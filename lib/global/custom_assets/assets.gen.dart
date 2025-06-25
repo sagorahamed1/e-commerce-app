@@ -22,11 +22,21 @@ class $AssetsIconsGen {
   /// File path: assets/icons/emailIcon.svg
   SvgGenImage get emailIcon => const SvgGenImage('assets/icons/emailIcon.svg');
 
+  /// File path: assets/icons/filterIcon.svg
+  SvgGenImage get filterIcon =>
+      const SvgGenImage('assets/icons/filterIcon.svg');
+
+  /// File path: assets/icons/home.svg
+  SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
+
   /// File path: assets/icons/lock.svg
   SvgGenImage get lock => const SvgGenImage('assets/icons/lock.svg');
 
   /// File path: assets/icons/meneyIcon.svg
   SvgGenImage get meneyIcon => const SvgGenImage('assets/icons/meneyIcon.svg');
+
+  /// File path: assets/icons/message.svg
+  SvgGenImage get message => const SvgGenImage('assets/icons/message.svg');
 
   /// File path: assets/icons/moneyIconCard.svg
   SvgGenImage get moneyIconCard =>
@@ -39,6 +49,12 @@ class $AssetsIconsGen {
   /// File path: assets/icons/phoneNo.svg
   SvgGenImage get phoneNo => const SvgGenImage('assets/icons/phoneNo.svg');
 
+  /// File path: assets/icons/plus.svg
+  SvgGenImage get plus => const SvgGenImage('assets/icons/plus.svg');
+
+  /// File path: assets/icons/profile.svg
+  SvgGenImage get profile => const SvgGenImage('assets/icons/profile.svg');
+
   /// File path: assets/icons/titleIcon.png
   AssetGenImage get titleIcon =>
       const AssetGenImage('assets/icons/titleIcon.png');
@@ -50,11 +66,16 @@ class $AssetsIconsGen {
   List<dynamic> get values => [
         card,
         emailIcon,
+        filterIcon,
+        home,
         lock,
         meneyIcon,
+        message,
         moneyIconCard,
         notification,
         phoneNo,
+        plus,
+        profile,
         titleIcon,
         user
       ];

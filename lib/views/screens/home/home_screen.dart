@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
+
+import '../../widgets/custom_product_card.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({super.key});
@@ -64,7 +68,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 Spacer(),
                 Assets.icons.notification.svg(),
                 SizedBox(width: 16.w),
-                Assets.icons.card.svg(),
+                GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.cartScreen);
+                    },
+                    child: Assets.icons.card.svg()),
               ],
             ),
             SizedBox(height: 8.h),
@@ -169,10 +177,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     text: "Recent category",
                     fontWeight: FontWeight.w500,
                     color: Color(0xff592B00)),
-                CustomText(
-                    text: "See all...",
-                    fontWeight: FontWeight.w500,
-                    color: Color(0xff592B00)),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.allProductScreen);
+                  },
+                  child: CustomText(
+                      text: "See all...",
+                      fontWeight: FontWeight.w500,
+                      color: Color(0xff592B00)),
+                ),
               ],
             ),
             Expanded(
@@ -187,109 +200,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     childAspectRatio: 0.868,
                   ),
                   itemBuilder: (context, index) {
-                    return AnimationConfiguration.staggeredGrid(
-                      position: index,
-                      columnCount: 2,
-                      duration: Duration(milliseconds: 500),
-                      child: SlideAnimation(
-                        verticalOffset: 50,
-                        child: SlideAnimation(
-                          delay: Duration(milliseconds: 275),
-                          child: GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xfff2e6cc),
-                                borderRadius: BorderRadius.circular(12),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color(0xffe3842e),
-                                    offset: Offset(1, 1),
-                                    blurRadius: 1,
-                                  ),
-                                ],
-                              ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(12.r),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      flex: 4,
-                                      child: Padding(
-                                          padding:  EdgeInsets.all(8.r),
-                                          child: CustomNetworkImage(
-                                            height: 105.h,
-                                              borderRadius: BorderRadius.circular(10.r),
-                                              imageUrl: "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773")),
-                                    ),
-                                    // Text and icons section
-                                    Expanded(
-                                      flex: 3,
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(horizontal: 8.w),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            // Title
-
-                                            Row(
-                                              children: [
-                                                Assets.icons.titleIcon.image(),
-                                                CustomText(text: " Cat Travel Bag", fontSize: 12.h, color: Colors.black),
-                                              ],
-                                            ),
-
-
-
-                                            Row(
-                                              children: [
-                                                Assets.icons.moneyIconCard.svg(),
-
-                                                CustomText(text: ' 30\$', fontSize: 12.h, color: Colors.red),
-                                              ],
-                                            ),
-
-                                            SizedBox(height: 4.h),
-
-                                            Row(
-                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                              children: [
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.location_on_outlined, size: 14.h),
-                                                    CustomText(text: "Banasree", fontSize: 12.h, color: Colors.black),
-                                                  ],
-                                                ),
-
-
-                                                Row(
-                                                  children: [
-                                                    Icon(Icons.watch_later_outlined, size: 14.h),
-                                                    CustomText(text: "2h ago", fontSize: 12.h, color: Colors.black),
-                                                  ],
-                                                ),
-                                              ],
-                                            ),
-
-                                            Align(
-                                              alignment: Alignment.bottomRight,
-                                              child: Icon(
-                                                Icons.favorite_border,
-                                                color: Colors.grey[600],
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                    return CustomProductCard(
+                        index: index,
+                        isFavorite: true,
+                      title: "Cat Travel Bag",
+                      address: "Dhaka",
+                      price: "30",
+                      onTap: () {
+                        Get.toNamed(AppRoutes.productDetailsScreen);
+                      },
                     );
                   },
                 ),

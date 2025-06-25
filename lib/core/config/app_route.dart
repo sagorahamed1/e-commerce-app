@@ -9,6 +9,9 @@ import '../../views/screens/auth/otp/opt_screen.dart';
 import '../../views/screens/auth/reset/reset_password_screen.dart';
 import '../../views/screens/auth/sing_up/sign_up_screen.dart';
 import '../../views/screens/bottom_nav_bar/bottom_nav_bar.dart';
+import '../../views/screens/home/all_product_screen.dart';
+import '../../views/screens/home/cart_screen.dart';
+import '../../views/screens/home/product_details_screen.dart';
 import '../../views/screens/message/message_screen.dart';
 import '../../views/screens/notification/notification_screen.dart';
 import '../../views/screens/onboarding/onboarding_screen.dart';
@@ -28,6 +31,9 @@ class AppRoutes {
   static const String notificationScreen = "/NotificationScreen";
   static const String messageScreen = "/MessageScreen";
   static const String welcomeScreen = "/WelcomeScreen";
+  static const String allProductScreen = "/AllProductScreen";
+  static const String productDetailsScreen = "/ProductDetailsScreen";
+  static const String cartScreen = "/CartScreen";
 
 
 
@@ -43,5 +49,8 @@ class AppRoutes {
     GetPage(name: notificationScreen, page: () =>  NotificationScreen()),
     GetPage(name: messageScreen, page: () =>  MessageScreen()),
     GetPage(name: welcomeScreen, page: () =>  WelcomeScreen()),
+    GetPage(name: allProductScreen, page: () =>  AllProductScreen()),
+    GetPage(name: productDetailsScreen, page: () =>  ProductDetailsScreen()),
+    GetPage(name: cartScreen, page: () =>  CartScreen()),
   ];
 }
