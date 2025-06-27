@@ -19,6 +19,9 @@ class $AssetsIconsGen {
   /// File path: assets/icons/aboutUs.svg
   SvgGenImage get aboutUs => const SvgGenImage('assets/icons/aboutUs.svg');
 
+  /// File path: assets/icons/arrowTop.svg
+  SvgGenImage get arrowTop => const SvgGenImage('assets/icons/arrowTop.svg');
+
   /// File path: assets/icons/attachfileIcon.svg
   SvgGenImage get attachfileIcon =>
       const SvgGenImage('assets/icons/attachfileIcon.svg');
@@ -133,6 +136,7 @@ class $AssetsIconsGen {
   /// List of all assets
   List<dynamic> get values => [
         aboutUs,
+        arrowTop,
         attachfileIcon,
         blockUserIcon,
         buyerProtection,

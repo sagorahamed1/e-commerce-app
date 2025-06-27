@@ -159,12 +159,16 @@ class ProductDetailsScreen extends StatelessWidget {
               Row(
                 children: [
           
-                  CustomButton(title: "Offer Price", onpress: (){}, width: 154.w, fontSize: 12.h),
+                  Expanded(
+                      flex: 1,
+                      child: CustomButton(title: "Offer Price", onpress: (){}, fontSize: 12.h)),
           
           
                   SizedBox(width: 10.w),
           
-                  CustomButton(title: "Add to Cart", onpress: (){}, width: 154.w, fontSize: 12.h),
+                  Expanded(
+                      flex: 1,
+                      child: CustomButton(title: "Add to Cart", onpress: (){}, fontSize: 12.h)),
           
           
                 ],

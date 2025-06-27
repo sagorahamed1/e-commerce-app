@@ -23,6 +23,7 @@ import '../../views/screens/profile/wallet_screen.dart';
 import '../../views/screens/purchas/confirm_purchase_screen.dart';
 import '../../views/screens/purchas/confirmed.dart';
 import '../../views/screens/purchas/make_payment.dart';
+import '../../views/screens/refund/refund_request_screen.dart';
 import '../../views/screens/setting/change_password_screen.dart';
 import '../../views/screens/setting/privacy_policy_all_screen.dart';
 import '../../views/screens/setting/setting_screen.dart';
@@ -57,6 +58,7 @@ class AppRoutes {
   static const String walletHistoryScreen = "/WalletHistoryScreen";
   static const String chatProfileScreen = "/ChatProfileScreen";
   static const String mediaScreen = "/MediaScreen";
+  static const String refundRequestScreen = "/RefundRequestScreen";
 
 
 
@@ -87,5 +89,6 @@ class AppRoutes {
     GetPage(name: walletHistoryScreen, page: () =>  WalletHistoryScreen()),
     GetPage(name: chatProfileScreen, page: () =>  ChatProfileScreen()),
     GetPage(name: mediaScreen, page: () =>  MediaScreen()),
+    GetPage(name: refundRequestScreen, page: () =>  RefundRequestScreen()),
   ];
 }

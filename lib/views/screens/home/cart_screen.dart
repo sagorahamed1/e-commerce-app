@@ -1,5 +1,6 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
@@ -18,6 +19,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: "Cart"),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.w),
@@ -400,7 +402,9 @@ class CartScreen extends StatelessWidget {
                             child: CustomButton(
                                 height: 26.h,
                                 title: "Request Refund",
-                                onpress: () {},
+                                onpress: () {
+                                  Get.toNamed(AppRoutes.refundRequestScreen);
+                                },
                                 color: Colors.transparent,
                                 fontSize: 9.h,
                                 loaderIgnore: true,
@@ -415,7 +419,159 @@ class CartScreen extends StatelessWidget {
                                 loaderIgnore: true,
                                 height: 26.h,
                                 title: "Rate Seller",
-                                onpress: () {},
+                                onpress: () {
+
+
+
+                                  TextEditingController amonCtrl =
+                                  TextEditingController();
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CustomText(
+                                                text: "Rate Your Experience",
+                                                fontSize: 16.h,
+                                                fontWeight: FontWeight.w600,
+                                                top: 29.h,
+                                                bottom: 20.h,
+                                                color: Color(0xff592B00)),
+                                            Divider(),
+
+
+                                            CustomText(top: 7.h,bottom: 6.h, text: "Product Summary Card", color: Colors.black),
+
+
+
+                                            Row(
+                                              children: [
+                                                CustomNetworkImage(
+                                                    borderRadius: BorderRadius.circular(8.r),
+                                                    imageUrl:
+                                                    "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773",
+                                                    height: 71.h,
+                                                    width: 61.w),
+
+                                                SizedBox(width: 12.w),
+
+                                                Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+
+                                                    CustomText(text: "Cat Travel Bag", color: Colors.black),
+                                                    CustomText(text: "Banani, Dhaka", color: Colors.black, fontSize: 12.h),
+                                                    CustomText(text: "Original Price: \$30", color: Colors.black, fontSize: 12.h),
+
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+
+
+                                            // CustomText(top: 7.h,bottom: 6.h, text: "Seller Info", color: Colors.black),
+                                            //
+                                            // Row(
+                                            //   children: [
+                                            //
+                                            //     CustomNetworkImage(imageUrl: "", height: 34.h, width: 34.w, boxShape: BoxShape.circle),
+                                            //
+                                            //
+                                            //     SizedBox(width: 10.w),
+                                            //     Column(
+                                            //       crossAxisAlignment: CrossAxisAlignment.start,
+                                            //       children: [
+                                            //
+                                            //         CustomText(text: " Sarah Rahman", color: Colors.black87),
+                                            //         Row(
+                                            //           children: [
+                                            //             CustomText(text: "⭐ 4.8 | Verified Seller", color: Colors.black87),
+                                            //           ],
+                                            //         ),
+                                            //
+                                            //
+                                            //       ],
+                                            //     )
+                                            //
+                                            //
+                                            //   ],
+                                            // ),
+
+                                          SizedBox(height: 12.h),
+
+                                          Align(
+                                            alignment: Alignment.center,
+                                            child: RatingBar.builder(
+                                              initialRating: 3,
+                                              minRating: 1,
+                                              direction: Axis.horizontal,
+                                              allowHalfRating: true,
+                                              itemSize: 22,
+                                              itemCount: 5,
+                                              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                                              itemBuilder: (context, _) => Icon(
+                                                Icons.star,
+                                                color: Colors.amber,
+                                              ),
+                                              onRatingUpdate: (rating) {
+                                                print(rating);
+                                              },
+                                            ),
+                                          ),
+
+                                            SizedBox(height: 12.h),
+                                            CustomTextField(
+                                                controller: amonCtrl,
+                                                hintText: "Review"),
+
+
+                                            CustomText(fontSize: 12.h,text: " Please Leave A Review For this service.", color: AppColors.primaryColor, bottom: 18.h),
+
+
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: CustomButton(
+                                                      height: 50.h,
+                                                      title: "Cancel",
+                                                      onpress: () {},
+                                                      color: Colors.transparent,
+                                                      fontSize: 11.h,
+                                                      loaderIgnore: true,
+                                                      boderColor: AppColors
+                                                          .primaryColor,
+                                                      titlecolor: AppColors
+                                                          .primaryColor),
+                                                ),
+                                                SizedBox(width: 8.w),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: CustomButton(
+                                                      loading: false,
+                                                      loaderIgnore: true,
+                                                      height: 50.h,
+                                                      title: "Submit",
+                                                      onpress: () {
+                                                        Get.toNamed(AppRoutes
+                                                            .messageScreen);
+                                                      },
+                                                      fontSize: 11.h),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+
+
+
+                                },
                                 fontSize: 9.h),
                           ),
                         ],
