@@ -16,6 +16,17 @@ import 'package:vector_graphics/vector_graphics.dart' as _vg;
 class $AssetsIconsGen {
   const $AssetsIconsGen();
 
+  /// File path: assets/icons/aboutUs.svg
+  SvgGenImage get aboutUs => const SvgGenImage('assets/icons/aboutUs.svg');
+
+  /// File path: assets/icons/attachfileIcon.svg
+  SvgGenImage get attachfileIcon =>
+      const SvgGenImage('assets/icons/attachfileIcon.svg');
+
+  /// File path: assets/icons/buyerProtection.svg
+  SvgGenImage get buyerProtection =>
+      const SvgGenImage('assets/icons/buyerProtection.svg');
+
   /// File path: assets/icons/card.svg
   SvgGenImage get card => const SvgGenImage('assets/icons/card.svg');
 
@@ -29,8 +40,15 @@ class $AssetsIconsGen {
   /// File path: assets/icons/home.svg
   SvgGenImage get home => const SvgGenImage('assets/icons/home.svg');
 
+  /// File path: assets/icons/homeUnselected.svg
+  SvgGenImage get homeUnselected =>
+      const SvgGenImage('assets/icons/homeUnselected.svg');
+
   /// File path: assets/icons/lock.svg
   SvgGenImage get lock => const SvgGenImage('assets/icons/lock.svg');
+
+  /// File path: assets/icons/logout.svg
+  SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
 
   /// File path: assets/icons/meneyIcon.svg
   SvgGenImage get meneyIcon => const SvgGenImage('assets/icons/meneyIcon.svg');
@@ -46,14 +64,38 @@ class $AssetsIconsGen {
   SvgGenImage get notification =>
       const SvgGenImage('assets/icons/notification.svg');
 
+  /// File path: assets/icons/personalInfoIcon.svg
+  SvgGenImage get personalInfoIcon =>
+      const SvgGenImage('assets/icons/personalInfoIcon.svg');
+
   /// File path: assets/icons/phoneNo.svg
   SvgGenImage get phoneNo => const SvgGenImage('assets/icons/phoneNo.svg');
 
   /// File path: assets/icons/plus.svg
   SvgGenImage get plus => const SvgGenImage('assets/icons/plus.svg');
 
+  /// File path: assets/icons/privacyPolicyIcon.svg
+  SvgGenImage get privacyPolicyIcon =>
+      const SvgGenImage('assets/icons/privacyPolicyIcon.svg');
+
   /// File path: assets/icons/profile.svg
   SvgGenImage get profile => const SvgGenImage('assets/icons/profile.svg');
+
+  /// File path: assets/icons/profile_selected.svg
+  SvgGenImage get profileSelected =>
+      const SvgGenImage('assets/icons/profile_selected.svg');
+
+  /// File path: assets/icons/rightArrow.svg
+  SvgGenImage get rightArrow =>
+      const SvgGenImage('assets/icons/rightArrow.svg');
+
+  /// File path: assets/icons/settingIco.svg
+  SvgGenImage get settingIco =>
+      const SvgGenImage('assets/icons/settingIco.svg');
+
+  /// File path: assets/icons/termandConditionIcon.svg
+  SvgGenImage get termandConditionIcon =>
+      const SvgGenImage('assets/icons/termandConditionIcon.svg');
 
   /// File path: assets/icons/titleIcon.png
   AssetGenImage get titleIcon =>
@@ -62,22 +104,43 @@ class $AssetsIconsGen {
   /// File path: assets/icons/user.svg
   SvgGenImage get user => const SvgGenImage('assets/icons/user.svg');
 
+  /// File path: assets/icons/walletIcon.svg
+  SvgGenImage get walletIcon =>
+      const SvgGenImage('assets/icons/walletIcon.svg');
+
+  /// File path: assets/icons/wishListIcon.svg
+  SvgGenImage get wishListIcon =>
+      const SvgGenImage('assets/icons/wishListIcon.svg');
+
   /// List of all assets
   List<dynamic> get values => [
+        aboutUs,
+        attachfileIcon,
+        buyerProtection,
         card,
         emailIcon,
         filterIcon,
         home,
+        homeUnselected,
         lock,
+        logout,
         meneyIcon,
         message,
         moneyIconCard,
         notification,
+        personalInfoIcon,
         phoneNo,
         plus,
+        privacyPolicyIcon,
         profile,
+        profileSelected,
+        rightArrow,
+        settingIco,
+        termandConditionIcon,
         titleIcon,
-        user
+        user,
+        walletIcon,
+        wishListIcon
       ];
 }
 
@@ -93,6 +156,10 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/cat.png
   AssetGenImage get cat => const AssetGenImage('assets/images/cat.png');
+
+  /// File path: assets/images/confirmImage.png
+  AssetGenImage get confirmImage =>
+      const AssetGenImage('assets/images/confirmImage.png');
 
   /// File path: assets/images/dog.png
   AssetGenImage get dog => const AssetGenImage('assets/images/dog.png');
@@ -112,16 +179,22 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding3.png');
 
+  /// File path: assets/images/walletBg.png
+  AssetGenImage get walletBg =>
+      const AssetGenImage('assets/images/walletBg.png');
+
   /// List of all assets
   List<AssetGenImage> get values => [
         allCategory,
         bird,
         cat,
+        confirmImage,
         dog,
         logo,
         onboarding1,
         onboarding2,
-        onboarding3
+        onboarding3,
+        walletBg
       ];
 }
 

@@ -8,13 +8,22 @@ import '../../views/screens/auth/login/login_screen.dart';
 import '../../views/screens/auth/otp/opt_screen.dart';
 import '../../views/screens/auth/reset/reset_password_screen.dart';
 import '../../views/screens/auth/sing_up/sign_up_screen.dart';
-import '../../views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import '../../views/screens/home/all_product_screen.dart';
 import '../../views/screens/home/cart_screen.dart';
 import '../../views/screens/home/product_details_screen.dart';
 import '../../views/screens/message/message_screen.dart';
 import '../../views/screens/notification/notification_screen.dart';
 import '../../views/screens/onboarding/onboarding_screen.dart';
+import '../../views/screens/profile/edit_profile_screen.dart';
+import '../../views/screens/profile/profile_information_screen.dart';
+import '../../views/screens/profile/wallet_history_screen.dart';
+import '../../views/screens/profile/wallet_screen.dart';
+import '../../views/screens/purchas/confirm_purchase_screen.dart';
+import '../../views/screens/purchas/confirmed.dart';
+import '../../views/screens/purchas/make_payment.dart';
+import '../../views/screens/setting/change_password_screen.dart';
+import '../../views/screens/setting/privacy_policy_all_screen.dart';
+import '../../views/screens/setting/setting_screen.dart';
 import '../../views/screens/splash/splash_screen.dart';
 import '../../views/screens/wellcome/welcome_screen.dart';
 
@@ -34,6 +43,16 @@ class AppRoutes {
   static const String allProductScreen = "/AllProductScreen";
   static const String productDetailsScreen = "/ProductDetailsScreen";
   static const String cartScreen = "/CartScreen";
+  static const String confirmPurchaseScreen = "/ConfirmPurchaseScreen";
+  static const String makePayment = "/MakePayment";
+  static const String confirmed = "/Confirmed";
+  static const String editProfileScreen = "/EditProfileScreen";
+  static const String profileInformationScreen = "/ProfileInformationScreen";
+  static const String settingScreen = "/SettingScreen";
+  static const String changePasswordScreen = "/ChangePasswordScreen";
+  static const String privacyPolicyAllScreen = "/PrivacyPolicyAllScreen";
+  static const String walletScreen = "/WalletScreen";
+  static const String walletHistoryScreen = "/WalletHistoryScreen";
 
 
 
@@ -52,5 +71,15 @@ class AppRoutes {
     GetPage(name: allProductScreen, page: () =>  AllProductScreen()),
     GetPage(name: productDetailsScreen, page: () =>  ProductDetailsScreen()),
     GetPage(name: cartScreen, page: () =>  CartScreen()),
+    GetPage(name: confirmPurchaseScreen, page: () =>  ConfirmPurchaseScreen()),
+    GetPage(name: makePayment, page: () =>  MakePayment()),
+    GetPage(name: confirmed, page: () =>  Confirmed()),
+    GetPage(name: editProfileScreen, page: () =>  EditProfileScreen()),
+    GetPage(name: profileInformationScreen, page: () =>  ProfileInformationScreen()),
+    GetPage(name: settingScreen, page: () =>  SettingScreen()),
+    GetPage(name: changePasswordScreen, page: () =>  ChangePasswordScreen()),
+    GetPage(name: privacyPolicyAllScreen, page: () =>  PrivacyPolicyAllScreen()),
+    GetPage(name: walletScreen, page: () =>  WalletScreen()),
+    GetPage(name: walletHistoryScreen, page: () =>  WalletHistoryScreen()),
   ];
 }

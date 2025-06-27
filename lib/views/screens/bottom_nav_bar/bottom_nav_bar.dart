@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
-import '../home/home_screen.dart'; // Add your custom colors
+import '../home/home_screen.dart';
+import '../profile/profile_screen.dart'; // Add your custom colors
 
 
 
@@ -16,7 +17,7 @@ class _MainScreenState extends State<BottomNavBar> {
      HomeScreen(),
      HomeScreen(),
      HomeScreen(),
-     HomeScreen(),
+     ProfileScreen(),
   ];
 
   int currentIndex = 0;
@@ -83,15 +84,13 @@ class _MainScreenState extends State<BottomNavBar> {
               shape: BoxShape.circle),
           child:  Padding(padding: EdgeInsets.all(6.r),
             child: index == 0
-                ? Assets.icons.home
-                .svg(color: isSelected ? AppColors.primaryColor : Colors.grey)
+                ? isSelected ? Assets.icons.home.svg() : Assets.icons.homeUnselected.svg()
                 : index == 1
                 ? Assets.icons.plus
                 .svg(color: isSelected ? AppColors.primaryColor : Colors.grey)
                 : index == 2
-                ? Assets.icons.message
-                .svg(color: isSelected ? AppColors.primaryColor : Colors.grey)
-                : Assets.icons.profile.svg(color: isSelected ? AppColors.primaryColor : Colors.grey),
+                ? Assets.icons.message.svg(color: isSelected ? AppColors.primaryColor : Colors.grey)
+                : isSelected ? Assets.icons.profileSelected.svg()  :  Assets.icons.profile.svg(),
           )
       ),
     );

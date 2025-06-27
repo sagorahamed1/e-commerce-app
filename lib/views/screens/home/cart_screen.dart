@@ -1,11 +1,14 @@
 import 'package:contained_tab_bar_view/contained_tab_bar_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
+import 'package:petattix/views/widgets/custom_text_field.dart';
 
 import '../../widgets/custom_text.dart';
 
@@ -42,15 +45,13 @@ class CartScreen extends StatelessWidget {
         ));
   }
 
-
-
   Widget _buildCartList() {
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
       itemCount: 3,
       itemBuilder: (context, index) {
         return Container(
-          margin: EdgeInsets.symmetric(vertical: 6.h,horizontal: 3.w),
+          margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
           decoration: BoxDecoration(
             color: const Color(0xfffef4ea), // Card background
             borderRadius: BorderRadius.circular(12.r),
@@ -71,7 +72,7 @@ class CartScreen extends StatelessWidget {
                 // Image Section
 
                 CustomNetworkImage(
-                  borderRadius: BorderRadius.circular(8.r),
+                    borderRadius: BorderRadius.circular(8.r),
                     imageUrl:
                         "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773",
                     height: 139.h,
@@ -122,21 +123,80 @@ class CartScreen extends StatelessWidget {
                           Expanded(
                             flex: 1,
                             child: CustomButton(
-                              height: 26.h,
+                                height: 26.h,
                                 title: "Offer Price",
-                                onpress: () {},
+                                onpress: () {
+                                  TextEditingController amonCtrl =
+                                      TextEditingController();
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return AlertDialog(
+                                        content: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CustomText(
+                                                text: "Offer Your Price",
+                                                fontSize: 16.h,
+                                                fontWeight: FontWeight.w600,
+                                                top: 29.h,
+                                                bottom: 20.h,
+                                                color: Color(0xff592B00)),
+                                            Divider(),
+                                            SizedBox(height: 12.h),
+                                            CustomTextField(
+                                                controller: amonCtrl,
+                                                labelText: "Enter Amount",
+                                                hintText: "Enter Amount"),
+                                            SizedBox(height: 12.h),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: CustomButton(
+                                                      height: 26.h,
+                                                      title: "Cancel",
+                                                      onpress: () {},
+                                                      color: Colors.transparent,
+                                                      fontSize: 11.h,
+                                                      loaderIgnore: true,
+                                                      boderColor: AppColors
+                                                          .primaryColor,
+                                                      titlecolor: AppColors
+                                                          .primaryColor),
+                                                ),
+                                                SizedBox(width: 8.w),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: CustomButton(
+                                                      loading: false,
+                                                      loaderIgnore: true,
+                                                      height: 26.h,
+                                                      title: "Offer",
+                                                      onpress: () {
+                                                        Get.toNamed(AppRoutes.messageScreen);
+                                                      },
+                                                      fontSize: 11.h),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
                                 color: Colors.transparent,
                                 fontSize: 11.h,
                                 loaderIgnore: true,
-                                boderColor: AppColors.primaryColor, titlecolor: AppColors.primaryColor),
+                                boderColor: AppColors.primaryColor,
+                                titlecolor: AppColors.primaryColor),
                           ),
                           SizedBox(width: 8.w),
-
-
                           Expanded(
                             flex: 1,
                             child: CustomButton(
-                              loading: false,
+                                loading: false,
                                 loaderIgnore: true,
                                 height: 26.h,
                                 title: "Purchase",
