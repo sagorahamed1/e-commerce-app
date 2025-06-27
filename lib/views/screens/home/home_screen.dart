@@ -66,7 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: AppColors.primaryColor,
                     left: 8.w),
                 Spacer(),
-                Assets.icons.notification.svg(),
+                GestureDetector(
+                    onTap: (){
+                      Get.toNamed(AppRoutes.notificationScreen);
+                    },
+                    child: Assets.icons.notification.svg()),
                 SizedBox(width: 16.w),
                 GestureDetector(
                     onTap: () {

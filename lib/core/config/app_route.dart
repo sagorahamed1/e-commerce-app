@@ -11,6 +11,8 @@ import '../../views/screens/auth/sing_up/sign_up_screen.dart';
 import '../../views/screens/home/all_product_screen.dart';
 import '../../views/screens/home/cart_screen.dart';
 import '../../views/screens/home/product_details_screen.dart';
+import '../../views/screens/message/chat_profile_screen.dart';
+import '../../views/screens/message/media_screen.dart';
 import '../../views/screens/message/message_screen.dart';
 import '../../views/screens/notification/notification_screen.dart';
 import '../../views/screens/onboarding/onboarding_screen.dart';
@@ -53,6 +55,8 @@ class AppRoutes {
   static const String privacyPolicyAllScreen = "/PrivacyPolicyAllScreen";
   static const String walletScreen = "/WalletScreen";
   static const String walletHistoryScreen = "/WalletHistoryScreen";
+  static const String chatProfileScreen = "/ChatProfileScreen";
+  static const String mediaScreen = "/MediaScreen";
 
 
 
@@ -81,5 +85,7 @@ class AppRoutes {
     GetPage(name: privacyPolicyAllScreen, page: () =>  PrivacyPolicyAllScreen()),
     GetPage(name: walletScreen, page: () =>  WalletScreen()),
     GetPage(name: walletHistoryScreen, page: () =>  WalletHistoryScreen()),
+    GetPage(name: chatProfileScreen, page: () =>  ChatProfileScreen()),
+    GetPage(name: mediaScreen, page: () =>  MediaScreen()),
   ];
 }

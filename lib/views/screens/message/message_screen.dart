@@ -116,49 +116,58 @@ class _ChatScreenState extends State<MessageScreen> {
           flashingCircleBrightColor: theme.flashingCircleBrightColor,
           flashingCircleDarkColor: theme.flashingCircleDarkColor,
         ),
-        appBar: ChatViewAppBar(
-          elevation: theme.elevation,
-          backGroundColor: theme.appBarColor,
-          profilePicture: Data.profileImage,
-          backArrowColor: theme.backArrowColor,
-          chatTitle: "Cat Travel Bag (Sagor)",
-          chatTitleTextStyle: TextStyle(
-            color: theme.appBarTitleTextStyle,
-            fontWeight: FontWeight.bold,
-            fontSize: 14.h,
-            letterSpacing: 0.25,
-          ),
-          userStatus: "last active 23 hr ago",
-          userStatusTextStyle: const TextStyle(color: Colors.grey),
-          actions: [
-            // IconButton(
-            //   onPressed: _onThemeIconTap,
-            //   icon: Icon(
-            //     isDarkTheme
-            //         ? Icons.brightness_4_outlined
-            //         : Icons.dark_mode_outlined,
-            //     color: theme.themeIconColor,
-            //   ),
-            // ),
-            // IconButton(
-            //   tooltip: 'Toggle TypingIndicator',
-            //   onPressed: _showHideTypingIndicator,
-            //   icon: Icon(
-            //     Icons.keyboard,
-            //     color: theme.themeIconColor,
-            //   ),
-            // ),
-            // IconButton(
-            //   tooltip: 'Simulate Message receive',
-            //   onPressed: receiveMessage,
-            //   icon: Icon(
-            //     Icons.supervised_user_circle,
-            //     color: theme.themeIconColor,
-            //   ),
-            // ),
 
-            IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
-          ],
+
+        appBar: GestureDetector(
+          onTap: () {
+            Get.toNamed(AppRoutes.chatProfileScreen);
+          },
+          child: ChatViewAppBar(
+
+            elevation: theme.elevation,
+            backGroundColor: theme.appBarColor,
+            profilePicture: Data.profileImage,
+            backArrowColor: theme.backArrowColor,
+            chatTitle: "Cat Travel Bag (Sagor)",
+            chatTitleTextStyle: TextStyle(
+              color: theme.appBarTitleTextStyle,
+              fontWeight: FontWeight.bold,
+              fontSize: 14.h,
+              letterSpacing: 0.25,
+            ),
+
+            userStatus: "last active 23 hr ago",
+            userStatusTextStyle: const TextStyle(color: Colors.grey),
+            actions: [
+              // IconButton(
+              //   onPressed: _onThemeIconTap,
+              //   icon: Icon(
+              //     isDarkTheme
+              //         ? Icons.brightness_4_outlined
+              //         : Icons.dark_mode_outlined,
+              //     color: theme.themeIconColor,
+              //   ),
+              // ),
+              // IconButton(
+              //   tooltip: 'Toggle TypingIndicator',
+              //   onPressed: _showHideTypingIndicator,
+              //   icon: Icon(
+              //     Icons.keyboard,
+              //     color: theme.themeIconColor,
+              //   ),
+              // ),
+              // IconButton(
+              //   tooltip: 'Simulate Message receive',
+              //   onPressed: receiveMessage,
+              //   icon: Icon(
+              //     Icons.supervised_user_circle,
+              //     color: theme.themeIconColor,
+              //   ),
+              // ),
+
+              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert))
+            ],
+          ),
         ),
         chatBackgroundConfig: ChatBackgroundConfiguration(
           messageTimeIconColor: theme.messageTimeIconColor,

@@ -3,6 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../home/home_screen.dart';
+import '../message/message_user_screen.dart';
+import '../post/post_screen.dart';
 import '../profile/profile_screen.dart'; // Add your custom colors
 
 
@@ -15,8 +17,8 @@ class BottomNavBar extends StatefulWidget {
 class _MainScreenState extends State<BottomNavBar> {
   final List<Widget> screens = [
      HomeScreen(),
-     HomeScreen(),
-     HomeScreen(),
+     PostScreen(),
+     MessageUserScreen(),
      ProfileScreen(),
   ];
 

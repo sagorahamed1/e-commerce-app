@@ -23,6 +23,10 @@ class $AssetsIconsGen {
   SvgGenImage get attachfileIcon =>
       const SvgGenImage('assets/icons/attachfileIcon.svg');
 
+  /// File path: assets/icons/blockUserIcon.svg
+  SvgGenImage get blockUserIcon =>
+      const SvgGenImage('assets/icons/blockUserIcon.svg');
+
   /// File path: assets/icons/buyerProtection.svg
   SvgGenImage get buyerProtection =>
       const SvgGenImage('assets/icons/buyerProtection.svg');
@@ -49,6 +53,9 @@ class $AssetsIconsGen {
 
   /// File path: assets/icons/logout.svg
   SvgGenImage get logout => const SvgGenImage('assets/icons/logout.svg');
+
+  /// File path: assets/icons/mediaIcon.svg
+  SvgGenImage get mediaIcon => const SvgGenImage('assets/icons/mediaIcon.svg');
 
   /// File path: assets/icons/meneyIcon.svg
   SvgGenImage get meneyIcon => const SvgGenImage('assets/icons/meneyIcon.svg');
@@ -85,9 +92,16 @@ class $AssetsIconsGen {
   SvgGenImage get profileSelected =>
       const SvgGenImage('assets/icons/profile_selected.svg');
 
+  /// File path: assets/icons/reportUserIcon.svg
+  SvgGenImage get reportUserIcon =>
+      const SvgGenImage('assets/icons/reportUserIcon.svg');
+
   /// File path: assets/icons/rightArrow.svg
   SvgGenImage get rightArrow =>
       const SvgGenImage('assets/icons/rightArrow.svg');
+
+  /// File path: assets/icons/searhIcon.svg
+  SvgGenImage get searhIcon => const SvgGenImage('assets/icons/searhIcon.svg');
 
   /// File path: assets/icons/settingIco.svg
   SvgGenImage get settingIco =>
@@ -100,6 +114,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/titleIcon.png
   AssetGenImage get titleIcon =>
       const AssetGenImage('assets/icons/titleIcon.png');
+
+  /// File path: assets/icons/uploadPlusIcon.svg
+  SvgGenImage get uploadPlusIcon =>
+      const SvgGenImage('assets/icons/uploadPlusIcon.svg');
 
   /// File path: assets/icons/user.svg
   SvgGenImage get user => const SvgGenImage('assets/icons/user.svg');
@@ -116,6 +134,7 @@ class $AssetsIconsGen {
   List<dynamic> get values => [
         aboutUs,
         attachfileIcon,
+        blockUserIcon,
         buyerProtection,
         card,
         emailIcon,
@@ -124,6 +143,7 @@ class $AssetsIconsGen {
         homeUnselected,
         lock,
         logout,
+        mediaIcon,
         meneyIcon,
         message,
         moneyIconCard,
@@ -134,10 +154,13 @@ class $AssetsIconsGen {
         privacyPolicyIcon,
         profile,
         profileSelected,
+        reportUserIcon,
         rightArrow,
+        searhIcon,
         settingIco,
         termandConditionIcon,
         titleIcon,
+        uploadPlusIcon,
         user,
         walletIcon,
         wishListIcon
@@ -179,6 +202,10 @@ class $AssetsImagesGen {
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding3.png');
 
+  /// File path: assets/images/uploadImage.png
+  AssetGenImage get uploadImage =>
+      const AssetGenImage('assets/images/uploadImage.png');
+
   /// File path: assets/images/walletBg.png
   AssetGenImage get walletBg =>
       const AssetGenImage('assets/images/walletBg.png');
@@ -194,6 +221,7 @@ class $AssetsImagesGen {
         onboarding1,
         onboarding2,
         onboarding3,
+        uploadImage,
         walletBg
       ];
 }
