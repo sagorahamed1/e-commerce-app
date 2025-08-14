@@ -20,6 +20,7 @@ import '../../views/screens/profile/edit_profile_screen.dart';
 import '../../views/screens/profile/profile_information_screen.dart';
 import '../../views/screens/profile/wallet_history_screen.dart';
 import '../../views/screens/profile/wallet_screen.dart';
+import '../../views/screens/profile/wish_list_screen.dart';
 import '../../views/screens/purchas/confirm_purchase_screen.dart';
 import '../../views/screens/purchas/confirmed.dart';
 import '../../views/screens/purchas/make_payment.dart';
@@ -59,6 +60,7 @@ class AppRoutes {
   static const String chatProfileScreen = "/ChatProfileScreen";
   static const String mediaScreen = "/MediaScreen";
   static const String refundRequestScreen = "/RefundRequestScreen";
+  static const String wishListScreen = "/WishListScreen";
 
 
 
@@ -90,5 +92,6 @@ class AppRoutes {
     GetPage(name: chatProfileScreen, page: () =>  ChatProfileScreen()),
     GetPage(name: mediaScreen, page: () =>  MediaScreen()),
     GetPage(name: refundRequestScreen, page: () =>  RefundRequestScreen()),
+    GetPage(name: wishListScreen, page: () =>  WishListScreen()),
   ];
 }
