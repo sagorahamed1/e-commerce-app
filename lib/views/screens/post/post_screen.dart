@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petattix/controller/product_controller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/helper/toast_message_helper.dart';
+import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
+import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
 
 import '../../widgets/cusotom_check_box.dart';
+import '../../widgets/custom_popup_menu.dart';
 import '../../widgets/custom_text.dart';
 
 class PostScreen extends StatefulWidget {
@@ -24,10 +29,32 @@ class PostScreen extends StatefulWidget {
 }
 
 class _PostScreenState extends State<PostScreen> {
+  ProductController productController = Get.put(ProductController());
+
+  @override
+  void initState() {
+    productController.fetchCategory();
+    productController.getMyProduct();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: CustomAppBar(title: "Post"),
+        appBar: AppBar(
+          leading: SizedBox(),
+          iconTheme: IconThemeData(color: Color(0xff592B00)),
+          backgroundColor: AppColors.bgColor,
+          centerTitle: true,
+          title: CustomText(
+            text: "Post",
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+            color: Color(0xff592B00),
+          ),
+        ),
+
+
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.w),
           child: ContainedTabBarView(
@@ -46,18 +73,17 @@ class _PostScreenState extends State<PostScreen> {
               Text('         My Post        '),
               Text('         My Sales       '),
             ],
-            views: [
-              _createPost(),
-              _myPostList(),
-              _mySalesList(_selected)
-            ],
-            onChange: (index) => print("Tab index changed to $index"),
+            views: [_createPost(), _myPostList(), _mySalesList(_selected)],
+            onChange: (int index) {
+              if(index == 1){
+                productController.getMyProduct();
+              }else{
+
+              }
+            },
           ),
         ));
   }
-
-
-
 
   TextEditingController titleCtrl = TextEditingController();
   TextEditingController locationCtrl = TextEditingController();
@@ -67,174 +93,225 @@ class _PostScreenState extends State<PostScreen> {
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController purchasePriceCtrl = TextEditingController();
   TextEditingController sellingPriceCtrl = TextEditingController();
+  TextEditingController quantityCtrl = TextEditingController();
+  TextEditingController categoryCtrl = TextEditingController();
+  TextEditingController selectedCategoryCtrl = TextEditingController();
+  TextEditingController brandCtrl = TextEditingController();
+
   bool _isChecked = false;
+  final GlobalKey<FormState> forKey = GlobalKey<FormState>();
+
   Widget _createPost() {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(height: 10.h),
-          Container(
-            height: 230.h,
-            width: double.infinity,
-            // padding: EdgeInsets.all(16.r),
-            decoration: BoxDecoration(
-              image: const DecorationImage(
-                image: AssetImage("assets/images/uploadImage.png"),
-                fit: BoxFit.cover,
+      child: Form(
+        key: forKey,
+        child: Column(
+          children: [
+            SizedBox(height: 10.h),
+            Container(
+              height: 230.h,
+              width: double.infinity,
+              // padding: EdgeInsets.all(16.r),
+              decoration: BoxDecoration(
+                image: const DecorationImage(
+                  image: AssetImage("assets/images/uploadImage.png"),
+                  fit: BoxFit.cover,
+                ),
+                borderRadius: BorderRadius.circular(12.r),
               ),
-              borderRadius: BorderRadius.circular(12.r),
-            ),
-            child: _images.isEmpty
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                        onTap: _pickImages,
-                        child: Assets.icons.uploadPlusIcon
-                            .svg(width: 44.w, height: 44.h),
-                      ),
-                      SizedBox(height: 10.h),
-                      const Text("Upload up to 5 images"),
-                    ],
-                  )
-                : Center(
-                    child: Stack(
-                      alignment: Alignment.center,
+              child: _images.isEmpty
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Image
-                        ClipRRect(
-                          borderRadius: BorderRadius.circular(10.r),
-                          child: Image.file(
-                            _images[_currentIndex],
-                            width: double.infinity,
-                            height: double.infinity,
-                            fit: BoxFit.cover,
-                          ),
+                        GestureDetector(
+                          onTap: _pickImages,
+                          child: Assets.icons.uploadPlusIcon
+                              .svg(width: 44.w, height: 44.h),
                         ),
-
-                        // Left Arrow
-                        Positioned(
-                          left: 8.w,
-                          child: GestureDetector(
-                            onTap: _prevImage,
-                            child: CircleAvatar(
-                              radius: 14.r,
-                              backgroundColor: Colors.black38,
-                              child:
-                                  Icon(Icons.arrow_left, color: Colors.white),
-                            ),
-                          ),
-                        ),
-
-                        // Right Arrow
-                        Positioned(
-                          right: 8.w,
-                          child: GestureDetector(
-                            onTap: _nextImage,
-                            child: CircleAvatar(
-                              radius: 14.r,
-                              backgroundColor: Colors.black38,
-                              child:
-                                  Icon(Icons.arrow_right, color: Colors.white),
-                            ),
-                          ),
-                        ),
-
-                        // Remove Icon
-                        Positioned(
-                          top: 8.h,
-                          right: 8.w,
-                          child: GestureDetector(
-                            onTap: () => _removeImage(_currentIndex),
-                            child: CircleAvatar(
-                              radius: 14.r,
-                              backgroundColor: AppColors.primaryColor,
-                              child: Icon(Icons.close,
-                                  size: 14.r, color: Colors.white),
-                            ),
-                          ),
-                        ),
+                        SizedBox(height: 10.h),
+                        const Text("Upload up to 5 images"),
                       ],
+                    )
+                  : Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          // Image
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10.r),
+                            child: Image.file(
+                              _images[_currentIndex],
+                              width: double.infinity,
+                              height: double.infinity,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                          // Left Arrow
+                          Positioned(
+                            left: 8.w,
+                            child: GestureDetector(
+                              onTap: _prevImage,
+                              child: CircleAvatar(
+                                radius: 14.r,
+                                backgroundColor: Colors.black38,
+                                child:
+                                    Icon(Icons.arrow_left, color: Colors.white),
+                              ),
+                            ),
+                          ),
+
+                          // Right Arrow
+                          Positioned(
+                            right: 8.w,
+                            child: GestureDetector(
+                              onTap: _nextImage,
+                              child: CircleAvatar(
+                                radius: 14.r,
+                                backgroundColor: Colors.black38,
+                                child:
+                                    Icon(Icons.arrow_right, color: Colors.white),
+                              ),
+                            ),
+                          ),
+
+                          // Remove Icon
+                          Positioned(
+                            top: 8.h,
+                            right: 8.w,
+                            child: GestureDetector(
+                              onTap: () => _removeImage(_currentIndex),
+                              child: CircleAvatar(
+                                radius: 14.r,
+                                backgroundColor: AppColors.primaryColor,
+                                child: Icon(Icons.close,
+                                    size: 14.r, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-          ),
-          SizedBox(height: 18.h),
-          CustomTextField(
-              controller: titleCtrl,
-              labelText: "Product Title",
-              hintText: "Product Title"),
-          CustomTextField(
-              controller: locationCtrl,
-              labelText: "Location",
-              hintText: "Location"),
-          CustomTextField(
-              controller: conditionCtrl,
-              labelText: "Condition",
-              hintText: "Condition"),
-          CustomTextField(
-              controller: usageDurationCtrl,
-              labelText: "Usage Duration",
-              hintText: "Usage Duration"),
-          CustomTextField(
-              controller: expireDateCtrl,
-              labelText: "Expire Data",
-              hintText: "Expire Date"),
+            ),
+            SizedBox(height: 18.h),
+            CustomTextField(
+                controller: titleCtrl,
+                labelText: "Product Title",
+                hintText: "Product Title"),
+            CustomTextField(
+                controller: locationCtrl,
+                labelText: "Address",
+                hintText: "Address"),
+            CustomTextField(
+                controller: brandCtrl,
+                labelText: "Brand Name",
+                hintText: "Brand Name"),
+            CustomTextField(
+                controller: quantityCtrl,
+                keyboardType: TextInputType.number,
+                labelText: "Quantity",
+                hintText: "Quantity"),
+            Align(
+                alignment: Alignment.centerLeft,
+                child: CustomText(
+                    text: "Selected Category", color: Colors.black, bottom: 6.h)),
+            CustomTextField(
+              readOnly: true,
+              hintText: "Select category",
+              controller: categoryCtrl,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Select category';
+                }
+                return null;
+              },
+              suffixIcon: CustomPopupMenu(
+                  items: productController.category,
+                  onSelected: (p0) {
+                    selectedCategoryCtrl.text = p0;
+                    final selectCarThis = productController.category
+                        .firstWhere((x) => x.id.toString() == p0);
+                    categoryCtrl.text = selectCarThis.name.toString();
+                    setState(() {});
+                  }),
+            ),
+            CustomTextField(
+                controller: conditionCtrl,
+                labelText: "Condition",
+                hintText: "Condition"),
+            Row(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: CustomTextField(
+                      keyboardType: TextInputType.number,
+                      controller: purchasePriceCtrl,
+                      labelText: "Purchase Price",
+                      hintText: "Purchase Price"),
+                ),
+                SizedBox(width: 16.w),
+                Expanded(
+                  flex: 1,
+                  child: CustomTextField(
+                      keyboardType: TextInputType.number,
+                      controller: sellingPriceCtrl,
+                      labelText: "Selling Price",
+                      hintText: "Selling Price"),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                Spacer(),
+                CircularCheckBox(
+                  size: 20.r,
+                  isChecked: _isChecked,
+                  onChanged: (value) {
+                    setState(() {
+                      _isChecked = value;
+                    });
+                  },
+                ),
+                CustomText(
+                    text: "Negotiable",
+                    fontSize: 16.h,
+                    color: Colors.black,
+                    left: 10.w,
+                    right: 5.w),
+              ],
+            ),
+            SizedBox(height: 16.h),
+            CustomTextField(
+                controller: descriptionCtrl,
+                labelText: "Description",
+                hintText: "Description"),
+            CustomButton(
+                title: "Create a Post",
+                onpress: () {
+                  if(forKey.currentState!.validate()){
+                    if(_images.length != 0){
+                      productController.addProduct(
+                          productName: titleCtrl.text,
+                          phurcasingPrice: purchasePriceCtrl.text,
+                          sellingPrice: sellingPriceCtrl.text,
+                          quantity: quantityCtrl.text,
+                          condition: conditionCtrl.text,
+                          description: descriptionCtrl.text,
+                          category: categoryCtrl.text,
+                          negotiable: _isChecked,
+                          brand: brandCtrl.text,
+                          location: locationCtrl.text,
+                          images: _images);
+                    }else{
+                      ToastMessageHelper.showToastMessage(context, "Please select your product images");
+                    }
+                  }
 
-
-          Row(
-            children: [
-
-              Expanded(
-                flex: 1,
-                child: CustomTextField(
-                    controller: purchasePriceCtrl,
-                    labelText: "Purchase Price",
-                    hintText: "Purchase Price"),
-              ),
-
-              SizedBox(width: 16.w),
-
-              Expanded(
-                flex: 1,
-                child: CustomTextField(
-                    controller: expireDateCtrl,
-                    labelText: "Selling Price",
-                    hintText: "Selling Price"),
-              ),
-            ],
-          ),
-
-
-          Row(
-            children: [
-
-              Spacer(),
-
-              CircularCheckBox(
-                size: 20.r,
-                isChecked: _isChecked,
-                onChanged: (value) {
-                  setState(() {
-                    _isChecked = value;
-                  });
-                },
-              ),
-
-
-              CustomText(text: "Negotiable", fontSize: 16.h, color: Colors.black,left: 10.w, right: 5.w),
-            ],
-          ),
-
-          SizedBox(height: 16.h),
-
-          CustomTextField(
-              controller: descriptionCtrl,
-              labelText: "Description",
-              hintText: "Description"),
-          CustomButton(title: "Create a Post", onpress: () {}),
-          SizedBox(height: 120.h)
-        ],
+                }),
+            SizedBox(height: 120.h)
+          ],
+        ),
       ),
     );
   }
@@ -284,10 +361,152 @@ class _PostScreenState extends State<PostScreen> {
     }
   }
 
-
-
-
   Widget _myPostList() {
+    return Obx(()=>
+    productController.myProductLoading.value ? ShimmerListView() :
+
+        productController.myProduct.isEmpty ? CustomText(text: "No Data found!") :
+       ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
+        itemCount: productController.myProduct.length,
+        itemBuilder: (context, index) {
+          var product = productController.myProduct[index];
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
+            decoration: BoxDecoration(
+              color: const Color(0xfffef4ea), // Card background
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 1,
+                  blurRadius: 6,
+                  offset: Offset(0, 0), // shadow in all directions
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: EdgeInsets.all(10.w),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image Section
+
+                  CustomNetworkImage(
+                      borderRadius: BorderRadius.circular(8.r),
+                      imageUrl:
+                          "${ApiConstants.imageBaseUrl}/${product.images?[0].image}",
+                      height: 139.h,
+                      width: 109.w),
+
+                  SizedBox(width: 7.w),
+
+                  // Info Section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CustomText(
+                                text: "${product.productName}",
+                                fontWeight: FontWeight.w600,
+                                bottom: 4.h,
+                                color: Colors.black),
+                            Spacer(),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xffD1F5D3), // Card background
+                                borderRadius: BorderRadius.circular(12.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                    offset:
+                                        Offset(0, 0), // shadow in all directions
+                                  ),
+                                ],
+                              ),
+                              child: CustomText(
+                                text: "${product.status}",
+                                left: 8.w,
+                                right: 8.w,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Assets.icons.moneyIconCard.svg(),
+                            SizedBox(width: 4.w),
+                            CustomText(
+                              text: "${product.purchasingPrice}\$",
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                        CustomText(
+                            text: "Pet Type: Cat",
+                            fontSize: 12.h,
+                            bottom: 4.h,
+                            color: Colors.black),
+                        CustomText(
+                          text: "Condition: ${product.condition}",
+                          fontSize: 12.h,
+                          bottom: 4.h,
+                          color: Colors.black,
+                        ),
+                        CustomText(
+                          text: "Location: ${product.category}",
+                          fontSize: 12.h,
+                          color: Colors.black,
+                          bottom: 7.h,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              flex: 1,
+                              child: CustomButton(
+                                  height: 26.h,
+                                  title: "Edit",
+                                  onpress: () {},
+                                  color: Colors.transparent,
+                                  fontSize: 11.h,
+                                  loaderIgnore: true,
+                                  boderColor: AppColors.primaryColor,
+                                  titlecolor: AppColors.primaryColor),
+                            ),
+                            SizedBox(width: 8.w),
+                            Expanded(
+                              flex: 1,
+                              child: CustomButton(
+                                  loading: false,
+                                  loaderIgnore: true,
+                                  height: 26.h,
+                                  title: "Delete",
+                                  onpress: () {},
+                                  fontSize: 11.h),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  final List<String> _options = ['In Progress', 'Packed', 'Handover'];
+  String _selected = 'In Progress';
+
+  Widget _mySalesList(String? selectedItem) {
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
       itemCount: 5,
@@ -327,7 +546,6 @@ class _PostScreenState extends State<PostScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-
                       Row(
                         children: [
                           CustomText(
@@ -336,7 +554,6 @@ class _PostScreenState extends State<PostScreen> {
                               bottom: 4.h,
                               color: Colors.black),
                           Spacer(),
-
                           Container(
                             decoration: BoxDecoration(
                               color: const Color(0xffD1F5D3), // Card background
@@ -346,18 +563,19 @@ class _PostScreenState extends State<PostScreen> {
                                   color: Colors.grey.withOpacity(0.4),
                                   spreadRadius: 1,
                                   blurRadius: 6,
-                                  offset: Offset(0, 0), // shadow in all directions
+                                  offset:
+                                      Offset(0, 0), // shadow in all directions
                                 ),
                               ],
                             ),
-
-                            child: CustomText(text: "Live", left: 8.w, right: 8.w,),
+                            child: CustomText(
+                              text: "Live",
+                              left: 8.w,
+                              right: 8.w,
+                            ),
                           ),
                         ],
                       ),
-
-
-
                       Row(
                         children: [
                           Assets.icons.moneyIconCard.svg(),
@@ -386,166 +604,23 @@ class _PostScreenState extends State<PostScreen> {
                         color: Colors.black,
                         bottom: 7.h,
                       ),
-                      Row(
-                        children: [
-                          Expanded(
-                            flex: 1,
-                            child: CustomButton(
-                                height: 26.h,
-                                title: "Edit",
-                                onpress: () {},
-                                color: Colors.transparent,
-                                fontSize: 11.h,
-                                loaderIgnore: true,
-                                boderColor: AppColors.primaryColor,
-                                titlecolor: AppColors.primaryColor),
-                          ),
-                          SizedBox(width: 8.w),
-                          Expanded(
-                            flex: 1,
-                            child: CustomButton(
-                                loading: false,
-                                loaderIgnore: true,
-                                height: 26.h,
-                                title: "Delete",
-                                onpress: () {},
-                                fontSize: 11.h),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-
-
-
-
-  final List<String> _options = ['In Progress', 'Packed', 'Handover'];
-  String _selected = 'In Progress';
-  Widget _mySalesList(String? selectedItem) {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
-          decoration: BoxDecoration(
-            color: const Color(0xfffef4ea), // Card background
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: Offset(0, 0), // shadow in all directions
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(10.w),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image Section
-
-                CustomNetworkImage(
-                    borderRadius: BorderRadius.circular(8.r),
-                    imageUrl:
-                    "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773",
-                    height: 139.h,
-                    width: 109.w),
-
-                SizedBox(width: 7.w),
-
-                // Info Section
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-
-                      Row(
-                        children: [
-                          CustomText(
-                              text: "Cat Travel Bag (Used)",
-                              fontWeight: FontWeight.w600,
-                              bottom: 4.h,
-                              color: Colors.black),
-                          Spacer(),
-
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xffD1F5D3), // Card background
-                              borderRadius: BorderRadius.circular(12.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  spreadRadius: 1,
-                                  blurRadius: 6,
-                                  offset: Offset(0, 0), // shadow in all directions
-                                ),
-                              ],
-                            ),
-
-                            child: CustomText(text: "Live", left: 8.w, right: 8.w,),
-                          ),
-                        ],
-                      ),
-
-
-
-                      Row(
-                        children: [
-                          Assets.icons.moneyIconCard.svg(),
-                          SizedBox(width: 4.w),
-                          CustomText(
-                            text: "30\$",
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red,
-                          ),
-                        ],
-                      ),
-                      CustomText(
-                          text: "Pet Type: Cat",
-                          fontSize: 12.h,
-                          bottom: 4.h,
-                          color: Colors.black),
-                      CustomText(
-                        text: "Condition: Used – 60% Usable",
-                        fontSize: 12.h,
-                        bottom: 4.h,
-                        color: Colors.black,
-                      ),
-                      CustomText(
-                        text: "Location: Banani, Dhaka",
-                        fontSize: 12.h,
-                        color: Colors.black,
-                        bottom: 7.h,
-                      ),
-
-
-
                       Align(
                         alignment: Alignment.centerRight,
                         child: Container(
                           height: 35.h,
-                          padding:  EdgeInsets.symmetric(horizontal: 12.w),
+                          padding: EdgeInsets.symmetric(horizontal: 12.w),
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFEF4EA), // light background
-                            border: Border.all(color: const Color(0xFFFF7A01)), // orange border
+                            color: const Color(0xFFFEF4EA),
+                            // light background
+                            border: Border.all(color: const Color(0xFFFF7A01)),
+                            // orange border
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: DropdownButtonHideUnderline(
                             child: DropdownButton<String>(
                               value: selectedItem,
-                              icon: const Icon(Icons.arrow_drop_down, color: Color(0xFFFF7A01)),
+                              icon: const Icon(Icons.arrow_drop_down,
+                                  color: Color(0xFFFF7A01)),
                               dropdownColor: const Color(0xFFFEF4EA),
                               borderRadius: BorderRadius.circular(16),
                               style: const TextStyle(color: Colors.black),
@@ -566,8 +641,6 @@ class _PostScreenState extends State<PostScreen> {
                           ),
                         ),
                       )
-
-
                     ],
                   ),
                 ),

@@ -53,8 +53,21 @@ class AuthController extends GetxController {
     final response = await ApiClient.postData(ApiConstants.loginEndPoint, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+
+      var data = response.body;
+      PrefsHelper.setString(AppConstants.firstName, data["data"]["firstName"]);
+      PrefsHelper.setString(AppConstants.lastName, data["data"]["lastName"]);
+      PrefsHelper.setString(AppConstants.email, data["data"]["email"]);
+      PrefsHelper.setString(AppConstants.role, data["data"]["roles"][0]);
+      PrefsHelper.setString(AppConstants.bearerToken, data["token"]);
+
       Get.offAllNamed(AppRoutes.welcomeScreen);
       loginLoading(false);
+
+      PrefsHelper.setString(AppConstants.image, data["data"]["email"]);
+
+
+
     } else {
       ToastMessageHelper.showToastMessage(context, response.body["message"]);
       loginLoading(false);
@@ -112,13 +125,13 @@ class AuthController extends GetxController {
 
   RxBool reSetPasswordLoading = false.obs;
 
-  resetPassword({required String email}) async {
+  resetPassword({required String newPassword, confirmPassword}) async {
     reSetPasswordLoading(true);
 
-    var body = {"email": "$email"};
+    var body = {"password": "$newPassword", "passwordConfirm" : "$confirmPassword"};
 
     final response =
-    await ApiClient.postData(ApiConstants.forgotPassword, jsonEncode(body));
+    await ApiClient.postData(ApiConstants.resetPassword, jsonEncode(body));
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       Get.toNamed(AppRoutes.logInScreen);
