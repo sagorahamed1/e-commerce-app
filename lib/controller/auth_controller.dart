@@ -60,6 +60,7 @@ class AuthController extends GetxController {
       PrefsHelper.setString(AppConstants.email, data["data"]["email"]);
       PrefsHelper.setString(AppConstants.role, data["data"]["roles"][0]);
       PrefsHelper.setString(AppConstants.bearerToken, data["token"]);
+      PrefsHelper.setBool(AppConstants.isLogged, true);
 
       Get.offAllNamed(AppRoutes.welcomeScreen);
       loginLoading(false);

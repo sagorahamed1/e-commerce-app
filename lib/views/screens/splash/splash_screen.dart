@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:petattix/core/app_constants/app_constants.dart';
+import 'package:petattix/helper/prefs_helper.dart';
 
 import '../../../core/config/app_route.dart';
 import '../../../global/custom_assets/assets.gen.dart';
@@ -16,8 +18,16 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3), () {
-      return Get.offAllNamed(AppRoutes.onboardingScreen);
+    Future.delayed(Duration(seconds: 3), ()async {
+      bool isLogged = await PrefsHelper.getBool(AppConstants.isLogged);
+      final token = await PrefsHelper.getString(AppConstants.bearerToken);
+
+
+      if(token != "" && isLogged){
+        Get.offAllNamed(AppRoutes.welcomeScreen);
+      }else{
+        Get.offAllNamed(AppRoutes.onboardingScreen);
+      }
     });
     super.initState();
   }

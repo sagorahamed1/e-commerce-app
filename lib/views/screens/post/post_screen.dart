@@ -35,6 +35,7 @@ class _PostScreenState extends State<PostScreen> {
   void initState() {
     productController.fetchCategory();
     productController.getMyProduct();
+    productController.fetchCountries();
     super.initState();
   }
 
@@ -53,8 +54,6 @@ class _PostScreenState extends State<PostScreen> {
             color: Color(0xff592B00),
           ),
         ),
-
-
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.w),
           child: ContainedTabBarView(
@@ -75,18 +74,15 @@ class _PostScreenState extends State<PostScreen> {
             ],
             views: [_createPost(), _myPostList(), _mySalesList(_selected)],
             onChange: (int index) {
-              if(index == 1){
+              if (index == 1) {
                 productController.getMyProduct();
-              }else{
-
-              }
+              } else {}
             },
           ),
         ));
   }
 
   TextEditingController titleCtrl = TextEditingController();
-  TextEditingController locationCtrl = TextEditingController();
   TextEditingController conditionCtrl = TextEditingController();
   TextEditingController usageDurationCtrl = TextEditingController();
   TextEditingController expireDateCtrl = TextEditingController();
@@ -97,6 +93,18 @@ class _PostScreenState extends State<PostScreen> {
   TextEditingController categoryCtrl = TextEditingController();
   TextEditingController selectedCategoryCtrl = TextEditingController();
   TextEditingController brandCtrl = TextEditingController();
+  TextEditingController heightCtrl = TextEditingController();
+  TextEditingController widthCtrl = TextEditingController();
+  TextEditingController lengthCtrl = TextEditingController();
+  TextEditingController weightCtrl = TextEditingController();
+  TextEditingController postalCodeCtrl = TextEditingController();
+  TextEditingController countryCodeCtrl = TextEditingController();
+  TextEditingController countryIdCtrl = TextEditingController();
+  TextEditingController countryTitleCtrl = TextEditingController();
+  TextEditingController addressLine1Ctrl = TextEditingController();
+  TextEditingController addressLine2Ctrl = TextEditingController();
+  TextEditingController cityCtrl = TextEditingController();
+  TextEditingController sizeCtrl = TextEditingController();
 
   bool _isChecked = false;
   final GlobalKey<FormState> forKey = GlobalKey<FormState>();
@@ -170,8 +178,8 @@ class _PostScreenState extends State<PostScreen> {
                               child: CircleAvatar(
                                 radius: 14.r,
                                 backgroundColor: Colors.black38,
-                                child:
-                                    Icon(Icons.arrow_right, color: Colors.white),
+                                child: Icon(Icons.arrow_right,
+                                    color: Colors.white),
                               ),
                             ),
                           ),
@@ -199,10 +207,112 @@ class _PostScreenState extends State<PostScreen> {
                 controller: titleCtrl,
                 labelText: "Product Title",
                 hintText: "Product Title"),
+
+
             CustomTextField(
-                controller: locationCtrl,
-                labelText: "Address",
-                hintText: "Address"),
+                controller: cityCtrl,
+                labelText: "City",
+                hintText: "City"),
+
+
+            CustomTextField(
+              keyboardType: TextInputType.number,
+                controller: sizeCtrl,
+                labelText: "Size",
+                hintText: "Size"),
+
+            CustomTextField(
+              keyboardType: TextInputType.number,
+                controller: heightCtrl,
+                labelText: "Purcell Height CM",
+                hintText: "Purcell Height CM"),
+            CustomTextField(
+              keyboardType: TextInputType.number,
+                controller: widthCtrl,
+                labelText: "Purcell Width CM",
+                hintText: "Purcell Width CM"),
+            CustomTextField(
+              keyboardType: TextInputType.number,
+                controller: lengthCtrl,
+                labelText: "Purcell Length CM",
+                hintText: "Purcell Length CM"),
+            CustomTextField(
+              keyboardType: TextInputType.number,
+                controller: weightCtrl,
+                labelText: "Purcell Weight KG",
+                hintText: "Purcell Weight KG"),
+
+
+
+
+            CustomTextField(
+              controller: countryTitleCtrl,
+              labelText: "Country",
+              hintText: "Country",
+              onTap: () {
+                productController.isListVisible.value = true;
+              },
+              onChanged: (value) {
+                productController.searchCountry(value);
+              },
+            ),
+
+            Obx(() {
+              if (!productController.isListVisible.value) {
+                return const SizedBox.shrink();
+              }
+
+              if (productController.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              return Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.black12,
+                  border: Border.all(color: Colors.grey, width: 0.05)
+                ),
+                child: ListView.builder(
+                  itemCount: productController.filteredCountry.length,
+                  itemBuilder: (context, index) {
+                    final country = productController.filteredCountry[index];
+                    return GestureDetector(
+                      onTap: () {
+                        countryTitleCtrl.text = country.title;
+                        countryCodeCtrl.text = country.countryCode;
+                        countryIdCtrl.text = country.countryId.toString();
+                        productController.isListVisible.value = false; // close list
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(country.title),
+                      ),
+                    );
+                  },
+                ),
+              );
+            }),
+
+
+            CustomTextField(
+                controller: addressLine1Ctrl,
+                labelText: "Address line 1",
+                hintText: "Address line 1"),
+
+
+
+            CustomTextField(
+                controller: addressLine2Ctrl,
+                labelText: "Address line 2",
+                hintText: "Address line 2"),
+
+
+            CustomTextField(
+              keyboardType: TextInputType.number,
+                controller: postalCodeCtrl,
+                labelText: "Postal Code",
+                hintText: "Postal Code"),
+
             CustomTextField(
                 controller: brandCtrl,
                 labelText: "Brand Name",
@@ -215,7 +325,9 @@ class _PostScreenState extends State<PostScreen> {
             Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
-                    text: "Selected Category", color: Colors.black, bottom: 6.h)),
+                    text: "Selected Category",
+                    color: Colors.black,
+                    bottom: 6.h)),
             CustomTextField(
               readOnly: true,
               hintText: "Select category",
@@ -287,10 +399,11 @@ class _PostScreenState extends State<PostScreen> {
                 labelText: "Description",
                 hintText: "Description"),
             CustomButton(
+              loading: productController.productAddLoading.value,
                 title: "Create a Post",
                 onpress: () {
-                  if(forKey.currentState!.validate()){
-                    if(_images.length != 0){
+                  if (forKey.currentState!.validate()) {
+                    if (_images.length != 0) {
                       productController.addProduct(
                           productName: titleCtrl.text,
                           phurcasingPrice: purchasePriceCtrl.text,
@@ -301,13 +414,24 @@ class _PostScreenState extends State<PostScreen> {
                           category: categoryCtrl.text,
                           negotiable: _isChecked,
                           brand: brandCtrl.text,
-                          location: locationCtrl.text,
+                          height: heightCtrl.text,
+                          width: widthCtrl.text,
+                          size: sizeCtrl.text,
+                          city: cityCtrl.text,
+                          countryCode: countryCodeCtrl.text,
+                          length: lengthCtrl.text,
+                          countryId: countryIdCtrl.text,
+                          postalCode: postalCodeCtrl.text,
+                          weight: widthCtrl.text,
+                          addressLine1: addressLine1Ctrl.text,
+                          addressLine2: addressLine2Ctrl.text,
+                          country: countryTitleCtrl.text,
                           images: _images);
-                    }else{
-                      ToastMessageHelper.showToastMessage(context, "Please select your product images");
+                    } else {
+                      ToastMessageHelper.showToastMessage(
+                          context, "Please select your product images");
                     }
                   }
-
                 }),
             SizedBox(height: 120.h)
           ],
@@ -362,144 +486,164 @@ class _PostScreenState extends State<PostScreen> {
   }
 
   Widget _myPostList() {
-    return Obx(()=>
-    productController.myProductLoading.value ? ShimmerListView() :
-
-        productController.myProduct.isEmpty ? CustomText(text: "No Data found!") :
-       ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
-        itemCount: productController.myProduct.length,
-        itemBuilder: (context, index) {
-          var product = productController.myProduct[index];
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
-            decoration: BoxDecoration(
-              color: const Color(0xfffef4ea), // Card background
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.4),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 0), // shadow in all directions
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(10.w),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Image Section
-
-                  CustomNetworkImage(
-                      borderRadius: BorderRadius.circular(8.r),
-                      imageUrl:
-                          "${ApiConstants.imageBaseUrl}/${product.images?[0].image}",
-                      height: 139.h,
-                      width: 109.w),
-
-                  SizedBox(width: 7.w),
-
-                  // Info Section
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+    return Obx(
+      () => productController.myProductLoading.value
+          ? ShimmerListView()
+          : productController.myProduct.isEmpty
+              ? CustomText(text: "No Data found!")
+              : ListView.builder(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
+                  itemCount: productController.myProduct.length,
+                  itemBuilder: (context, index) {
+                    var product = productController.myProduct[index];
+                    return Container(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
+                      decoration: BoxDecoration(
+                        color: const Color(0xfffef4ea), // Card background
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: Offset(0, 0), // shadow in all directions
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            CustomText(
-                                text: "${product.productName}",
-                                fontWeight: FontWeight.w600,
-                                bottom: 4.h,
-                                color: Colors.black),
-                            Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xffD1F5D3), // Card background
-                                borderRadius: BorderRadius.circular(12.r),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.4),
-                                    spreadRadius: 1,
-                                    blurRadius: 6,
-                                    offset:
-                                        Offset(0, 0), // shadow in all directions
+                            // Image Section
+
+                            CustomNetworkImage(
+                                borderRadius: BorderRadius.circular(8.r),
+                                imageUrl:
+                                    "${ApiConstants.imageBaseUrl}/${product.images?[0].image}",
+                                height: 139.h,
+                                width: 109.w),
+
+                            SizedBox(width: 7.w),
+
+                            // Info Section
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      CustomText(
+                                          text: "${product.productName}",
+                                          fontWeight: FontWeight.w600,
+                                          bottom: 4.h,
+                                          color: Colors.black),
+                                      Spacer(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color(
+                                              0xffD1F5D3), // Card background
+                                          borderRadius:
+                                              BorderRadius.circular(12.r),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.4),
+                                              spreadRadius: 1,
+                                              blurRadius: 6,
+                                              offset: Offset(0,
+                                                  0), // shadow in all directions
+                                            ),
+                                          ],
+                                        ),
+                                        child: CustomText(
+                                          text: "${product.status}",
+                                          left: 8.w,
+                                          right: 8.w,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      Assets.icons.moneyIconCard.svg(),
+                                      SizedBox(width: 4.w),
+                                      CustomText(
+                                        text: "${product.purchasingPrice}\$",
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red,
+                                      ),
+                                    ],
+                                  ),
+                                  CustomText(
+                                      text: "Pet Type: Cat",
+                                      fontSize: 12.h,
+                                      bottom: 4.h,
+                                      color: Colors.black),
+                                  CustomText(
+                                    text: "Condition: ${product.condition}",
+                                    fontSize: 12.h,
+                                    bottom: 4.h,
+                                    color: Colors.black,
+                                  ),
+                                  CustomText(
+                                    text: "Location: ${product.category}",
+                                    fontSize: 12.h,
+                                    color: Colors.black,
+                                    bottom: 7.h,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        flex: 1,
+                                        child: CustomButton(
+                                            height: 26.h,
+                                            title: "Edit",
+                                            onpress: () {
+                                              Get.toNamed(
+                                                  AppRoutes
+                                                      .editMyProductScreent,
+                                                  arguments: {"index": index});
+                                            },
+                                            color: Colors.transparent,
+                                            fontSize: 11.h,
+                                            loaderIgnore: true,
+                                            boderColor: AppColors.primaryColor,
+                                            titlecolor: AppColors.primaryColor),
+                                      ),
+                                      SizedBox(width: 8.w),
+                                      Expanded(
+                                        flex: 1,
+                                        child: Obx(
+                                          () => CustomButton(
+                                              loading: productController
+                                                  .deleteMyProductLoading.value,
+                                              loaderIgnore: true,
+                                              height: 26.h,
+                                              title: "Delete",
+                                              onpress: () {
+                                                productController
+                                                    .deleteMyProduct(
+                                                        context: context,
+                                                        id: product.id
+                                                            .toString());
+                                              },
+                                              fontSize: 11.h),
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                              child: CustomText(
-                                text: "${product.status}",
-                                left: 8.w,
-                                right: 8.w,
-                              ),
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Assets.icons.moneyIconCard.svg(),
-                            SizedBox(width: 4.w),
-                            CustomText(
-                              text: "${product.purchasingPrice}\$",
-                              fontWeight: FontWeight.w500,
-                              color: Colors.red,
-                            ),
-                          ],
-                        ),
-                        CustomText(
-                            text: "Pet Type: Cat",
-                            fontSize: 12.h,
-                            bottom: 4.h,
-                            color: Colors.black),
-                        CustomText(
-                          text: "Condition: ${product.condition}",
-                          fontSize: 12.h,
-                          bottom: 4.h,
-                          color: Colors.black,
-                        ),
-                        CustomText(
-                          text: "Location: ${product.category}",
-                          fontSize: 12.h,
-                          color: Colors.black,
-                          bottom: 7.h,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: CustomButton(
-                                  height: 26.h,
-                                  title: "Edit",
-                                  onpress: () {},
-                                  color: Colors.transparent,
-                                  fontSize: 11.h,
-                                  loaderIgnore: true,
-                                  boderColor: AppColors.primaryColor,
-                                  titlecolor: AppColors.primaryColor),
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              flex: 1,
-                              child: CustomButton(
-                                  loading: false,
-                                  loaderIgnore: true,
-                                  height: 26.h,
-                                  title: "Delete",
-                                  onpress: () {},
-                                  fontSize: 11.h),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 

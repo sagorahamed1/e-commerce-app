@@ -13,6 +13,18 @@ class ProductModel {
   final String? condition;
   final String? size;
   final String? brand;
+  final dynamic height;
+  final dynamic width;
+  final dynamic length;
+  final dynamic weight;
+  final dynamic city;
+  final dynamic addressLine1;
+  final dynamic addressLine2;
+  final dynamic isAddressResidential;
+  final dynamic postalCode;
+  final dynamic countryId;
+  final dynamic countryCode;
+  final dynamic country;
   final bool? isNegotiable;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -32,6 +44,18 @@ class ProductModel {
     this.condition,
     this.size,
     this.brand,
+    this.height,
+    this.width,
+    this.length,
+    this.weight,
+    this.city,
+    this.addressLine1,
+    this.addressLine2,
+    this.isAddressResidential,
+    this.postalCode,
+    this.countryId,
+    this.countryCode,
+    this.country,
     this.isNegotiable,
     this.createdAt,
     this.updatedAt,
@@ -52,6 +76,18 @@ class ProductModel {
     condition: json["condition"],
     size: json["size"],
     brand: json["brand"],
+    height: json["height"],
+    width: json["width"],
+    length: json["length"],
+    weight: json["weight"],
+    city: json["city"],
+    addressLine1: json["address_line_1"],
+    addressLine2: json["address_line_2"],
+    isAddressResidential: json["is_address_residential"],
+    postalCode: json["postal_code"],
+    countryId: json["country_id"],
+    countryCode: json["country_code"],
+    country: json["country"],
     isNegotiable: json["is_negotiable"],
     createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
     updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
@@ -72,6 +108,18 @@ class ProductModel {
     "condition": condition,
     "size": size,
     "brand": brand,
+    "height": height,
+    "width": width,
+    "length": length,
+    "weight": weight,
+    "city": city,
+    "address_line_1": addressLine1,
+    "address_line_2": addressLine2,
+    "is_address_residential": isAddressResidential,
+    "postal_code": postalCode,
+    "country_id": countryId,
+    "country_code": countryCode,
+    "country": country,
     "is_negotiable": isNegotiable,
     "created_at": createdAt?.toIso8601String(),
     "updated_at": updatedAt?.toIso8601String(),
@@ -113,7 +161,7 @@ class User {
   final String? firstName;
   final String? lastName;
   final String? email;
-  final dynamic image;
+  final String? image;
   final List<String>? roles;
   final bool? isActive;
   final DateTime? createdAt;

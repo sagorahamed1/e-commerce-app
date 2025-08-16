@@ -104,6 +104,37 @@ class ApiClient extends GetxService {
 
 
 
+  //==========================================> Post Data <======================================
+  static Future<Response> dummyPostData(String uri, dynamic body,
+      {Map<String, String>? headers}) async {
+
+
+    var mainHeaders = {
+      'Content-Type': 'application/json'
+    };
+
+    try {
+      print('====> API Call: $uri\nHeader: $mainHeaders');
+      print('====> API Body: $body');
+
+      http.Response response = await client.post(
+        Uri.parse(uri),
+        body: body,
+        headers: headers ?? mainHeaders,
+      ).timeout(const Duration(seconds: timeoutInSeconds));
+
+      print("==========> Response Post Method : ${response.statusCode} \n*********${response.body}");
+      return handleResponse(response, uri);
+    } catch (e, s) {
+      print("===> Error in postData: $e");
+      print("===> Error in postData: $s");
+      return const Response(statusCode: 1, statusText: noInternetMessage);
+    }
+  }
+
+
+
+
   static Future<Response> postMultipartData(
       String uri, Map<String, String> body,
       {required List<MultipartBody> multipartBody,
@@ -288,6 +319,9 @@ class ApiClient extends GetxService {
       return const Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
+
+
+
 
   //==========================================> Handle Response <======================================
   static Response handleResponse(http.Response response, String uri) {

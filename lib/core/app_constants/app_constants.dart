@@ -6,6 +6,7 @@ static const String firstName = "firstName";
 static const String lastName = "lastName";
 static const String role = "role";
 static const String image = "image";
+static const String isLogged = "isLogged";
 
 
   static RegExp emailValidate = RegExp(

@@ -16,6 +16,7 @@ import '../../views/screens/message/media_screen.dart';
 import '../../views/screens/message/message_screen.dart';
 import '../../views/screens/notification/notification_screen.dart';
 import '../../views/screens/onboarding/onboarding_screen.dart';
+import '../../views/screens/post/edit_my_product_screent.dart';
 import '../../views/screens/profile/edit_profile_screen.dart';
 import '../../views/screens/profile/profile_information_screen.dart';
 import '../../views/screens/profile/wallet_history_screen.dart';
@@ -61,6 +62,7 @@ class AppRoutes {
   static const String mediaScreen = "/MediaScreen";
   static const String refundRequestScreen = "/RefundRequestScreen";
   static const String wishListScreen = "/WishListScreen";
+  static const String editMyProductScreent = "/EditMyProductScreent";
 
 
 
@@ -93,5 +95,6 @@ class AppRoutes {
     GetPage(name: mediaScreen, page: () =>  MediaScreen()),
     GetPage(name: refundRequestScreen, page: () =>  RefundRequestScreen()),
     GetPage(name: wishListScreen, page: () =>  WishListScreen()),
+    GetPage(name: editMyProductScreent, page: () =>  EditMyProductScreent()),
   ];
 }

@@ -9,7 +9,9 @@ import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
 
+import '../../../controller/product_controller.dart';
 import '../../widgets/custom_product_card.dart';
+import '../../widgets/shimmer_grid_view.dart';
 
 class AllProductScreen extends StatefulWidget {
   AllProductScreen({super.key});
@@ -20,12 +22,21 @@ class AllProductScreen extends StatefulWidget {
 
 class _AllProductScreenState extends State<AllProductScreen> {
   final TextEditingController searchCtrl = TextEditingController();
-
+  ProductController productController = Get.put(ProductController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      productController.getAllProduct();
+    });
+
+    super.initState();
+  }
 
   double minPrice = 5;
   double maxPrice = 20;
-
 
   @override
   Widget build(BuildContext context) {
@@ -118,7 +129,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                   padding:  EdgeInsets.symmetric(horizontal: 30.w),
                   child: CustomButton(
                       title: "Apply", onpress: () {
-
+                        productController.allProduct.value = [];
+                        productController.getAllProduct(price: "${minPrice.ceil()}-${maxPrice.ceil()}");
                   }),
                 )
               ],
@@ -157,25 +169,35 @@ class _AllProductScreenState extends State<AllProductScreen> {
             ),
             Expanded(
               child: AnimationLimiter(
-                child: GridView.builder(
-                  itemCount: 50,
-                  padding: EdgeInsets.symmetric(vertical: 1.h),
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.868,
+                child: Obx( () => productController.allProductLoading.value ? ShimmerGridView() :
+                   GridView.builder(
+                    itemCount: productController.allProduct.length,
+                    padding: EdgeInsets.symmetric(vertical: 1.h),
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      childAspectRatio: 0.868,
+                    ),
+                    itemBuilder: (context, index) {
+                      var product = productController.allProduct[index];
+                      return CustomProductCard(
+                        image: "${product.images?[0].image}",
+                        index: index,
+                        isFavorite: true,
+                        title: "${product.productName}",
+                        address: "${product.addressLine1 ?? "N/A"}",
+                        price: "${product.purchasingPrice}",
+                        onTap: () {Get.toNamed(AppRoutes.productDetailsScreen, arguments: {
+                          "index" : index
+                        });},
+
+                        favoriteOnTap: () {
+                          productController.toggleFavourite(id: product.id.toString());
+                        },
+                      );
+                    },
                   ),
-                  itemBuilder: (context, index) {
-                    return CustomProductCard(
-                      index: index,
-                      isFavorite: true,
-                      title: "Cat Travel Bag",
-                      address: "Dhaka",
-                      price: "30",
-                      onTap: () {Get.toNamed(AppRoutes.productDetailsScreen);},
-                    );
-                  },
                 ),
               ),
             ),

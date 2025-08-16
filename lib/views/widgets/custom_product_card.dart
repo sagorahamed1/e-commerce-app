@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:petattix/services/api_constants.dart';
 
 import '../../global/custom_assets/assets.gen.dart';
 import 'cachanetwork_image.dart';
@@ -16,6 +17,7 @@ class CustomProductCard extends StatelessWidget {
   final DateTime? time;
   final bool? isFavorite;
   final VoidCallback? onTap;
+  final VoidCallback? favoriteOnTap;
 
   const CustomProductCard(
       {super.key,
@@ -26,7 +28,7 @@ class CustomProductCard extends StatelessWidget {
         this.time,
         this.image,
         this.isFavorite,
-        this.onTap});
+        this.onTap, this.favoriteOnTap});
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,7 @@ class CustomProductCard extends StatelessWidget {
                               height: 105.h,
                               borderRadius: BorderRadius.circular(10.r),
                               imageUrl:
-                              "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773")),
+                              "${ApiConstants.imageBaseUrl}/$image")),
                     ),
                     // Text and icons section
                     Expanded(
@@ -128,7 +130,7 @@ class CustomProductCard extends StatelessWidget {
                             Align(
                               alignment: Alignment.bottomRight,
                               child: GestureDetector(
-                                onTap: (){},
+                                onTap: favoriteOnTap,
                                 child: Icon(
                                   isFavorite ?? false
                                       ? Icons.favorite
