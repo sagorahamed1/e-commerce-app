@@ -220,14 +220,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             var product = productController.allProduct[index];
                             return CustomProductCard(
                               index: index,
-                              isFavorite: false,
+                              // isFavorite: false,
                               title: "${product.productName}",
                               address: "${product.addressLine1 ?? "N/A"}",
-                              price: "${product.purchasingPrice}",
+                              price: "${product.sellingPrice}",
                               image: "${product.images?[0].image}",
                               onTap: () {
                                 Get.toNamed(AppRoutes.productDetailsScreen, arguments: {
-                                  "index" : index
+                                  "index" : product.id
+                                })?.then((_){
+                                  productController.getAllProduct();
                                 });
                               },
                               favoriteOnTap: () {

@@ -1,13 +1,16 @@
+
+
 import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:petattix/helper/toast_message_helper.dart';
-import 'package:petattix/model/category_model.dart';
-import 'package:petattix/model/product_model.dart';
 
+import '../helper/toast_message_helper.dart';
+import '../model/category_model.dart';
 import '../model/country_model.dart';
+import '../model/product_model.dart';
+import '../model/single_product_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
 
@@ -121,6 +124,32 @@ class ProductController extends GetxController {
       allProductLoading(false);
     }
   }
+
+
+
+
+
+
+  Rx<SingleProductModel> singleProduct = SingleProductModel().obs;
+  RxBool singleProductLoading = false.obs;
+
+  getSingleProduct({String? id}) async {
+    allProductLoading(true);
+    var response = await ApiClient.getData(
+        "${ApiConstants.product}/${id?? ""}");
+
+    print("=============${response.body}");
+    if (response.statusCode == 200) {
+      singleProduct.value = SingleProductModel.fromJson(response.body["data"]);
+
+      allProductLoading(false);
+    } else {
+      allProductLoading(false);
+    }
+  }
+
+
+
 
 
 

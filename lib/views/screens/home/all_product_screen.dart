@@ -187,7 +187,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
                         isFavorite: true,
                         title: "${product.productName}",
                         address: "${product.addressLine1 ?? "N/A"}",
-                        price: "${product.purchasingPrice}",
+                        price: "${product.sellingPrice}",
                         onTap: () {Get.toNamed(AppRoutes.productDetailsScreen, arguments: {
                           "index" : index
                         });},

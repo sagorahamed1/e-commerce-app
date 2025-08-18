@@ -194,6 +194,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
+  /// File path: assets/images/no_data_found.png
+  AssetGenImage get noDataFound =>
+      const AssetGenImage('assets/images/no_data_found.png');
+
   /// File path: assets/images/onboarding1.png
   AssetGenImage get onboarding1 =>
       const AssetGenImage('assets/images/onboarding1.png');
@@ -222,6 +226,7 @@ class $AssetsImagesGen {
         confirmImage,
         dog,
         logo,
+        noDataFound,
         onboarding1,
         onboarding2,
         onboarding3,

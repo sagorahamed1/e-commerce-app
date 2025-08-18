@@ -127,20 +127,20 @@ class CustomProductCard extends StatelessWidget {
                               ],
                             ),
 
-                            Align(
-                              alignment: Alignment.bottomRight,
-                              child: GestureDetector(
-                                onTap: favoriteOnTap,
-                                child: Icon(
-                                  isFavorite ?? false
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
-                                  color: isFavorite ?? false
-                                      ? Colors.red
-                                      : Colors.grey[600],
-                                ),
-                              ),
-                            ),
+                            // Align(
+                            //   alignment: Alignment.bottomRight,
+                            //   child: GestureDetector(
+                            //     onTap: favoriteOnTap,
+                            //     child: Icon(
+                            //       isFavorite ?? false
+                            //           ? Icons.favorite
+                            //           : Icons.favorite_border,
+                            //       color: isFavorite ?? false
+                            //           ? Colors.red
+                            //           : Colors.grey[600],
+                            //     ),
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

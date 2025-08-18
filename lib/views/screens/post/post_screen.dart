@@ -16,6 +16,7 @@ import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
+import 'package:petattix/views/widgets/no_data_found_card.dart';
 
 import '../../widgets/cusotom_check_box.dart';
 import '../../widgets/custom_popup_menu.dart';
@@ -70,7 +71,7 @@ class _PostScreenState extends State<PostScreen> {
             tabs: const [
               Text('        Create Post         '),
               Text('         My Post        '),
-              Text('         My Sales       '),
+              Text('         Purchases       '),
             ],
             views: [_createPost(), _myPostList(), _mySalesList(_selected)],
             onChange: (int index) {
@@ -490,7 +491,7 @@ class _PostScreenState extends State<PostScreen> {
       () => productController.myProductLoading.value
           ? ShimmerListView()
           : productController.myProduct.isEmpty
-              ? CustomText(text: "No Data found!")
+              ? NoDataFoundCard()
               : ListView.builder(
                   padding:
                       EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
