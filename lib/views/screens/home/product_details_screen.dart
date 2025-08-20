@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,7 @@ import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../controller/product_controller.dart';
 import '../../widgets/cachanetwork_image.dart';
@@ -41,12 +44,26 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
             () => Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomNetworkImage(
-                    height: 216.h,
-                    width: double.infinity,
-                    borderRadius: BorderRadius.circular(10.r),
-                    imageUrl:
-                        "${ApiConstants.imageBaseUrl}/${productController.singleProduct.value.images?[0].image}"),
+
+
+                ProductImageSlider(
+                  images: productController.singleProduct.value.images
+                      ?.map((e) => "${ApiConstants.imageBaseUrl}/${e.image}")
+                      .toList() ?? [],
+                ),
+
+                //
+                // CustomNetworkImage(
+                //     height: 216.h,
+                //     width: double.infinity,
+                //     borderRadius: BorderRadius.circular(10.r),
+                //     imageUrl:
+                //         "${ApiConstants.imageBaseUrl}/${productController.singleProduct.value.images?[0].image}"),
+                //
+
+
+
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -221,10 +238,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     Expanded(
                         flex: 1,
-                        child: CustomButton(
-                            title: "Offer Price",
-                            onpress: () {},
-                            fontSize: 12.h)),
+                        child: Obx(() =>
+                           CustomButton(
+                              loading: productController.sendOfferLoading.value,
+                              title: "Offer Price",
+                              onpress: () {
+                                productController.sendOffer(
+                                    id: productController.singleProduct.value.id.toString(),
+                                    price: productController.singleProduct.value.sellingPrice.toString());
+                              },
+                              fontSize: 12.h),
+                        )),
                     SizedBox(width: 10.w),
                     Expanded(
                         flex: 1,
@@ -240,6 +264,86 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           ),
         ),
       ),
+    );
+  }
+}
+
+
+
+
+class ProductImageSlider extends StatefulWidget {
+  final List<String> images;
+
+  const ProductImageSlider({super.key, required this.images});
+
+  @override
+  State<ProductImageSlider> createState() => _ProductImageSliderState();
+}
+
+class _ProductImageSliderState extends State<ProductImageSlider> {
+  late PageController _pageController;
+  int _currentPage = 0;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(initialPage: 0);
+
+    // Auto scroll logic
+    _timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
+      if (_currentPage < widget.images.length - 1) {
+        _currentPage++;
+      } else {
+        _currentPage = 0;
+      }
+      _pageController.animateToPage(
+        _currentPage,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 220.h,
+          child: PageView.builder(
+            controller: _pageController,
+            itemCount: widget.images.length,
+            itemBuilder: (context, index) {
+              return ClipRRect(
+                borderRadius: BorderRadius.circular(10.r),
+                child: Image.network(
+                  widget.images[index],
+                  fit: BoxFit.cover,
+                  width: double.infinity,
+                ),
+              );
+            },
+          ),
+        ),
+        SizedBox(height: 10.h),
+        SmoothPageIndicator(
+          controller: _pageController,
+          count: widget.images.length,
+          effect: ExpandingDotsEffect(
+            activeDotColor: AppColors.primaryColor,
+            dotHeight: 8.h,
+            dotWidth: 8.w,
+          ),
+        ),
+      ],
     );
   }
 }

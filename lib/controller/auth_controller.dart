@@ -58,6 +58,8 @@ class AuthController extends GetxController {
       PrefsHelper.setString(AppConstants.firstName, data["data"]["firstName"]);
       PrefsHelper.setString(AppConstants.lastName, data["data"]["lastName"]);
       PrefsHelper.setString(AppConstants.email, data["data"]["email"]);
+      PrefsHelper.setString(AppConstants.address, data["data"]["address"]);
+      PrefsHelper.setString(AppConstants.phone, data["data"]["phone"]);
       PrefsHelper.setString(AppConstants.role, data["data"]["roles"][0]);
       PrefsHelper.setString(AppConstants.bearerToken, data["token"]);
       PrefsHelper.setBool(AppConstants.isLogged, true);

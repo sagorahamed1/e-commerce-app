@@ -102,28 +102,28 @@ class CustomProductCard extends StatelessWidget {
                             SizedBox(height: 4.h),
 
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Row(
-                                  children: [
-                                    Icon(Icons.location_on_outlined,
-                                        size: 14.h),
-                                    CustomText(
-                                        text: "$address",
-                                        fontSize: 12.h,
-                                        color: Colors.black),
-                                  ],
+                                Icon(Icons.location_on_outlined,
+                                    size: 14.h),
+                                SizedBox(
+                                  width: 130.w,
+                                  child: CustomText(
+                                      text: "$address",
+                                      fontSize: 12.h,
+                                      color: Colors.black),
                                 ),
-                                Row(
-                                  children: [
-                                    Icon(Icons.watch_later_outlined,
-                                        size: 14.h),
-                                    CustomText(
-                                        text: "2h ago",
-                                        fontSize: 12.h,
-                                        color: Colors.black),
-                                  ],
-                                ),
+                              ],
+                            ),
+
+
+                            Row(
+                              children: [
+                                Icon(Icons.watch_later_outlined,
+                                    size: 14.h),
+                                CustomText(
+                                    text: "2h ago",
+                                    fontSize: 12.h,
+                                    color: Colors.black),
                               ],
                             ),
 

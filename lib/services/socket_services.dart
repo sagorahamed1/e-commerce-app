@@ -1,105 +1,84 @@
 import 'dart:async';
+import 'dart:ui';
+import 'package:petattix/core/app_constants/app_constants.dart';
+import 'package:petattix/helper/prefs_helper.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart';
 
-import '../core/app_constants/app_constants.dart';
-import '../helper/prefs_helper.dart';
-
+import 'api_constants.dart';
 
 class SocketServices {
-  static final SocketServices _socketApi = SocketServices._internal();
-   IO.Socket? socket;
-  static String? token;
-
-  factory SocketServices() => _socketApi;
+  factory SocketServices() {
+    return _socketApi;
+  }
 
   SocketServices._internal();
 
-  Future<void> init() async {
+  static IO.Socket? socket;
 
-    // if(socket.connected){
-    //   disconnect(isManual: true);
-    // }
+  static final SocketServices _socketApi = SocketServices._internal();
 
-    token = await PrefsHelper.getString(AppConstants.bearerToken) ?? "";
+  // static IO.Socket socket = IO.io('${ApiConstants.socketUrl}',
+  //     IO.OptionBuilder().setTransports(['websocket']).enableForceNew().build());
 
-    print("-------------------------------------------------------------\n Socket call \n token = $token");
+  static void init({String token = ""}) {
+    if (token != "") {
+      socket = IO.io(
+          '${ApiConstants.imageBaseUrl}',
+          IO.OptionBuilder()
+              .setTransports(['websocket'])
+              .setExtraHeaders({'Authorization': 'Bearer $token'})
+              .enableForceNew()
+              .build());
+    }
 
-    socket = IO.io(
-        'https://api.valentinesproservice.com?token=$token',
-        // '${ApiConstants.imageBaseUrl}?token=$token',
-        IO.OptionBuilder()
-            .setTransports(['websocket'])
-            .enableForceNew()
-            .enableReconnection()
-            .build()
-    );
+    if (!socket!.connected) {
+      socket?.onConnect((_) {
+        print(
+            '==================================> socket connected: ${socket?.connected}');
+      });
 
-    _setupSocketListeners(token.toString());
-    socket?.connect(); // Ensure connection starts
+      socket?.onConnectError((err) {
+        print('==================================> socket connect error: $err');
+      });
+
+      socket?.onDisconnect((_) {
+        print('===================================> socket disconnected');
+      });
+    } else {
+      print("==================================> socket already connected");
+    }
   }
 
-  void _setupSocketListeners(String token) {
-    socket?.onConnect((_) {
-      print('========> Socket connected: ${socket?.connected}');
-    });
-
-    socket?.onConnectError((err) {
-      print('========> Socket connect error: $err');
-    });
-
-    // socket.onDisconnect((_) {
-    //   print('========> Socket disconnected! Attempting to reconnect...');
-    //   Future.delayed(Duration(seconds: 2), () {
-    //     if (!socket.connected) {
-    //       socket.connect(); // Force reconnect if needed
-    //     }
-    //   });
-    // });
-
-
-
-    socket?.onReconnect((_) {
-      print('========> Socket reconnected! $token');
-      // init();
-    });
-
-    socket?.onError((error) {
-      print('========> Socket error: $error');
-    });
-  }
-
-  Future<dynamic> emitWithAck(String event, dynamic body) async {
+  static Future<dynamic> emitWithAck(String event, dynamic body) async {
     Completer<dynamic> completer = Completer<dynamic>();
+
+    // Debug: Log the event and body being emitted
+    print("emitWithAck: Emitting event '$event' with body: $body");
+
     socket?.emitWithAck(event, body, ack: (data) {
-      completer.complete(data ?? 1);
+      // Debug: Log the acknowledgment received
+      print("emitWithAck: Acknowledgment received for event '$event': $data");
+
+      if (data != null) {
+        completer.complete(data);
+      } else {
+        completer.complete(1); // Default fallback if `data` is null
+      }
     });
+
+    // Debug: Awaiting acknowledgment
+    print("emitWithAck: Waiting for acknowledgment for event '$event'");
+
     return completer.future;
   }
 
-  void emit(String event, dynamic body) {
+  static emit(String event, dynamic body) async {
     if (body != null) {
       socket?.emit(event, body);
-      print('===========> Emit $event \n $body');
+      print('===========> Emit $event and \n $body');
     }
   }
 
-
-  // void disconnect() {
-  //   socket.disconnect();
-  //   print('========> Socket manually disconnected');
-  // }
-
-
-  void disconnect({bool isManual = false}) {
-    if (isManual) {
-      socket?.clearListeners();
-      socket?.disconnect();
-      socket?.destroy();
-      print('========> Socket manually disconnected');
-    } else {
-      socket?.disconnect();
-      print('========> Socket disconnected without destroying');
-    }
-  }
 
 }

@@ -3,7 +3,7 @@ class ApiConstants{
   // static const String imageBaseUrl = "http://192.168.40.142:5000";
 
   static const String baseUrl = "https://petattix-xilem.sarv.live/api/v1";
-  static const String imageBaseUrl = "https://petattix-xilem.sarv.live";
+  static const String imageBaseUrl = "https://petattix-xilem.sarv.live/";
 
 
   static const String signUpEndPoint = "/auth/signup";
@@ -17,4 +17,7 @@ class ApiConstants{
   static const String product = "/products";
   static const String getCategory = "/categories";
   static const String favourites = "/favourites";
+  static const String offerSend = "/offers/send";
+  static const String getChatUser = "/conversations?term=pet&limit=10";
+  static String chatEndPoint(String? id) =>  "/messages/${id??""}?limit=100";
 }

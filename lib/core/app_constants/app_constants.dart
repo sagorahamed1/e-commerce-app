@@ -6,6 +6,8 @@ static const String firstName = "firstName";
 static const String lastName = "lastName";
 static const String role = "role";
 static const String image = "image";
+static const String address = "address";
+static const String phone = "phone";
 static const String isLogged = "isLogged";
 
 

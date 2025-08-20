@@ -50,6 +50,7 @@ dependencies:
   chatview: ^2.5.0
   flutter_rating_bar: ^4.0.1
   intl_phone_field:
+  smooth_page_indicator: ^1.2.1
 
 
 

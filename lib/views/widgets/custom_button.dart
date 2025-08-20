@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../core/app_constants/app_colors.dart';
+import '../../global/custom_assets/assets.gen.dart';
 import 'custom_text.dart';
 
 class CustomButton extends StatelessWidget {
@@ -69,12 +70,12 @@ class CustomButton extends StatelessWidget {
             loaderIgnore ? const SizedBox() :  SizedBox(width: 20.w),
 
 
-            // loaderIgnore ? const SizedBox() :  loading  ?
-            //     SizedBox(
-            //         height: 25.h,
-            //         width: 25.w,
-            //         child: Assets.lottie.buttonLoading.lottie(fit: BoxFit.cover)
-            //     ) :  SizedBox(width: 25.w)
+            loaderIgnore ? const SizedBox() :  loading  ?
+                SizedBox(
+                    height: 25.h,
+                    width: 25.w,
+                    child: Assets.lottie.loading.lottie(fit: BoxFit.cover)
+                ) :  SizedBox(width: 25.w)
           ],
         ),
       ),

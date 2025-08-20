@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 import 'dart:io';
 
@@ -36,7 +34,8 @@ class ProductController extends GetxController {
       countryCode,
       countryId,
       addressLine1,
-      addressLine2, country,
+      addressLine2,
+      country,
       required bool negotiable,
       required List<File> images}) async {
     productAddLoading(true);
@@ -76,7 +75,8 @@ class ProductController extends GetxController {
         ApiConstants.product, body,
         multipartBody: photoList);
 
-    print("========================================================================= ${response.body}");
+    print(
+        "========================================================================= ${response.body}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       productAddLoading(false);
@@ -104,15 +104,13 @@ class ProductController extends GetxController {
     }
   }
 
-
-
   RxList<ProductModel> allProduct = <ProductModel>[].obs;
   RxBool allProductLoading = false.obs;
 
   getAllProduct({String? price}) async {
     allProductLoading(true);
     var response = await ApiClient.getData(
-        "${ApiConstants.product}?page=1&limit=10&type=global&price=${price??""}");
+        "${ApiConstants.product}?page=1&limit=10&type=global&price=${price ?? ""}");
 
     print("=============${response.body}");
     if (response.statusCode == 200) {
@@ -125,18 +123,13 @@ class ProductController extends GetxController {
     }
   }
 
-
-
-
-
-
   Rx<SingleProductModel> singleProduct = SingleProductModel().obs;
   RxBool singleProductLoading = false.obs;
 
   getSingleProduct({String? id}) async {
     allProductLoading(true);
-    var response = await ApiClient.getData(
-        "${ApiConstants.product}/${id?? ""}");
+    var response =
+        await ApiClient.getData("${ApiConstants.product}/${id ?? ""}");
 
     print("=============${response.body}");
     if (response.statusCode == 200) {
@@ -147,12 +140,6 @@ class ProductController extends GetxController {
       allProductLoading(false);
     }
   }
-
-
-
-
-
-
 
   RxList<CategoryModel> category = <CategoryModel>[].obs;
   RxBool categoryLoading = false.obs;
@@ -173,24 +160,42 @@ class ProductController extends GetxController {
 
 
 
-
   RxBool toggleFavouriteLoading = false.obs;
 
   toggleFavourite({required String id}) async {
     toggleFavouriteLoading(true);
 
-    var body = {
-      "productId" : int.parse(id)
-    };
+    var body = {"productId": int.parse(id)};
 
-    var response = await ApiClient.postData(ApiConstants.favourites, jsonEncode(body));
+    var response =
+        await ApiClient.postData(ApiConstants.favourites, jsonEncode(body));
 
     if (response.statusCode == 200) {
-
-
       toggleFavouriteLoading(false);
     } else {
       toggleFavouriteLoading(false);
+    }
+  }
+
+
+
+
+  RxBool sendOfferLoading = false.obs;
+
+  sendOffer({required String id, price}) async {
+    sendOfferLoading(true);
+
+    var body = {
+      "product_id" : int.parse(id),
+      "price": double.parse(price)};
+
+    var response =
+    await ApiClient.postData(ApiConstants.offerSend, jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      sendOfferLoading(false);
+    } else {
+      sendOfferLoading(false);
     }
   }
 
@@ -215,6 +220,7 @@ class ProductController extends GetxController {
       deleteMyProductLoading(false);
     }
   }
+
 
 
 
@@ -263,5 +269,8 @@ class ProductController extends GetxController {
           .toList();
     }
   }
+
+
+
 
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_constants.dart';
 import 'package:petattix/helper/prefs_helper.dart';
+import 'package:petattix/services/socket_services.dart';
 
 import '../../../core/config/app_route.dart';
 import '../../../global/custom_assets/assets.gen.dart';
@@ -23,8 +24,10 @@ class _SplashScreenState extends State<SplashScreen> {
       final token = await PrefsHelper.getString(AppConstants.bearerToken);
 
 
+
       if(token != "" && isLogged){
         Get.offAllNamed(AppRoutes.welcomeScreen);
+        SocketServices.init(token: token);
       }else{
         Get.offAllNamed(AppRoutes.onboardingScreen);
       }
