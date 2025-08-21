@@ -516,11 +516,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petattix/controller/product_controller.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
 import '../../../controller/chat_controller.dart';
 import '../../../core/app_constants/app_colors.dart';
+import '../../../core/config/app_route.dart';
 import '../../../helper/toast_message_helper.dart';
 import '../../../services/api_constants.dart';
 import 'package:timeago/timeago.dart' as TimeAgo;
@@ -536,6 +538,7 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
   final ChatDataController chatController = Get.put(ChatDataController());
+  final ProductController productController = Get.put(ProductController());
   var argumentsData = Get.arguments;
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -553,6 +556,7 @@ class _MessageScreenState extends State<MessageScreen> {
         }
       }
     });
+
     super.initState();
   }
 
@@ -590,24 +594,98 @@ class _MessageScreenState extends State<MessageScreen> {
         centerTitle: false,
         title: Row(
           children: [
-            CustomNetworkImage(
-                boxShape: BoxShape.circle,
-                imageUrl:
-                    '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.receiver?.image}',
-                height: 40.h,
-                width: 40.h),
+            Obx(
+              () => CustomNetworkImage(
+                  boxShape: BoxShape.circle,
+                  imageUrl:
+                      '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.receiver?.image}',
+                  height: 40.h,
+                  width: 40.h),
+            ),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CustomText(
-                    text:
-                        '${chatController.chatMessages.value.receiver?.firstName} ${chatController.chatMessages.value.receiver?.lastName}',
-                    fontSize: 18.h,
-                    left: 10.w),
+                Obx(
+                  () => CustomText(
+                      text:
+                          '${chatController.chatMessages.value.receiver?.firstName} ${chatController.chatMessages.value.receiver?.lastName}',
+                      fontSize: 18.h,
+                      left: 10.w),
+                ),
               ],
             ),
           ],
         ),
+        
+        actions: [
+
+          PopupMenuButton(itemBuilder: (context) => [
+           PopupMenuItem(child: CustomText(text: "New Offer Create"), onTap: () {
+             TextEditingController amonCtrl = TextEditingController();
+             showDialog(
+               context: context,
+               builder: (context) {
+                 return AlertDialog(
+                   content: Column(
+                     mainAxisSize: MainAxisSize.min,
+                     children: [
+                       CustomText(
+                           text: "Offer Your Price",
+                           fontSize: 16.h,
+                           fontWeight: FontWeight.w600,
+                           top: 29.h,
+                           bottom: 20.h,
+                           color: Color(0xff592B00)),
+                       Divider(),
+                       SizedBox(height: 12.h),
+                       CustomTextField(
+                           controller: amonCtrl,
+                           labelText: "Enter Amount",
+                           hintText: "Enter Amount"),
+                       SizedBox(height: 12.h),
+                       Row(
+                         children: [
+                           Expanded(
+                             flex: 1,
+                             child: CustomButton(
+                                 height: 50.h,
+                                 title: "Cancel",
+                                 onpress: () {
+                                   Get.back();
+                                 },
+                                 color: Colors.transparent,
+                                 fontSize: 11.h,
+                                 loaderIgnore: true,
+                                 boderColor: AppColors
+                                     .primaryColor,
+                                 titlecolor: AppColors
+                                     .primaryColor),
+                           ),
+                           SizedBox(width: 8.w),
+                           Expanded(
+                             flex: 1,
+                             child: CustomButton(
+                                 loading: false,
+                                 loaderIgnore: true,
+                                 height: 50.h,
+                                 title: "Offer",
+                                 onpress: () {
+
+                                   productController.sendOffer(id: Get.arguments["chatId"], price: amonCtrl.text);
+
+                                 },
+                                 fontSize: 11.h),
+                           ),
+                         ],
+                       )
+                     ],
+                   ),
+                 );
+               },
+             );
+           })
+          ])
+        ],
       ),
       body: Column(
         children: [
@@ -626,17 +704,19 @@ class _MessageScreenState extends State<MessageScreen> {
                                 .chatMessages.value.messages!.length) {
                           final message = chatController
                               .chatMessages.value.messages?[index];
+                          print(
+                              "--================================${message?.type}");
 
                           return Column(
-                            crossAxisAlignment: message?.senderId ==
-                                    argumentsData["currectUserId"]
+                            crossAxisAlignment: message?.senderId != chatController.chatMessages.value.receiver?.id
                                 ? CrossAxisAlignment.end
                                 : CrossAxisAlignment.start,
                             children: [
                               SizedBox(
                                 height: 12.h,
                               ),
-                              message?.type == "image"
+                              message?.type.toString().toLowerCase() ==
+                                      "type.image"
                                   ? BubbleNormalImage(
                                       isSender: true,
                                       //message?.senderId == message?.senderId,
@@ -647,10 +727,12 @@ class _MessageScreenState extends State<MessageScreen> {
                                           height: 150,
                                           width: 150),
                                       color: Colors.transparent,
-                                      tail: message?.senderId ==
-                                          argumentsData["currectUserId"],
+                                      tail: message?.senderId !=
+                                          chatController
+                                              .chatMessages.value.receiver?.id,
                                       delivered: true)
-                                  : message?.type == "offer"
+                                  : message?.type.toString().toLowerCase() ==
+                                          "type.text"
                                       ? BubbleNormal(
                                           text: "${message?.msg}",
                                           isSender: message?.senderId !=
@@ -675,18 +757,37 @@ class _MessageScreenState extends State<MessageScreen> {
                                         )
                                       : customOfferMessage(
                                           price: "10",
-                                          title: "message",
-                                          isSender: false,
-                                          imageUrl: "",
+                                          title: "${Get.arguments["name"]}",
+                                          isSender: message?.senderId != chatController.chatMessages.value.receiver?.id,
+                                          status: '',
+                                          imageUrl:
+                                              "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.receiver?.image}",
                                           buttons: [
-                                            CustomButton(
-                                                title: "title", onpress: () {})
-                                          ],
-                                          status: ""),
+                                            SizedBox(
+                                              height: 32.h,
+                                                width: 100.w,
+                                                child: CustomButton(
+                                                    title: chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId ?  "Reject" : "Cancel",
+                                                    color: Colors.transparent,
+                                                    titlecolor: AppColors.primaryColor,
+                                                    loaderIgnore: true,
+                                                    fontSize: 10.h,
+                                                    onpress: () {})),
+                                            SizedBox(width: 8.w),
+
+                                            if(chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId)
+                                            SizedBox(
+                                                width: 100.w,
+                                                height: 32.h,
+                                                child: CustomButton(
+                                                  fontSize: 10.h,
+                                                  loaderIgnore: true,
+                                                  title: "Accept",
+                                                  onpress: () {},
+                                                ))
+                                          ]),
                               Align(
-                                alignment: message?.senderId !=
-                                        chatController
-                                            .chatMessages.value.receiver?.id
+                                alignment: message?.senderId != chatController.chatMessages.value.receiver?.id
                                     ? AlignmentDirectional.centerEnd
                                     : Alignment.centerLeft,
                                 child: CustomText(
@@ -794,10 +895,13 @@ class _MessageScreenState extends State<MessageScreen> {
                       ),
                       SizedBox(width: 10.w),
                       Expanded(
-                        child: CustomTextField(
-                          validator: (value) {},
-                          controller: _controller,
-                          hintText: 'Type your message...',
+                        child: Padding(
+                          padding: EdgeInsets.only(top: 14.h),
+                          child: CustomTextField(
+                            validator: (value) {},
+                            controller: _controller,
+                            hintText: 'Type your message...',
+                          ),
                         ),
                       ),
                       SizedBox(width: 10.w),
@@ -834,10 +938,10 @@ class _MessageScreenState extends State<MessageScreen> {
   }) {
     return Container(
       width: 320.w,
-      margin: EdgeInsets.symmetric(vertical: 8.h),
+      margin: EdgeInsets.symmetric(vertical: 8.h, horizontal: 20.w),
       padding: EdgeInsets.all(12.r),
       decoration: BoxDecoration(
-        color: isSender ? const Color(0xFFFFF0DC) : Colors.white,
+        color: isSender ? const Color(0xFFE6E6E6) : Color(0xffE6E6E6),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -845,12 +949,11 @@ class _MessageScreenState extends State<MessageScreen> {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              imageUrl,
-              width: 48.w,
-              height: 48.h,
-              fit: BoxFit.cover,
-            ),
+            child: CustomNetworkImage(
+              height: 90.h,
+                width: 48.w,
+                imageUrl: "$imageUrl"
+            )
           ),
           SizedBox(width: 8.h),
           Expanded(
@@ -860,10 +963,11 @@ class _MessageScreenState extends State<MessageScreen> {
                 CustomText(
                     text: title,
                     color: Colors.black,
-                    fontSize: 16.h,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 14.h,
                     bottom: 4.h),
-                CustomText(text: status, bottom: 4.h),
-                CustomText(text: price, bottom: 10.h),
+                CustomText(text: "Buyer offers you a price", bottom: 4.h, color: Colors.black),
+                CustomText(text: "Offer Price: \$$price", bottom: 10.h, color: Color(0xff27A14B)),
                 Row(
                   children: [...buttons],
                 )

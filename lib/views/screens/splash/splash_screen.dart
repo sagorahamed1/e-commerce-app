@@ -16,7 +16,11 @@ class SplashScreen extends StatefulWidget {
   State<SplashScreen> createState() => _SplashScreenState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderStateMixin {
+
+
+  late final AnimationController _controller;
+
   @override
   void initState() {
     Future.delayed(Duration(seconds: 3), ()async {
@@ -32,6 +36,14 @@ class _SplashScreenState extends State<SplashScreen> {
         Get.offAllNamed(AppRoutes.onboardingScreen);
       }
     });
+
+
+
+
+    _controller = AnimationController(
+      duration: const Duration(seconds: 2),
+      vsync: this,
+    )..repeat();
     super.initState();
   }
 
@@ -50,7 +62,18 @@ class _SplashScreenState extends State<SplashScreen> {
                   fontWeight: FontWeight.w500,
                   top: 20.h,
                   bottom: 139.h),
-              Assets.lottie.loading.lottie(height: 60.h)
+
+
+              RotationTransition(
+                turns: _controller,
+                child: Assets.images.splashLoading.image(
+                  width: 60.w,
+                  height: 60.h,
+                ),
+              ),
+
+
+              // Assets.lottie.loading.lottie(height: 60.h)
             ],
           ),
         ),

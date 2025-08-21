@@ -75,7 +75,9 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                               return GestureDetector(
                                 onTap: () {
                                   Get.toNamed(AppRoutes.messageScreen, arguments: {
-                                    "chatId" : chatUser.id.toString()
+                                    "chatId" : chatUser.id.toString(),
+                                     "name" : "${chatUser.name}",
+                                     "image" : "${chatUser.image}"
                                   });
                                 },
                                 child: Container(
@@ -93,7 +95,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                                             color: Color(0xff592B00),
                                             width: 0.002),
                                         imageUrl:
-                                            "${ApiConstants.imageBaseUrl}/${chatUser.image}",
+                                            "${ApiConstants.imageBaseUrl}${chatUser.image}",
                                         height: 58.h,
                                         width: 58.w,
                                         boxShape: BoxShape.circle,
