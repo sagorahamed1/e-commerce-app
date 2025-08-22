@@ -55,6 +55,7 @@ class AuthController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
 
       var data = response.body;
+      PrefsHelper.setString(AppConstants.userId, data["data"]["id"]);
       PrefsHelper.setString(AppConstants.firstName, data["data"]["firstName"]);
       PrefsHelper.setString(AppConstants.lastName, data["data"]["lastName"]);
       PrefsHelper.setString(AppConstants.email, data["data"]["email"]);

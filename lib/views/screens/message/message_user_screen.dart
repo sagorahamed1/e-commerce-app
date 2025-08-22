@@ -28,6 +28,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
 
   @override
   void initState() {
+    chatListController.chatUsers.value = [];
     chatListController.getChatUser();
     super.initState();
   }

@@ -15,6 +15,7 @@ class ProfileController extends GetxController {
   RxString phone = "".obs;
   RxString address = "".obs;
   RxString image = "".obs;
+  RxString id = "".obs;
 
   getLocalData() async {
     firstName.value = await PrefsHelper.getString(AppConstants.firstName);
@@ -23,6 +24,7 @@ class ProfileController extends GetxController {
     phone.value = await PrefsHelper.getString(AppConstants.phone);
     address.value = await PrefsHelper.getString(AppConstants.address);
     image.value = await PrefsHelper.getString(AppConstants.image);
+    id.value = await PrefsHelper.getString(AppConstants.userId);
   }
 
   ///===============profile update================<>

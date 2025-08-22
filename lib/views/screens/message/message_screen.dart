@@ -519,10 +519,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:petattix/controller/product_controller.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
-import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
 import '../../../controller/chat_controller.dart';
+import '../../../controller/profile_controller.dart';
 import '../../../core/app_constants/app_colors.dart';
-import '../../../core/config/app_route.dart';
 import '../../../helper/toast_message_helper.dart';
 import '../../../services/api_constants.dart';
 import 'package:timeago/timeago.dart' as TimeAgo;
@@ -542,6 +541,7 @@ class _MessageScreenState extends State<MessageScreen> {
   var argumentsData = Get.arguments;
   final TextEditingController _controller = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+  bool itsMe = true;
 
   @override
   void initState() {
@@ -556,6 +556,7 @@ class _MessageScreenState extends State<MessageScreen> {
         }
       }
     });
+
 
     super.initState();
   }
@@ -598,26 +599,29 @@ class _MessageScreenState extends State<MessageScreen> {
               () => CustomNetworkImage(
                   boxShape: BoxShape.circle,
                   imageUrl:
-                      '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.receiver?.image}',
+                      '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.conversation?.image}',
                   height: 40.h,
                   width: 40.h),
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Obx(
-                  () => CustomText(
-                      text:
-                          '${chatController.chatMessages.value.receiver?.firstName} ${chatController.chatMessages.value.receiver?.lastName}',
-                      fontSize: 18.h,
-                      left: 10.w),
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Obx(
+                    () => CustomText(
+                        text:
+                            '${chatController.chatMessages.value.conversation?.name}',
+                        fontSize: 18.h,
+                        left: 10.w),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
         
         actions: [
+
 
           PopupMenuButton(itemBuilder: (context) => [
            PopupMenuItem(child: CustomText(text: "New Offer Create"), onTap: () {
@@ -665,14 +669,14 @@ class _MessageScreenState extends State<MessageScreen> {
                            Expanded(
                              flex: 1,
                              child: CustomButton(
-                                 loading: false,
                                  loaderIgnore: true,
                                  height: 50.h,
                                  title: "Offer",
                                  onpress: () {
 
-                                   productController.sendOffer(id: Get.arguments["chatId"], price: amonCtrl.text);
+                                   productController.sendOffer(id: chatController.chatMessages.value.conversation?.product?.id.toString() ?? "", price: amonCtrl.text);
 
+                                   Get.back();
                                  },
                                  fontSize: 11.h),
                            ),
@@ -696,16 +700,13 @@ class _MessageScreenState extends State<MessageScreen> {
                   : ListView.builder(
                       controller: _scrollController,
                       reverse: true,
-                      itemCount:
-                          chatController.chatMessages.value.messages?.length,
+                      itemCount: chatController.chatMessages.value.messages?.length,
                       itemBuilder: (context, index) {
                         if (index <
-                            chatController
-                                .chatMessages.value.messages!.length) {
-                          final message = chatController
-                              .chatMessages.value.messages?[index];
-                          print(
-                              "--================================${message?.type}");
+                            chatController.chatMessages.value.messages!.length) {
+                          final message = chatController.chatMessages.value.messages?[index];
+                          print("--================================${message?.type}");
+
 
                           return Column(
                             crossAxisAlignment: message?.senderId != chatController.chatMessages.value.receiver?.id
@@ -716,7 +717,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                 height: 12.h,
                               ),
                               message?.type.toString().toLowerCase() ==
-                                      "type.image"
+                                      "image"
                                   ? BubbleNormalImage(
                                       isSender: true,
                                       //message?.senderId == message?.senderId,
@@ -727,12 +728,10 @@ class _MessageScreenState extends State<MessageScreen> {
                                           height: 150,
                                           width: 150),
                                       color: Colors.transparent,
-                                      tail: message?.senderId !=
-                                          chatController
-                                              .chatMessages.value.receiver?.id,
+                                      tail: message?.senderId != chatController.chatMessages.value.receiver?.id,
                                       delivered: true)
                                   : message?.type.toString().toLowerCase() ==
-                                          "type.text"
+                                          "text"
                                       ? BubbleNormal(
                                           text: "${message?.msg}",
                                           isSender: message?.senderId !=
@@ -756,35 +755,62 @@ class _MessageScreenState extends State<MessageScreen> {
                                           ),
                                         )
                                       : customOfferMessage(
-                                          price: "10",
-                                          title: "${Get.arguments["name"]}",
+                                          price: "${message?.offer?.price}",
+                                          title: "${chatController.chatMessages.value.conversation?.name}",
                                           isSender: message?.senderId != chatController.chatMessages.value.receiver?.id,
                                           status: '',
                                           imageUrl:
                                               "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.receiver?.image}",
                                           buttons: [
-                                            SizedBox(
-                                              height: 32.h,
-                                                width: 100.w,
-                                                child: CustomButton(
-                                                    title: chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId ?  "Reject" : "Cancel",
-                                                    color: Colors.transparent,
-                                                    titlecolor: AppColors.primaryColor,
-                                                    loaderIgnore: true,
-                                                    fontSize: 10.h,
-                                                    onpress: () {})),
-                                            SizedBox(width: 8.w),
 
-                                            if(chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId)
+                                            message?.offer?.status == "accepted" ?
                                             SizedBox(
                                                 width: 100.w,
                                                 height: 32.h,
                                                 child: CustomButton(
                                                   fontSize: 10.h,
                                                   loaderIgnore: true,
-                                                  title: "Accept",
-                                                  onpress: () {},
-                                                ))
+                                                  title: "Purchase",
+                                                  onpress: () {
+                                                    productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId);
+                                                  },
+                                                )) :
+                                            Row(
+                                              children: [
+                                                SizedBox(
+                                                    height: 32.h,
+                                                    width: 100.w,
+                                                    child: CustomButton(
+                                                        title: chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId ?  "Reject" : "Cancel",
+                                                        color: Colors.transparent,
+                                                        titlecolor: AppColors.primaryColor,
+                                                        loaderIgnore: true,
+                                                        fontSize: 10.h,
+                                                        onpress: () {
+                                                          if(chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId){
+
+                                                          }else{
+                                                            productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "reject", buyerId: message?.offer?.buyerId);
+                                                          }
+                                                        })),
+                                                SizedBox(width: 8.w),
+
+                                                if(chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId)
+                                                  SizedBox(
+                                                      width: 100.w,
+                                                      height: 32.h,
+                                                      child: CustomButton(
+                                                        fontSize: 10.h,
+                                                        loaderIgnore: true,
+                                                        title: "Accept",
+                                                        onpress: () {
+                                                          productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId);
+                                                        },
+                                                      ))
+                                              ],
+                                            )
+
+
                                           ]),
                               Align(
                                 alignment: message?.senderId != chatController.chatMessages.value.receiver?.id

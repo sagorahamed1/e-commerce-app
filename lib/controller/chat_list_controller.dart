@@ -22,7 +22,7 @@ class ChatListController extends GetxController {
   @override
   void onInit() {
     chatUsers.clear();
-    getChatUser();
+    // getChatUser();
     super.onInit();
   }
 

@@ -12,6 +12,7 @@ import 'package:petattix/views/widgets/custom_text.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../../controller/product_controller.dart';
+import '../../../controller/profile_controller.dart';
 import '../../widgets/cachanetwork_image.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
@@ -23,11 +24,13 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ProductController productController = Get.put(ProductController());
+  ProfileController profileController = Get.put(ProfileController());
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       productController.getSingleProduct(id: Get.arguments["index"].toString());
+      profileController.getLocalData();
     });
 
     super.initState();
@@ -35,6 +38,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Scaffold(
       appBar: CustomAppBar(title: "Product Details"),
       body: Padding(
@@ -234,6 +239,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   ],
                 ),
                 SizedBox(height: 12.h),
+
+
+               if(productController.singleProduct.value.user?.id != profileController.id.value)
                 Row(
                   children: [
                     Expanded(

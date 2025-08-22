@@ -18,6 +18,8 @@ class ApiConstants{
   static const String getCategory = "/categories";
   static const String favourites = "/favourites";
   static const String offerSend = "/offers/send";
+  static const String offerAccept = "/offers";
+  static  String favouite(String? page) => "/favourites?page=${page??""}&limit=10";
   static const String getChatUser = "/conversations?term=pet&limit=10";
   static String chatEndPoint(String? id) =>  "/messages/${id??""}?limit=100";
 }

@@ -141,6 +141,8 @@ class ProductController extends GetxController {
     }
   }
 
+
+
   RxList<CategoryModel> category = <CategoryModel>[].obs;
   RxBool categoryLoading = false.obs;
 
@@ -196,6 +198,28 @@ class ProductController extends GetxController {
       sendOfferLoading(false);
     } else {
       sendOfferLoading(false);
+    }
+  }
+
+
+
+
+  RxBool acceptOrCancelLoading = false.obs;
+
+  acceptOrCancel({required String id, buyerId, status}) async {
+    acceptOrCancelLoading(true);
+
+    var body = {
+      "buyer_id" : buyerId
+    };
+
+    var response =
+    await ApiClient.postData("${ApiConstants.offerAccept}/${id??""}/${status??""}", jsonEncode(body));
+
+    if (response.statusCode == 200) {
+      acceptOrCancelLoading(false);
+    } else {
+      acceptOrCancelLoading(false);
     }
   }
 
