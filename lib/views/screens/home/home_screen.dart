@@ -6,10 +6,12 @@ import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
+import 'package:petattix/views/widgets/no_data_found_card.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../controller/product_controller.dart';
@@ -33,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
-  List accessories = ["Accessories", "Clothing", "Pet beds", "All"];
+  // List accessories = ["Accessories", "Clothing", "Pet beds", "All"];
 
   @override
   Widget build(BuildContext context) {
@@ -76,41 +78,41 @@ class _HomeScreenState extends State<HomeScreen> {
                 hintText: "Search For Pet Product",
               ),
             ),
-            SizedBox(
-              height: 50.h,
-              child: ListView.builder(
-                itemCount: accessories.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return Container(
-                      width: 90.w,
-                      margin:
-                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 4.w),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(16.r),
-                        border: Border.all(color: Colors.grey, width: 0.05),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color(0x40000000),
-                            offset: Offset(0, 0),
-                            blurRadius: 4,
-                            spreadRadius: 0,
-                          ),
-                        ],
-                      ),
-                      child: Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(4.r),
-                          child: CustomText(
-                              text: "${accessories[index]}",
-                              fontSize: 12.h,
-                              color: AppColors.primaryColor),
-                        ),
-                      ));
-                },
-              ),
-            ),
+            // SizedBox(
+            //   height: 50.h,
+            //   child: ListView.builder(
+            //     itemCount: accessories.length,
+            //     scrollDirection: Axis.horizontal,
+            //     itemBuilder: (context, index) {
+            //       return Container(
+            //           width: 90.w,
+            //           margin:
+            //               EdgeInsets.symmetric(vertical: 6.h, horizontal: 4.w),
+            //           decoration: BoxDecoration(
+            //             color: Colors.white,
+            //             borderRadius: BorderRadius.circular(16.r),
+            //             border: Border.all(color: Colors.grey, width: 0.05),
+            //             boxShadow: [
+            //               BoxShadow(
+            //                 color: Color(0x40000000),
+            //                 offset: Offset(0, 0),
+            //                 blurRadius: 4,
+            //                 spreadRadius: 0,
+            //               ),
+            //             ],
+            //           ),
+            //           child: Center(
+            //             child: Padding(
+            //               padding: EdgeInsets.all(4.r),
+            //               child: CustomText(
+            //                   text: "${accessories[index]}",
+            //                   fontSize: 12.h,
+            //                   color: AppColors.primaryColor),
+            //             ),
+            //           ));
+            //     },
+            //   ),
+            // ),
             CustomText(
                 text: "Popular category",
                 fontWeight: FontWeight.w500,
@@ -163,7 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       height: 50.h,
                                       width: 50.w,
                                       child: CustomNetworkImage(
-                                          imageUrl: "imageUrl"),
+                                          imageUrl: "${ApiConstants.imageBaseUrl}${category.image}"),
                                     ),
                                     SizedBox(
                                       width: 65.w,
@@ -206,7 +208,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Obx(
                   () => productController.allProductLoading.value
                       ? ShimmerListView()
-                      : GridView.builder(
+                      : productController.allProduct.isEmpty ? NoDataFoundCard(paddingFromTop: 40.h) : GridView.builder(
                           itemCount: productController.allProduct.length,
                           padding: EdgeInsets.symmetric(vertical: 12.h),
                           gridDelegate:
@@ -241,6 +243,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
+
+
+            SizedBox(height: 100.h)
           ],
         ),
       ),

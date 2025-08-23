@@ -85,26 +85,24 @@ class _PostScreenState extends State<PostScreen> {
 
   TextEditingController titleCtrl = TextEditingController();
   TextEditingController conditionCtrl = TextEditingController();
-  TextEditingController usageDurationCtrl = TextEditingController();
-  TextEditingController expireDateCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController purchasePriceCtrl = TextEditingController();
   TextEditingController sellingPriceCtrl = TextEditingController();
-  TextEditingController quantityCtrl = TextEditingController();
+  // TextEditingController quantityCtrl = TextEditingController();
   TextEditingController categoryCtrl = TextEditingController();
   TextEditingController selectedCategoryCtrl = TextEditingController();
   TextEditingController brandCtrl = TextEditingController();
-  TextEditingController heightCtrl = TextEditingController();
-  TextEditingController widthCtrl = TextEditingController();
-  TextEditingController lengthCtrl = TextEditingController();
-  TextEditingController weightCtrl = TextEditingController();
-  TextEditingController postalCodeCtrl = TextEditingController();
-  TextEditingController countryCodeCtrl = TextEditingController();
-  TextEditingController countryIdCtrl = TextEditingController();
-  TextEditingController countryTitleCtrl = TextEditingController();
-  TextEditingController addressLine1Ctrl = TextEditingController();
-  TextEditingController addressLine2Ctrl = TextEditingController();
-  TextEditingController cityCtrl = TextEditingController();
+  // TextEditingController heightCtrl = TextEditingController();
+  // TextEditingController widthCtrl = TextEditingController();
+  // TextEditingController lengthCtrl = TextEditingController();
+  // TextEditingController weightCtrl = TextEditingController();
+  // TextEditingController postalCodeCtrl = TextEditingController();
+  // TextEditingController countryCodeCtrl = TextEditingController();
+  // TextEditingController countryIdCtrl = TextEditingController();
+  // TextEditingController countryTitleCtrl = TextEditingController();
+  // TextEditingController addressLine1Ctrl = TextEditingController();
+  // TextEditingController addressLine2Ctrl = TextEditingController();
+  // TextEditingController cityCtrl = TextEditingController();
   TextEditingController sizeCtrl = TextEditingController();
 
   bool _isChecked = false;
@@ -211,118 +209,119 @@ class _PostScreenState extends State<PostScreen> {
 
 
             CustomTextField(
-                controller: cityCtrl,
-                labelText: "City",
-                hintText: "City"),
-
-
-            CustomTextField(
               keyboardType: TextInputType.number,
                 controller: sizeCtrl,
                 labelText: "Size",
                 hintText: "Size"),
 
-            CustomTextField(
-              keyboardType: TextInputType.number,
-                controller: heightCtrl,
-                labelText: "Purcell Height CM",
-                hintText: "Purcell Height CM"),
-            CustomTextField(
-              keyboardType: TextInputType.number,
-                controller: widthCtrl,
-                labelText: "Purcell Width CM",
-                hintText: "Purcell Width CM"),
-            CustomTextField(
-              keyboardType: TextInputType.number,
-                controller: lengthCtrl,
-                labelText: "Purcell Length CM",
-                hintText: "Purcell Length CM"),
-            CustomTextField(
-              keyboardType: TextInputType.number,
-                controller: weightCtrl,
-                labelText: "Purcell Weight KG",
-                hintText: "Purcell Weight KG"),
 
-
-
-
-            CustomTextField(
-              controller: countryTitleCtrl,
-              labelText: "Country",
-              hintText: "Country",
-              onTap: () {
-                productController.isListVisible.value = true;
-              },
-              onChanged: (value) {
-                productController.searchCountry(value);
-              },
-            ),
-
-            Obx(() {
-              if (!productController.isListVisible.value) {
-                return const SizedBox.shrink();
-              }
-
-              if (productController.isLoading.value) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              return Container(
-                height: 150,
-                decoration: BoxDecoration(
-                  color: Colors.black12,
-                  border: Border.all(color: Colors.grey, width: 0.05)
-                ),
-                child: ListView.builder(
-                  itemCount: productController.filteredCountry.length,
-                  itemBuilder: (context, index) {
-                    final country = productController.filteredCountry[index];
-                    return GestureDetector(
-                      onTap: () {
-                        countryTitleCtrl.text = country.title;
-                        countryCodeCtrl.text = country.countryCode;
-                        countryIdCtrl.text = country.countryId.toString();
-                        productController.isListVisible.value = false; // close list
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(country.title),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }),
-
-
-            CustomTextField(
-                controller: addressLine1Ctrl,
-                labelText: "Address line 1",
-                hintText: "Address line 1"),
-
-
-
-            CustomTextField(
-                controller: addressLine2Ctrl,
-                labelText: "Address line 2",
-                hintText: "Address line 2"),
-
-
-            CustomTextField(
-              keyboardType: TextInputType.number,
-                controller: postalCodeCtrl,
-                labelText: "Postal Code",
-                hintText: "Postal Code"),
+            // CustomTextField(
+            //     controller: cityCtrl,
+            //     labelText: "City",
+            //     hintText: "City"),
+            //
+            //
+            // CustomTextField(
+            //   keyboardType: TextInputType.number,
+            //     controller: heightCtrl,
+            //     labelText: "Purcell Height CM",
+            //     hintText: "Purcell Height CM"),
+            // CustomTextField(
+            //   keyboardType: TextInputType.number,
+            //     controller: widthCtrl,
+            //     labelText: "Purcell Width CM",
+            //     hintText: "Purcell Width CM"),
+            // CustomTextField(
+            //   keyboardType: TextInputType.number,
+            //     controller: lengthCtrl,
+            //     labelText: "Purcell Length CM",
+            //     hintText: "Purcell Length CM"),
+            // CustomTextField(
+            //   keyboardType: TextInputType.number,
+            //     controller: weightCtrl,
+            //     labelText: "Purcell Weight KG",
+            //     hintText: "Purcell Weight KG"),
+            //
+            //
+            //
+            //
+            // CustomTextField(
+            //   controller: countryTitleCtrl,
+            //   labelText: "Country",
+            //   hintText: "Country",
+            //   onTap: () {
+            //     productController.isListVisible.value = true;
+            //   },
+            //   onChanged: (value) {
+            //     productController.searchCountry(value);
+            //   },
+            // ),
+            //
+            // Obx(() {
+            //   if (!productController.isListVisible.value) {
+            //     return const SizedBox.shrink();
+            //   }
+            //
+            //   if (productController.isLoading.value) {
+            //     return const Center(child: CircularProgressIndicator());
+            //   }
+            //
+            //   return Container(
+            //     height: 150,
+            //     decoration: BoxDecoration(
+            //       color: Colors.black12,
+            //       border: Border.all(color: Colors.grey, width: 0.05)
+            //     ),
+            //     child: ListView.builder(
+            //       itemCount: productController.filteredCountry.length,
+            //       itemBuilder: (context, index) {
+            //         final country = productController.filteredCountry[index];
+            //         return GestureDetector(
+            //           onTap: () {
+            //             countryTitleCtrl.text = country.title;
+            //             countryCodeCtrl.text = country.countryCode;
+            //             countryIdCtrl.text = country.countryId.toString();
+            //             productController.isListVisible.value = false; // close list
+            //           },
+            //           child: Padding(
+            //             padding: const EdgeInsets.all(8.0),
+            //             child: Text(country.title),
+            //           ),
+            //         );
+            //       },
+            //     ),
+            //   );
+            // }),
+            //
+            //
+            // CustomTextField(
+            //     controller: addressLine1Ctrl,
+            //     labelText: "Address line 1",
+            //     hintText: "Address line 1"),
+            //
+            //
+            //
+            // CustomTextField(
+            //     controller: addressLine2Ctrl,
+            //     labelText: "Address line 2",
+            //     hintText: "Address line 2"),
+            //
+            //
+            // CustomTextField(
+            //   keyboardType: TextInputType.number,
+            //     controller: postalCodeCtrl,
+            //     labelText: "Postal Code",
+            //     hintText: "Postal Code"),
 
             CustomTextField(
                 controller: brandCtrl,
                 labelText: "Brand Name",
                 hintText: "Brand Name"),
-            CustomTextField(
-                controller: quantityCtrl,
-                keyboardType: TextInputType.number,
-                labelText: "Quantity",
-                hintText: "Quantity"),
+            // CustomTextField(
+            //     controller: quantityCtrl,
+            //     keyboardType: TextInputType.number,
+            //     labelText: "Quantity",
+            //     hintText: "Quantity"),
             Align(
                 alignment: Alignment.centerLeft,
                 child: CustomText(
@@ -409,24 +408,24 @@ class _PostScreenState extends State<PostScreen> {
                           productName: titleCtrl.text,
                           phurcasingPrice: purchasePriceCtrl.text,
                           sellingPrice: sellingPriceCtrl.text,
-                          quantity: quantityCtrl.text,
+                          // quantity: quantityCtrl.text,
                           condition: conditionCtrl.text,
                           description: descriptionCtrl.text,
                           category: categoryCtrl.text,
                           negotiable: _isChecked,
                           brand: brandCtrl.text,
-                          height: heightCtrl.text,
-                          width: widthCtrl.text,
                           size: sizeCtrl.text,
-                          city: cityCtrl.text,
-                          countryCode: countryCodeCtrl.text,
-                          length: lengthCtrl.text,
-                          countryId: countryIdCtrl.text,
-                          postalCode: postalCodeCtrl.text,
-                          weight: widthCtrl.text,
-                          addressLine1: addressLine1Ctrl.text,
-                          addressLine2: addressLine2Ctrl.text,
-                          country: countryTitleCtrl.text,
+                          // city: cityCtrl.text,
+                          // height: heightCtrl.text,
+                          // width: widthCtrl.text,
+                          // countryCode: countryCodeCtrl.text,
+                          // length: lengthCtrl.text,
+                          // countryId: countryIdCtrl.text,
+                          // postalCode: postalCodeCtrl.text,
+                          // weight: widthCtrl.text,
+                          // addressLine1: addressLine1Ctrl.text,
+                          // addressLine2: addressLine2Ctrl.text,
+                          // country: countryTitleCtrl.text,
                           images: _images);
                     } else {
                       ToastMessageHelper.showToastMessage(

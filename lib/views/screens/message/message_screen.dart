@@ -517,6 +517,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petattix/controller/product_controller.dart';
+import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import '../../../controller/chat_controller.dart';
@@ -593,31 +594,36 @@ class _MessageScreenState extends State<MessageScreen> {
       appBar: AppBar(
         elevation: 8,
         centerTitle: false,
-        title: Row(
-          children: [
-            Obx(
-              () => CustomNetworkImage(
-                  boxShape: BoxShape.circle,
-                  imageUrl:
-                      '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.conversation?.image}',
-                  height: 40.h,
-                  width: 40.h),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(
-                    () => CustomText(
-                        text:
-                            '${chatController.chatMessages.value.conversation?.name}',
-                        fontSize: 18.h,
-                        left: 10.w),
-                  ),
-                ],
+        title: GestureDetector(
+          onTap: () {
+            Get.toNamed(AppRoutes.chatProfileScreen);
+          },
+          child: Row(
+            children: [
+              Obx(
+                () => CustomNetworkImage(
+                    boxShape: BoxShape.circle,
+                    imageUrl:
+                        '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.conversation?.image}',
+                    height: 40.h,
+                    width: 40.h),
               ),
-            ),
-          ],
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Obx(
+                      () => CustomText(
+                          text:
+                              '${chatController.chatMessages.value.conversation?.name}',
+                          fontSize: 18.h,
+                          left: 10.w),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
         
         actions: [
@@ -674,7 +680,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                  title: "Offer",
                                  onpress: () {
 
-                                   productController.sendOffer(id: chatController.chatMessages.value.conversation?.product?.id.toString() ?? "", price: amonCtrl.text);
+                                   productController.sendOffer(id: chatController.chatMessages.value.conversation?.product?.id.toString() ?? "", price: amonCtrl.text, context:  context);
 
                                    Get.back();
                                  },
@@ -772,7 +778,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                                   loaderIgnore: true,
                                                   title: "Purchase",
                                                   onpress: () {
-                                                    productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId);
+                                                    Get.toNamed(AppRoutes.confirmPurchaseScreen);
+                                                    // productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId);
                                                   },
                                                 )) :
                                             Row(

@@ -82,20 +82,23 @@ class OptScreen extends StatelessWidget {
 
                   SizedBox(height: 120.h),
 
-                  CustomButton(
-                      title: "Get Verification Code",
-                      onpress: () {
-                        if (pinCtrl.text == "") {
-                          ToastMessageHelper.showToastMessage(
-                            context,
-                              "Please enter otp code");
-                        } else {
-                          Get.arguments["screenType"] == "Sign up"
-                              ? authController.verifyEmail(otp: pinCtrl.text, verifyType: "sign up")
+                  Obx(() =>
+                     CustomButton(
+                       loading: authController.verifyEmailLoading.value,
+                        title: "Get Verification Code",
+                        onpress: () {
+                          if (pinCtrl.text == "") {
+                            ToastMessageHelper.showToastMessage(
+                              context,
+                                "Please enter otp code");
+                          } else {
+                            Get.arguments["screenType"] == "Sign up"
+                                ? authController.verifyEmail(otp: pinCtrl.text, verifyType: "sign up")
 
-                              : authController.verifyEmail(otp: pinCtrl.text, verifyType: "forgot");
-                        }
-                      }),
+                                : authController.verifyEmail(otp: pinCtrl.text, verifyType: "forgot");
+                          }
+                        }),
+                  ),
                   SizedBox(height: 160.h),
                 ],
               )

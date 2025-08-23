@@ -253,7 +253,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               onpress: () {
                                 productController.sendOffer(
                                     id: productController.singleProduct.value.id.toString(),
-                                    price: productController.singleProduct.value.sellingPrice.toString());
+                                    price: productController.singleProduct.value.sellingPrice.toString(), context:  context);
                               },
                               fontSize: 12.h),
                         )),

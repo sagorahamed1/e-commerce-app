@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:petattix/core/config/app_route.dart';
 
 import '../helper/toast_message_helper.dart';
 import '../model/category_model.dart';
@@ -18,24 +19,24 @@ class ProductController extends GetxController {
   addProduct(
       {required String productName,
       category,
-      quantity,
+      // quantity,
       brand,
       condition,
       phurcasingPrice,
       sellingPrice,
       description,
       size,
-      height,
-      width,
-      length,
-      weight,
-      city,
-      postalCode,
-      countryCode,
-      countryId,
-      addressLine1,
-      addressLine2,
-      country,
+      // height,
+      // width,
+      // length,
+      // weight,
+      // city,
+      // postalCode,
+      // countryCode,
+      // countryId,
+      // addressLine1,
+      // addressLine2,
+      // country,
       required bool negotiable,
       required List<File> images}) async {
     productAddLoading(true);
@@ -51,32 +52,31 @@ class ProductController extends GetxController {
       "selling_price": "$sellingPrice",
       "phurcasing_price": "$phurcasingPrice",
       "category": "$category",
-      "quantity": "$quantity",
+      "quantity": "1",
       "description": "$description",
       "condition": "$condition",
       "brand": "$brand",
       "is_negotiable": "$negotiable",
       "size": "$size",
-      "height": "$height",
-      "width": "$width",
-      "length": "$length",
-      "weight": "$weight",
-      "city": "$city",
-      "postal_code": "$postalCode",
-      "country_id": "$countryId",
-      "country_code": "$countryCode",
-      "address_line_1": "$addressLine1",
-      "address_line_2": "$addressLine2",
-      "is_address_residential": "true",
-      "country": "$country"
+      // "height": "$height",
+      // "width": "$width",
+      // "length": "$length",
+      // "weight": "$weight",
+      // "city": "$city",
+      // "postal_code": "$postalCode",
+      // "country_id": "$countryId",
+      // "country_code": "$countryCode",
+      // "address_line_1": "$addressLine1",
+      // "address_line_2": "$addressLine2",
+      // "is_address_residential": "true",
+      // "country": "$country"
     };
 
     final response = await ApiClient.postMultipartData(
         ApiConstants.product, body,
         multipartBody: photoList);
 
-    print(
-        "========================================================================= ${response.body}");
+    print("========================================================================= ${response.body}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       productAddLoading(false);
@@ -184,7 +184,7 @@ class ProductController extends GetxController {
 
   RxBool sendOfferLoading = false.obs;
 
-  sendOffer({required String id, price}) async {
+  sendOffer({required String id, price, required BuildContext context}) async {
     sendOfferLoading(true);
 
     var body = {
@@ -197,6 +197,7 @@ class ProductController extends GetxController {
     if (response.statusCode == 200) {
       sendOfferLoading(false);
     } else {
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
       sendOfferLoading(false);
     }
   }
@@ -217,6 +218,7 @@ class ProductController extends GetxController {
     await ApiClient.postData("${ApiConstants.offerAccept}/${id??""}/${status??""}", jsonEncode(body));
 
     if (response.statusCode == 200) {
+
       acceptOrCancelLoading(false);
     } else {
       acceptOrCancelLoading(false);

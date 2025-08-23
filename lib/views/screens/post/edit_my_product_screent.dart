@@ -261,7 +261,7 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
                               productName: titleCtrl.text,
                               phurcasingPrice: purchasePriceCtrl.text,
                               sellingPrice: sellingPriceCtrl.text,
-                              quantity: quantityCtrl.text,
+                              // quantity: quantityCtrl.text,
                               condition: conditionCtrl.text,
                               description: descriptionCtrl.text,
                               category: categoryCtrl.text,

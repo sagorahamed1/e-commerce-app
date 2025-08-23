@@ -3,7 +3,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 
 class NoDataFoundCard extends StatelessWidget {
-  const NoDataFoundCard({super.key});
+  final double? paddingFromTop;
+  const NoDataFoundCard({super.key, this.paddingFromTop});
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class NoDataFoundCard extends StatelessWidget {
       padding:  EdgeInsets.symmetric(horizontal: 0.w),
       child: Column(
         children: [
-          SizedBox(height: 150.h),
+          SizedBox(height: paddingFromTop ?? 150.h),
           Assets.images.noDataFound.image(),
         ],
       ),

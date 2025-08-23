@@ -108,6 +108,7 @@ class CustomProductCard extends StatelessWidget {
                                 SizedBox(
                                   width: 130.w,
                                   child: CustomText(
+                                    textAlign: TextAlign.start,
                                       text: "$address",
                                       fontSize: 12.h,
                                       color: Colors.black),

@@ -72,10 +72,10 @@ class CustomButton extends StatelessWidget {
 
             loaderIgnore ? const SizedBox() :  loading  ?
                 SizedBox(
-                    height: 25.h,
+                    height: 40.h,
                     width: 25.w,
                     child: Assets.lottie.loading.lottie(fit: BoxFit.cover)
-                ) :  SizedBox(width: 25.w)
+                ) :  SizedBox(width: 20.w)
           ],
         ),
       ),
