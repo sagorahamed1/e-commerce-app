@@ -53,7 +53,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                 ProductImageSlider(
                   images: productController.singleProduct.value.images
-                      ?.map((e) => "${ApiConstants.imageBaseUrl}/${e.image}")
+                      ?.map((e) => "${ApiConstants.imageBaseUrl}${e.image}")
                       .toList() ?? [],
                 ),
 

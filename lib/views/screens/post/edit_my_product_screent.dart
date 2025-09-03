@@ -258,6 +258,7 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
                       if(forKey.currentState!.validate()){
                         if(_images.length != 0){
                           productController.addProduct(
+                            context: context,
                               productName: titleCtrl.text,
                               phurcasingPrice: purchasePriceCtrl.text,
                               sellingPrice: sellingPriceCtrl.text,

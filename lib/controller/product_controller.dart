@@ -17,7 +17,8 @@ class ProductController extends GetxController {
   RxBool productAddLoading = false.obs;
 
   addProduct(
-      {required String productName,
+      {required BuildContext context,
+        required String productName,
       category,
       // quantity,
       brand,
@@ -79,6 +80,7 @@ class ProductController extends GetxController {
     print("========================================================================= ${response.body}");
 
     if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage(context, "Product post successful");
       productAddLoading(false);
     } else {
       productAddLoading(false);

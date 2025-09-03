@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:petattix/controller/payment_controlller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
@@ -49,14 +50,31 @@ class WalletScreen extends StatelessWidget {
                         children: [
                           CustomText(
                               text: "Available Balance",
-                              fontSize: 20.h,
+                              fontSize: 18.h,
                               fontWeight: FontWeight.w600,
                               color: Colors.white),
-                          CustomText(
-                              text: "\$ 12000",
-                              fontSize: 36.h,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white),
+                          // SizedBox(
+                          //   width: 170.w,
+                          //   child: CustomText(
+                          //       text: "\$ 12000000",
+                          //       fontSize: 30.h,
+                          //       fontWeight: FontWeight.w600,
+                          //       color: Colors.white),
+                          // ),
+
+                          SizedBox(
+                            width: 170.w,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown, // text will shrink to fit width
+                              child: CustomText(
+                                text: "\$ 1000",
+                                fontSize: 30.sp,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+
                         ],
                       ),
                       Column(
@@ -92,6 +110,7 @@ class WalletScreen extends StatelessWidget {
                                         ),
                                         SizedBox(height: 12.h),
                                         CustomTextField(
+                                          keyboardType: TextInputType.number,
                                             controller: amonCtrl,
                                             labelText: "Enter Amount",
                                             hintText: "Enter Amount"),
@@ -103,7 +122,9 @@ class WalletScreen extends StatelessWidget {
                                               child: CustomButton(
                                                   height: 50.h,
                                                   title: "Cancel",
-                                                  onpress: () {},
+                                                  onpress: () {
+                                                    Get.back();
+                                                  },
                                                   color: Colors.transparent,
                                                   fontSize: 11.h,
                                                   loaderIgnore: true,
@@ -121,8 +142,10 @@ class WalletScreen extends StatelessWidget {
                                                   height: 50.h,
                                                   title: "Yes",
                                                   onpress: () {
-                                                    Get.toNamed(AppRoutes
-                                                        .messageScreen);
+
+                                                    PaymentController().makePayment(amount: amonCtrl.text, subscriptionId: "subscriptionId", context:  context);
+
+                                                    Get.back();
                                                   },
                                                   fontSize: 11.h),
                                             ),

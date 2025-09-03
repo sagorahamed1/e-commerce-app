@@ -37,6 +37,10 @@ class $AssetsIconsGen {
   /// File path: assets/icons/card.svg
   SvgGenImage get card => const SvgGenImage('assets/icons/card.svg');
 
+  /// File path: assets/icons/confirmationIcon.svg
+  SvgGenImage get confirmationIcon =>
+      const SvgGenImage('assets/icons/confirmationIcon.svg');
+
   /// File path: assets/icons/emailIcon.svg
   SvgGenImage get emailIcon => const SvgGenImage('assets/icons/emailIcon.svg');
 
@@ -141,6 +145,7 @@ class $AssetsIconsGen {
         blockUserIcon,
         buyerProtection,
         card,
+        confirmationIcon,
         emailIcon,
         filterIcon,
         home,
