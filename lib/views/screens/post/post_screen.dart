@@ -106,6 +106,7 @@ class _PostScreenState extends State<PostScreen> {
   TextEditingController sizeCtrl = TextEditingController();
 
   bool _isChecked = false;
+  bool _isBoost = false;
   final GlobalKey<FormState> forKey = GlobalKey<FormState>();
 
   Widget _createPost() {
@@ -398,6 +399,38 @@ class _PostScreenState extends State<PostScreen> {
                 controller: descriptionCtrl,
                 labelText: "Description",
                 hintText: "Description"),
+
+
+
+
+            Row(
+              children: [
+
+                CircularCheckBox(
+                  size: 20.r,
+                  isChecked: _isBoost,
+                  onChanged: (value) {
+                    setState(() {
+                      _isBoost = value;
+                    });
+                  },
+                ),
+                CustomText(
+                    text: "Boost This Add",
+                    fontSize: 16.h,
+                    color: Colors.black,
+                    left: 10.w,
+                    right: 5.w),
+              ],
+            ),
+
+            CustomText(
+                left: 30.w,
+                text: "Boost your ad to appear at the top of your audience’s feed for 3 days with just 1€.", fontSize: 10.h, maxline: 3, textAlign: TextAlign.start),
+
+
+            SizedBox(height: 20.h),
+
             CustomButton(
               loading: productController.productAddLoading.value,
                 title: "Create a Post",
@@ -416,6 +449,7 @@ class _PostScreenState extends State<PostScreen> {
                           negotiable: _isChecked,
                           brand: brandCtrl.text,
                           size: sizeCtrl.text,
+                          isBoosted: _isBoost,
                           // city: cityCtrl.text,
                           // height: heightCtrl.text,
                           // width: widthCtrl.text,
@@ -434,7 +468,7 @@ class _PostScreenState extends State<PostScreen> {
                     }
                   }
                 }),
-            SizedBox(height: 120.h)
+            SizedBox(height: 160.h)
           ],
         ),
       ),
@@ -447,15 +481,29 @@ class _PostScreenState extends State<PostScreen> {
 
   int _currentIndex = 0;
 
+
+
   Future<void> _pickImages() async {
     final List<XFile>? picked = await _picker.pickMultiImage();
     if (picked != null) {
       final newImages = picked.map((x) => File(x.path)).toList();
+      productController.aiUploadImage(image: newImages.first);
       setState(() {
         final remaining = 5 - _images.length;
         _images.addAll(newImages.take(remaining));
         _currentIndex = _images.length - 1;
+
       });
+
+
+      titleCtrl.text = productController. aiImageInfo["product_name"] ?? "";
+      sizeCtrl.text = productController. aiImageInfo["size"] ?? "";
+      brandCtrl.text = productController. aiImageInfo["brand"] ?? "";
+      categoryCtrl.text = productController. aiImageInfo["category"] ?? "";
+      conditionCtrl.text = productController. aiImageInfo["condition"] ?? "";
+      descriptionCtrl.text = productController. aiImageInfo["description"] ?? "";
+      purchasePriceCtrl.text = productController. aiImageInfo["purchasing_price"] ?? "";
+      sellingPriceCtrl.text = productController. aiImageInfo["selling_price"] ?? "";
     }
   }
 

@@ -1,18 +1,11 @@
 import 'dart:convert';
-import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:petattix/core/config/app_route.dart';
-
+import 'package:petattix/constants/constants.dart';
+import 'package:petattix/helper/prefs_helper.dart';
 import '../global/custom_assets/assets.gen.dart';
-import '../helper/toast_message_helper.dart';
-import '../model/category_model.dart';
-import '../model/country_model.dart';
-import '../model/product_model.dart';
-import '../model/single_product_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
 import '../views/widgets/custom_button.dart';
@@ -24,13 +17,14 @@ class WalletController extends GetxController {
 
   RxBool addBalanceLoading = false.obs;
 
-  addBalanceToWallet({required String amount, trxId, required BuildContext context}) async {
+  addBalanceToWallet({required String amount, trxId, paymentIntentId, required BuildContext context}) async {
     addBalanceLoading(true);
 
     var body = {
       "amount": int.parse(amount),
       "paymentMethod" :"Stripe",
-      "transectionId" : "tran-123456124"
+      "transectionId" : "$trxId",
+      "paymentId" : "$paymentIntentId"
     };
 
     var response = await ApiClient.postData("${ApiConstants.walletBalanceAdd}", jsonEncode(body));
@@ -94,6 +88,16 @@ class WalletController extends GetxController {
 
 
 
+  RxBool walletLoading = false.obs;
+  getWallet()async{
+    walletLoading(true);
+
+    final response = await ApiClient.getData("uri");
+
+    if(response.statusCode == 200 || response.statusCode == 201){
+
+    }
+  }
 
 
 

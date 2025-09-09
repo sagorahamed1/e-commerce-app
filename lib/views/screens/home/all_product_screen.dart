@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -11,6 +13,7 @@ import 'package:petattix/views/widgets/custom_text_field.dart';
 
 import '../../../controller/product_controller.dart';
 import '../../widgets/custom_product_card.dart';
+import '../../widgets/no_data_found_card.dart';
 import '../../widgets/shimmer_grid_view.dart';
 
 class AllProductScreen extends StatefulWidget {
@@ -25,11 +28,11 @@ class _AllProductScreenState extends State<AllProductScreen> {
   ProductController productController = Get.put(ProductController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-
   @override
   void initState() {
+    final category = Get.arguments["category"];
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      productController.getAllProduct();
+      productController.getAllProduct(categoryFilter: category);
     });
 
     super.initState();
@@ -40,6 +43,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Timer? debounce;
     return Scaffold(
       key: _scaffoldKey,
       endDrawer: SizedBox(
@@ -50,15 +54,20 @@ class _AllProductScreenState extends State<AllProductScreen> {
             padding: const EdgeInsets.all(20),
             child: ListView(
               children: [
+                CustomText(
+                    text: "Filler",
+                    fontSize: 20.h,
+                    fontWeight: FontWeight.w600,
+                    color: Color(0xff592B00)),
 
-                CustomText(text: "Filler", fontSize: 20.h, fontWeight: FontWeight.w600, color: Color(0xff592B00)),
-
-
-                 SizedBox(height: 20.h),
+                SizedBox(height: 20.h),
 
                 /// Category
 
-                CustomText(text: "Category", color: Colors.black, textAlign: TextAlign.start),
+                CustomText(
+                    text: "Category",
+                    color: Colors.black,
+                    textAlign: TextAlign.start),
 
                 SizedBox(height: 10.h),
                 Wrap(
@@ -73,10 +82,13 @@ class _AllProductScreenState extends State<AllProductScreen> {
                   ],
                 ),
 
-                 SizedBox(height: 25.h),
+                SizedBox(height: 25.h),
 
                 /// Usability
-                CustomText(text: "Usability", color: Colors.black, textAlign: TextAlign.start),
+                CustomText(
+                    text: "Usability",
+                    color: Colors.black,
+                    textAlign: TextAlign.start),
                 SizedBox(height: 10.h),
                 Wrap(
                   spacing: 10,
@@ -90,11 +102,14 @@ class _AllProductScreenState extends State<AllProductScreen> {
                   ],
                 ),
 
-                 SizedBox(height: 25.h),
+                SizedBox(height: 25.h),
 
                 /// Price Range
-                CustomText(text: "Price Range", color: Colors.black, textAlign: TextAlign.start),
-                 SizedBox(height: 10.h),
+                CustomText(
+                    text: "Price Range",
+                    color: Colors.black,
+                    textAlign: TextAlign.start),
+                SizedBox(height: 10.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -122,16 +137,18 @@ class _AllProductScreenState extends State<AllProductScreen> {
                   ),
                 ),
 
-                 SizedBox(height: 80.h),
+                SizedBox(height: 80.h),
 
                 /// Apply Button
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 30.w),
+                  padding: EdgeInsets.symmetric(horizontal: 30.w),
                   child: CustomButton(
-                      title: "Apply", onpress: () {
+                      title: "Apply",
+                      onpress: () {
                         productController.allProduct.value = [];
-                        productController.getAllProduct(price: "${minPrice.ceil()}-${maxPrice.ceil()}");
-                  }),
+                        productController.getAllProduct(
+                            price: "${minPrice.ceil()}-${maxPrice.ceil()}");
+                      }),
                 )
               ],
             ),
@@ -154,6 +171,19 @@ class _AllProductScreenState extends State<AllProductScreen> {
                     controller: searchCtrl,
                     prefixIcon: Icon(Icons.search_rounded),
                     hintText: "Search For Pet Product",
+                    validator: (value) => null,
+                    onChanged: (value) {
+                      if (debounce?.isActive ?? false) debounce!.cancel();
+                      debounce = Timer(Duration(milliseconds: 500), () {
+                        productController.allProduct.clear();
+
+                        productController.getAllProduct(
+                            search: searchCtrl.text);
+
+                        print(
+                            "=======================================================================called ${searchCtrl.text}");
+                      });
+                    },
                   ),
                 ),
                 GestureDetector(
@@ -169,35 +199,49 @@ class _AllProductScreenState extends State<AllProductScreen> {
             ),
             Expanded(
               child: AnimationLimiter(
-                child: Obx( () => productController.allProductLoading.value ? ShimmerGridView() :
-                   GridView.builder(
-                    itemCount: productController.allProduct.length,
-                    padding: EdgeInsets.symmetric(vertical: 1.h),
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
-                      childAspectRatio: 0.868,
-                    ),
-                    itemBuilder: (context, index) {
-                      var product = productController.allProduct[index];
-                      return CustomProductCard(
-                        image: "${product.images?[0].image}",
-                        index: index,
-                        isFavorite: true,
-                        title: "${product.productName}",
-                        address: "${product.addressLine1 ?? "N/A"}",
-                        price: "${product.sellingPrice}",
-                        onTap: () {Get.toNamed(AppRoutes.productDetailsScreen, arguments: {
-                          "index" : index
-                        });},
-
-                        favoriteOnTap: () {
-                          productController.toggleFavourite(id: product.id.toString());
-                        },
-                      );
-                    },
-                  ),
+                child: Obx(
+                  () => productController.allProductLoading.value
+                      ? ShimmerGridView()
+                      : productController.allProduct.isEmpty
+                          ? NoDataFoundCard(paddingFromTop: 40.h)
+                          : GridView.builder(
+                              itemCount: productController.allProduct.length,
+                              padding: EdgeInsets.symmetric(vertical: 1.h),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                childAspectRatio: 0.868,
+                              ),
+                              itemBuilder: (context, index) {
+                                var product =
+                                    productController.allProduct[index];
+                                return CustomProductCard(
+                                  image: "${product.images?[0].image}",
+                                  index: index,
+                                  isFavorite: true,
+                                  title: "${product.productName}",
+                                  address: "${product.addressLine1 ?? "N/A"}",
+                                  price: "${product.sellingPrice}",
+                                  // onTap: () {
+                                  //   Get.toNamed(AppRoutes.productDetailsScreen,
+                                  //       arguments: {"index": index});
+                                  // },
+                                  onTap: () {
+                                    Get.toNamed(AppRoutes.productDetailsScreen, arguments: {
+                                      "index" : product.id
+                                    })?.then((_){
+                                      productController.getAllProduct();
+                                    });
+                                  },
+                                  favoriteOnTap: () {
+                                    productController.toggleFavourite(
+                                        id: product.id.toString());
+                                  },
+                                );
+                              },
+                            ),
                 ),
               ),
             ),
@@ -207,18 +251,19 @@ class _AllProductScreenState extends State<AllProductScreen> {
     );
   }
 
-
-
   Widget categoryButton(String text, [bool selected = false]) {
     return Container(
-      decoration: BoxDecoration(
-        color: selected ? Colors.orange : Colors.transparent,
-        border: Border.all(color: Colors.orange),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: CustomText(text: text, color: selected ? Colors.white : Colors.orange, left: 32.w, right: 32.w, top: 4.h, bottom: 4.h)
-    );
+        decoration: BoxDecoration(
+          color: selected ? Colors.orange : Colors.transparent,
+          border: Border.all(color: Colors.orange),
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: CustomText(
+            text: text,
+            color: selected ? Colors.white : Colors.orange,
+            left: 32.w,
+            right: 32.w,
+            top: 4.h,
+            bottom: 4.h));
   }
-
 }
-

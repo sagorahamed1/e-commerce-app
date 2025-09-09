@@ -82,10 +82,13 @@ class CustomProductCard extends StatelessWidget {
                             Row(
                               children: [
                                 Assets.icons.titleIcon.image(),
-                                CustomText(
-                                    text: " $title",
-                                    fontSize: 12.h,
-                                    color: Colors.black),
+                                Expanded(
+                                  child: CustomText(
+                                    textAlign: TextAlign.start,
+                                      text: " $title",
+                                      fontSize: 12.h,
+                                      color: Colors.black),
+                                ),
                               ],
                             ),
 

@@ -47,7 +47,7 @@ class AppRoutes {
   static const String welcomeScreen = "/WelcomeScreen";
   static const String allProductScreen = "/AllProductScreen";
   static const String productDetailsScreen = "/ProductDetailsScreen";
-  static const String cartScreen = "/CartScreen";
+  // static const String cartScreen = "/CartScreen";
   static const String confirmPurchaseScreen = "/ConfirmPurchaseScreen";
   static const String makePayment = "/MakePayment";
   static const String confirmed = "/Confirmed";
@@ -80,7 +80,7 @@ class AppRoutes {
     GetPage(name: welcomeScreen, page: () =>  WelcomeScreen()),
     GetPage(name: allProductScreen, page: () =>  AllProductScreen()),
     GetPage(name: productDetailsScreen, page: () =>  ProductDetailsScreen()),
-    GetPage(name: cartScreen, page: () =>  CartScreen()),
+    // GetPage(name: cartScreen, page: () =>  CartScreen()),
     GetPage(name: confirmPurchaseScreen, page: () =>  ConfirmPurchaseScreen()),
     GetPage(name: makePayment, page: () =>  MakePayment()),
     GetPage(name: confirmed, page: () =>  Confirmed()),

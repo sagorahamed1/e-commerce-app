@@ -29,7 +29,7 @@ class SingleProductModel {
   final DateTime? updatedAt;
   final List<Image>? images;
   final User? user;
-  final bool? isFavorite;
+   bool? isFavorite;
 
   SingleProductModel({
     this.id,
@@ -209,4 +209,74 @@ class User {
     "updatedAt": updatedAt?.toIso8601String(),
     "deletedAt": deletedAt,
   };
+}
+
+
+
+extension SingleProductModelCopyWith on SingleProductModel {
+  SingleProductModel copyWith({
+    int? id,
+    String? userId,
+    String? productName,
+    String? status,
+    String? sellingPrice,
+    String? purchasingPrice,
+    String? category,
+    int? quantity,
+    String? description,
+    String? condition,
+    String? size,
+    String? brand,
+    dynamic height,
+    dynamic width,
+    dynamic length,
+    dynamic weight,
+    dynamic city,
+    dynamic addressLine1,
+    dynamic addressLine2,
+    dynamic isAddressResidential,
+    dynamic postalCode,
+    dynamic countryId,
+    dynamic countryCode,
+    dynamic country,
+    bool? isNegotiable,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    List<Image>? images,
+    User? user,
+    bool? isFavorite,
+  }) {
+    return SingleProductModel(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      productName: productName ?? this.productName,
+      status: status ?? this.status,
+      sellingPrice: sellingPrice ?? this.sellingPrice,
+      purchasingPrice: purchasingPrice ?? this.purchasingPrice,
+      category: category ?? this.category,
+      quantity: quantity ?? this.quantity,
+      description: description ?? this.description,
+      condition: condition ?? this.condition,
+      size: size ?? this.size,
+      brand: brand ?? this.brand,
+      height: height ?? this.height,
+      width: width ?? this.width,
+      length: length ?? this.length,
+      weight: weight ?? this.weight,
+      city: city ?? this.city,
+      addressLine1: addressLine1 ?? this.addressLine1,
+      addressLine2: addressLine2 ?? this.addressLine2,
+      isAddressResidential: isAddressResidential ?? this.isAddressResidential,
+      postalCode: postalCode ?? this.postalCode,
+      countryId: countryId ?? this.countryId,
+      countryCode: countryCode ?? this.countryCode,
+      country: country ?? this.country,
+      isNegotiable: isNegotiable ?? this.isNegotiable,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      images: images ?? this.images,
+      user: user ?? this.user,
+      isFavorite: isFavorite ?? this.isFavorite,
+    );
+  }
 }

@@ -25,12 +25,12 @@ class PaymentController {
     try {
       final paymentIntent = await Stripe.instance.retrievePaymentIntent(piId);
       if (kDebugMode) {
-        print("Payment Intent: $paymentIntent");
+        debugPrint("Payment Intent: $paymentIntent");
       }
       return paymentIntent;
     } catch (e) {
       if (kDebugMode) {
-        print('Error fetching payment intent: $e');
+        debugPrint('Error fetching payment intent: $e');
       }
       throw e;
     }
@@ -43,7 +43,7 @@ class PaymentController {
         String clientSecret = paymentIntentData!['client_secret'];
 
         if (kDebugMode) {
-          print("Client Secret: $clientSecret");
+          debugPrint("Client Secret: $clientSecret");
         }
 
         await Stripe.instance.initPaymentSheet(
@@ -62,7 +62,7 @@ class PaymentController {
       }
     } catch (e, s) {
       if (kDebugMode) {
-        print('Exception: $e\nStack trace: $s');
+        debugPrint('Exception: $e\nStack trace: $s');
       }
     }
   }
@@ -84,13 +84,13 @@ class PaymentController {
       );
 
       if (kDebugMode) {
-        print("Payment Intent Response: ${response.body}");
+        debugPrint("Payment Intent Response: ${response.body}");
       }
 
       return jsonDecode(response.body);
     } catch (e) {
       if (kDebugMode) {
-        print("Error creating payment intent: $e");
+        debugPrint("Error creating payment intent: $e");
       }
       return null;
     }
@@ -106,13 +106,13 @@ class PaymentController {
       await Stripe.instance.presentPaymentSheet();
       retrieveTxnId(paymentIntent: paymentIntentData!['id'], subscriptionId: '$subscriptionId', context: context, amount: amount); ///subscription id
       if (kDebugMode) {
-        print('Payment intent: $paymentIntentData');
+        debugPrint('Payment intent: $paymentIntentData');
       }
       ScaffoldMessenger.of(Get.context!).showSnackBar(const SnackBar(content: Text("Paid successfully")));
       paymentIntentData = null;
     } catch (e) {
       if (kDebugMode) {
-        print("Error displaying payment sheet: $e");
+        debugPrint("Error displaying payment sheet: $e");
       }
     }
   }
@@ -130,13 +130,14 @@ class PaymentController {
       if (response.statusCode == 200 || response.statusCode == 201) {
         var data = json.decode(response.body);
         if (kDebugMode) {
-          print("Transaction Id: ${data['data'][0]['balance_transaction']}");
+          debugPrint("==========================data ${data}");
+          debugPrint("Transaction Id: ${data['data'][0]['balance_transaction']}");
         }
         var transactionId = data['data'][0]['balance_transaction'];
-        print("======================  $subscriptionId");
+        debugPrint("======================  $subscriptionId");
         final  WalletController subscriptionController = Get.put(WalletController());
 
-        subscriptionController.addBalanceToWallet(amount: "$amount", trxId: transactionId, context: context);
+        subscriptionController.addBalanceToWallet(amount: "$amount", trxId: transactionId, context: context, paymentIntentId: paymentIntent);
         // subscriptionController.payment(subscriptionId: subscriptionId, transactionId: "$transactionId");
 
       }else{

@@ -20,6 +20,7 @@ class ApiConstants{
   static const String offerSend = "/offers/send";
   static const String offerAccept = "/offers";
   static const String walletBalanceAdd = "/wallets/recharge";
+  static const String productAnalyze = "/product/analyze";
   static  String favouite(String? page) => "/favourites?page=${page??""}&limit=10";
   static const String getChatUser = "/conversations?term=pet&limit=10";
   static String chatEndPoint(String? id) =>  "/messages/${id??""}?limit=100";

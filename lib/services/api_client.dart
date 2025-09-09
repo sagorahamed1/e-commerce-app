@@ -5,7 +5,9 @@ import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/request/request.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
+import 'package:mime/mime.dart';
 import 'package:mime_type/mime_type.dart';
+import 'package:petattix/core/config/app_route.dart';
 import '../core/app_constants/app_constants.dart';
 import '../helper/prefs_helper.dart';
 import 'api_constants.dart';
@@ -155,7 +157,7 @@ class ApiClient extends GetxService {
       for (MultipartBody element in multipartBody) {
         request.files.add(await http.MultipartFile.fromPath(
           element.key,
-          element.file.path,
+          element.file.path
         ));
       }
       request.fields.addAll(body);
@@ -163,6 +165,57 @@ class ApiClient extends GetxService {
       await http.Response.fromStream(await request.send());
       return handleResponse(_response, uri);
     } catch (e) {
+      return const Response(statusCode: 1, statusText: noInternetMessage);
+    }
+  }
+
+
+
+  static Future<Response> postMultipartDataMime(
+      String uri,
+      Map<String, String> body, {
+        required List<MultipartBody> multipartBody,
+        Map<String, String>? headers,
+      }) async {
+    try {
+      bearerToken = await PrefsHelper.getString(AppConstants.bearerToken);
+
+      var mainHeaders = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Authorization': 'Bearer $bearerToken'
+      };
+
+      debugPrint('====> API Call: $uri\nHeader: ${headers ?? mainHeaders}');
+      debugPrint('====> API Body: $body with ${multipartBody.length} picture');
+
+      var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(ApiConstants.baseUrl + uri),
+      );
+
+      request.headers.addAll(headers ?? mainHeaders);
+
+      for (MultipartBody element in multipartBody) {
+        final mimeType = lookupMimeType(element.file.path) ?? "application/octet-stream";
+        final mimeParts = mimeType.split('/');
+
+        request.files.add(
+          await http.MultipartFile.fromPath(
+            element.key,
+            element.file.path,
+            contentType: MediaType(mimeParts[0], mimeParts[1]),
+          ),
+        );
+      }
+
+      request.fields.addAll(body);
+
+      http.Response _response =
+      await http.Response.fromStream(await request.send());
+
+      return handleResponse(_response, uri);
+    } catch (e) {
+      debugPrint("Error in postMultipartData: $e");
       return const Response(statusCode: 1, statusText: noInternetMessage);
     }
   }
@@ -350,11 +403,17 @@ class ApiClient extends GetxService {
           statusCode: response0.statusCode,
           body: response0.body,
           statusText: errorResponse.message);
+
     } else if (response0.statusCode != 200 && response0.body == null) {
       response0 = const Response(statusCode: 0, statusText: noInternetMessage);
     }
 
     debugPrint('====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
+
+    if(response.statusCode == 401 && jsonDecode(response.body)["message"] == "jwt expired"){
+      Get.offAllNamed(AppRoutes.logInScreen);
+    }
+
     return response0;
   }
 }

@@ -8,6 +8,7 @@ import 'package:petattix/core/config/app_route.dart';
 import '../helper/toast_message_helper.dart';
 import '../model/category_model.dart';
 import '../model/country_model.dart';
+import '../model/my_card_model.dart';
 import '../model/product_model.dart';
 import '../model/single_product_model.dart';
 import '../services/api_client.dart';
@@ -39,6 +40,7 @@ class ProductController extends GetxController {
       // addressLine2,
       // country,
       required bool negotiable,
+      required bool isBoosted,
       required List<File> images}) async {
     productAddLoading(true);
 
@@ -59,6 +61,7 @@ class ProductController extends GetxController {
       "brand": "$brand",
       "is_negotiable": "$negotiable",
       "size": "$size",
+      "is_boosted" : "$isBoosted"
       // "height": "$height",
       // "width": "$width",
       // "length": "$length",
@@ -109,10 +112,10 @@ class ProductController extends GetxController {
   RxList<ProductModel> allProduct = <ProductModel>[].obs;
   RxBool allProductLoading = false.obs;
 
-  getAllProduct({String? price}) async {
+  getAllProduct({String? price, search, categoryFilter}) async {
     allProductLoading(true);
     var response = await ApiClient.getData(
-        "${ApiConstants.product}?page=1&limit=10&type=global&price=${price ?? ""}");
+        "${ApiConstants.product}?page=1&limit=10&type=global&price=${price ?? ""}&term=${search??""}&category=${categoryFilter??""}");
 
     print("=============${response.body}");
     if (response.statusCode == 200) {
@@ -164,6 +167,25 @@ class ProductController extends GetxController {
 
 
 
+
+  RxList<MyCardModel> myCard = <MyCardModel>[].obs;
+  RxBool myCardLoading = false.obs;
+
+  getMyCard() async {
+    myCardLoading(true);
+    var response = await ApiClient.getData("${ApiConstants.favourites}?page=1&limit=10");
+
+    if (response.statusCode == 200) {
+      myCard.value = List<MyCardModel>.from(response.body["data"].map((x) => MyCardModel.fromJson(x)));
+
+      myCardLoading(false);
+    } else {
+      myCardLoading(false);
+    }
+  }
+
+
+
   RxBool toggleFavouriteLoading = false.obs;
 
   toggleFavourite({required String id}) async {
@@ -171,10 +193,15 @@ class ProductController extends GetxController {
 
     var body = {"productId": int.parse(id)};
 
-    var response =
-        await ApiClient.postData(ApiConstants.favourites, jsonEncode(body));
+    var response = await ApiClient.postData(ApiConstants.favourites, jsonEncode(body));
 
     if (response.statusCode == 200) {
+
+      singleProduct.value = singleProduct.value.copyWith(
+        isFavorite: !(singleProduct.value.isFavorite ?? false),
+      );
+
+      update();
       toggleFavouriteLoading(false);
     } else {
       toggleFavouriteLoading(false);
@@ -199,8 +226,9 @@ class ProductController extends GetxController {
     if (response.statusCode == 200) {
       sendOfferLoading(false);
     } else {
-      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
       sendOfferLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+
     }
   }
 
@@ -224,6 +252,30 @@ class ProductController extends GetxController {
       acceptOrCancelLoading(false);
     } else {
       acceptOrCancelLoading(false);
+    }
+  }
+
+
+
+  RxBool aiUploadImageLoading = false.obs;
+
+  var aiImageInfo = {}.obs;
+
+  aiUploadImage({required File image}) async {
+    aiUploadImageLoading(true);
+    List<MultipartBody> multipartBody = image == null ? [] : [MultipartBody("image", image)];
+
+
+    var response =
+    await ApiClient.postMultipartDataMime("${ApiConstants.productAnalyze}", {}, multipartBody: multipartBody);
+
+    if (response.statusCode == 200) {
+      var data = response.body;
+      aiImageInfo.value = data["data"];
+
+      aiUploadImageLoading(false);
+    } else {
+      aiUploadImageLoading(false);
     }
   }
 

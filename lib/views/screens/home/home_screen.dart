@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -39,7 +41,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
         child: Column(
@@ -64,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 SizedBox(width: 16.w),
                 GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.cartScreen);
+                      Get.toNamed(AppRoutes.wishListScreen, arguments: {"title" : "Cart"});
                     },
                     child: Assets.icons.card.svg()),
               ],
@@ -73,9 +77,18 @@ class _HomeScreenState extends State<HomeScreen> {
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: CustomTextField(
+                readOnly: true,
                 controller: searchCtrl,
                 prefixIcon: Icon(Icons.search),
                 hintText: "Search For Pet Product",
+                validator: (value) => null,
+                onTap: () {
+                  Get.toNamed(AppRoutes.allProductScreen, arguments: {"category" : ""})?.then((_){
+                    productController.allProduct.clear();
+                    productController.getAllProduct();
+                  });
+                },
+
               ),
             ),
             // SizedBox(
@@ -141,41 +154,51 @@ class _HomeScreenState extends State<HomeScreen> {
                           var category = productController.category[index];
                           return Padding(
                             padding: EdgeInsets.symmetric(horizontal: 6.w),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                shape: BoxShape.circle,
-                                border: Border.all(
-                                    color: Colors.grey.withOpacity(0.2),
-                                    width: 1),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.black12,
-                                    offset: Offset(0, 2),
-                                    blurRadius: 4,
-                                  ),
-                                ],
-                              ),
-                              child: Padding(
-                                padding: EdgeInsets.all(12.r),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      height: 50.h,
-                                      width: 50.w,
-                                      child: CustomNetworkImage(
-                                          imageUrl: "${ApiConstants.imageBaseUrl}${category.image}"),
-                                    ),
-                                    SizedBox(
-                                      width: 65.w,
-                                      child: CustomText(
-                                          text: "${category.name.toString()}",
-                                          fontSize: 12.sp,
-                                          fontWeight: FontWeight.w500,
-                                          color: Color(0xff592B00)),
+                            child: GestureDetector(
+                              onTap: () {
+                                Get.toNamed(AppRoutes.allProductScreen, arguments: {
+                                  "category" : category.name.toString()
+                                })?.then((_){
+                                  productController.allProduct.clear();
+                                  productController.getAllProduct();
+                                });
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                      color: Colors.grey.withOpacity(0.2),
+                                      width: 1),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black12,
+                                      offset: Offset(0, 2),
+                                      blurRadius: 4,
                                     ),
                                   ],
+                                ),
+                                child: Padding(
+                                  padding: EdgeInsets.all(12.r),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      SizedBox(
+                                        height: 50.h,
+                                        width: 50.w,
+                                        child: CustomNetworkImage(
+                                            imageUrl: "${ApiConstants.imageBaseUrl}${category.image}"),
+                                      ),
+                                      SizedBox(
+                                        width: 65.w,
+                                        child: CustomText(
+                                            text: "${category.name.toString()}",
+                                            fontSize: 12.sp,
+                                            fontWeight: FontWeight.w500,
+                                            color: Color(0xff592B00)),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -194,7 +217,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Color(0xff592B00)),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.allProductScreen);
+                    Get.toNamed(AppRoutes.allProductScreen, arguments: {"category" : ""});
                   },
                   child: CustomText(
                       text: "See all...",

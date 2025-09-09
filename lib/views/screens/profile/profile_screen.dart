@@ -85,7 +85,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   title: "Wish-list",
                   icon: Assets.icons.wishListIcon.svg(),
                   onTap: () {
-                    Get.toNamed(AppRoutes.wishListScreen);
+                    Get.toNamed(AppRoutes.wishListScreen, arguments: {"title" : "Wish List"});
                   },
                 ),
 

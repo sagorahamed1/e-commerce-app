@@ -88,16 +88,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               id: productController.singleProduct.value.id
                                   .toString());
                         },
-                        child: Icon(
-                          productController.singleProduct.value.isFavorite ??
-                                  false
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: productController
-                                      .singleProduct.value.isFavorite ??
-                                  false
-                              ? Colors.red
-                              : Colors.grey[600],
+                        child: Obx(() =>
+                           Icon(
+                            productController.singleProduct.value.isFavorite ??
+                                    false
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: productController
+                                        .singleProduct.value.isFavorite ??
+                                    false
+                                ? Colors.red
+                                : Colors.grey[600],
+                          ),
                         ),
                       ),
                     ),
@@ -192,20 +194,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     color: Color(0xff1C1C1C),
                     text:
                         "${productController.singleProduct.value.description}"),
-                CustomText(
-                    text: "Return & Refund Policy",
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500),
-                CustomText(
-                    color: Color(0xff1C1C1C),
-                    text: "• Returns accepted within 2 days"),
-                CustomText(
-                    color: Color(0xff1C1C1C),
-                    text: "• Buyer pays return shipping"),
-                CustomText(
-                    color: Color(0xff1C1C1C),
-                    text: "• Refund: Full if item is damaged/misrepresented",
-                    bottom: 10.h),
+                // CustomText(
+                //     text: "Return & Refund Policy",
+                //     color: Colors.black,
+                //     fontWeight: FontWeight.w500),
+                // CustomText(
+                //     color: Color(0xff1C1C1C),
+                //     text: "• Returns accepted within 2 days"),
+                // CustomText(
+                //     color: Color(0xff1C1C1C),
+                //     text: "• Buyer pays return shipping"),
+                // CustomText(
+                //     color: Color(0xff1C1C1C),
+                //     text: "• Refund: Full if item is damaged/misrepresented",
+                //     bottom: 10.h),
                 CustomText(
                     text: "Seller Info",
                     color: Colors.black,
