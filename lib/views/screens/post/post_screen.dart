@@ -257,7 +257,7 @@ class _PostScreenState extends State<PostScreen> {
             //     productController.searchCountry(value);
             //   },
             // ),
-            //
+
             // Obx(() {
             //   if (!productController.isListVisible.value) {
             //     return const SizedBox.shrink();
