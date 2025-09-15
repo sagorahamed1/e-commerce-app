@@ -116,7 +116,22 @@ class SignUpScreen extends StatelessWidget {
                     controller: confirmPassWordCtrl,
                     prefixIcon: Assets.icons.lock.svg(),
                     hintText: "Re-enter password",
-                    isPassword: true),
+                    isPassword: true,
+
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      Future.delayed(Duration.zero, () => isMatched.value = false);
+                      return "Please enter your confirm password";
+                    } else if (passWordCtrl.text == value) {
+                      Future.delayed(Duration.zero, () => isMatched.value = true);
+                      return null;
+                    } else {
+                      Future.delayed(Duration.zero, () => isMatched.value = false);
+                      return "Password Not Matching";
+                    }
+                  },
+
+                ),
 
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -230,4 +245,9 @@ class SignUpScreen extends StatelessWidget {
       ),
     );
   }
+
+
+
+  RxBool isMatched = false.obs;
+  ismMatchedColor() {isMatched.value = !isMatched.value;}
 }

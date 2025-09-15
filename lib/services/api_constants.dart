@@ -12,6 +12,8 @@ class ApiConstants{
   static const String emailVerify = "/auth/verify-otp";
   static const String forgotPassword = "/auth/forgot-password";
   static const String resetPassword = "/auth/reset-password";
+  static const String profile = "/users/profile";
+  static const String updatePassword = "/auth/update-password";
 
 
   static const String product = "/products";
@@ -19,6 +21,7 @@ class ApiConstants{
   static const String favourites = "/favourites";
   static const String offerSend = "/offers/send";
   static const String offerAccept = "/offers";
+  static const String reports = "/reports";
   static const String walletBalanceAdd = "/wallets/recharge";
   static const String productAnalyze = "/product/analyze";
   static  String favouite(String? page) => "/favourites?page=${page??""}&limit=10";

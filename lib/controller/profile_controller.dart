@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_constants.dart';
 import 'package:petattix/helper/prefs_helper.dart';
@@ -31,32 +32,39 @@ class ProfileController extends GetxController {
   RxBool updateProfileLoading = false.obs;
 
   profileUpdate(
-      {File? image, String? firstName, lastName, String? address, String? phone}) async {
+      {File? image, String? firstName, lastName, String? address, String? phone,required BuildContext context}) async {
     updateProfileLoading(true);
     List<MultipartBody> multipartBody =
         image == null ? [] : [MultipartBody("image", image)];
 
-    // var body = {
-    //   "name": '$name',
-    //   "address": "$address",
-    //   "phone": "$phone",
-    // };
-    // var response = await ApiClient.postMultipartData(
-    //     ApiConstants.updateProfile, body,
-    //     multipartBody: multipartBody);
-    //
-    // print("=======> ${response.body}");
-    // if (response.statusCode == 200 || response.statusCode == 201) {
-    //   Get.back();
-    //   await PrefsHelper.setString(AppConstants.name, name);
-    //   await PrefsHelper.setString(
-    //       AppConstants.image, response.body["data"]['image']["publicFileURL"]);
-    //   ToastMessageHelper.showToastMessage('Profile Updated Successful');
-    //
-    //   update();
-    //   updateProfileLoading(false);
-    // } else {
-    //   updateProfileLoading(false);
-    // }
+    var body = {
+      "firstName": "$firstName",
+      "lastName": "$lastName",
+      "address": "$address",
+      "phone": "$phone"
+    };
+    var response = await ApiClient.patchMultipartData(
+        ApiConstants.profile, body,
+        multipartBody: multipartBody);
+
+    print("=======> ${response.body}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+
+
+
+      Get.back();
+      Get.back();
+
+
+      await PrefsHelper.setString(AppConstants.firstName, firstName);
+      await PrefsHelper.setString(AppConstants.lastName, lastName);
+      await PrefsHelper.setString(AppConstants.image, response.body["data"]['image']);
+      update();
+      ToastMessageHelper.showToastMessage(context, "'Profile Updated Successful'");
+      updateProfileLoading(false);
+    } else {
+      updateProfileLoading(false);
+    }
   }
 }

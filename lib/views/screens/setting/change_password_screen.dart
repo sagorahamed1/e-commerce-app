@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:petattix/controller/auth_controller.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
@@ -14,6 +15,8 @@ class ChangePasswordScreen extends StatelessWidget {
   TextEditingController currentPassCtrl = TextEditingController();
   TextEditingController newPassCtrl = TextEditingController();
   TextEditingController rePassCtrl = TextEditingController();
+
+  AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,21 @@ class ChangePasswordScreen extends StatelessWidget {
                 contentPaddingVertical: 14.h,
                 borderColor: Color(0xff592B00),
                 hintextColor: Colors.black,
-                filColor: Colors.white),
+                filColor: Colors.white,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  Future.delayed(Duration.zero, () => isMatched.value = false);
+                  return "Please enter your confirm password";
+                } else if (newPassCtrl.text == value) {
+                  Future.delayed(Duration.zero, () => isMatched.value = true);
+                  return null;
+                } else {
+                  Future.delayed(Duration.zero, () => isMatched.value = false);
+                  return "Password Not Matching";
+                }
+              },
+
+            ),
             Align(
                 alignment: Alignment.centerRight,
                 child: CustomText(text: "Forget Password")),
@@ -86,7 +103,9 @@ class ChangePasswordScreen extends StatelessWidget {
                                   child: CustomButton(
                                       height: 50.h,
                                       title: "Cancel",
-                                      onpress: () {},
+                                      onpress: () {
+                                        Get.back();
+                                      },
                                       color: Colors.transparent,
                                       fontSize: 11.h,
                                       loaderIgnore: true,
@@ -102,7 +121,12 @@ class ChangePasswordScreen extends StatelessWidget {
                                       height: 50.h,
                                       title: "Yes",
                                       onpress: () {
-                                        Get.back();
+
+
+                                        authController.changePassword(oldPass: currentPassCtrl.text.trim(),
+                                            newPass: newPassCtrl.text.trim(),
+                                            context: context);
+
                                       },
                                       fontSize: 11.h),
                                 ),
@@ -120,4 +144,8 @@ class ChangePasswordScreen extends StatelessWidget {
       ),
     );
   }
+
+
+  RxBool isMatched = false.obs;
+  ismMatchedColor() {isMatched.value = !isMatched.value;}
 }

@@ -139,4 +139,29 @@ class ChatDataController extends GetxController {
   //     print("=================message send successful");
   //   }
   // }
+
+
+
+  RxBool reportLoading = false.obs;
+
+  reportUser({required String reportedTo, description}) async {
+    reportLoading(true);
+
+    var body = {
+      "reported_to": reportedTo,
+      "description":"$description"
+    };
+
+    var response =
+    await ApiClient.postData("${ApiConstants.reports}", jsonEncode(body));
+
+    if (response.statusCode == 200) {
+
+      Get.back();
+      reportLoading(false);
+    } else {
+      reportLoading(false);
+    }
+  }
+
 }

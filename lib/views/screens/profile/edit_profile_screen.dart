@@ -61,8 +61,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     children: [
                       _image != null
                           ? Container(
+                        height: 85.h,
+                         width: 85.w,
+                         clipBehavior: Clip.antiAlias,
                               decoration: BoxDecoration(shape: BoxShape.circle),
-                              child: Image.memory(_image!))
+                              child: Image.memory(_image!, fit: BoxFit.cover))
                           : CustomNetworkImage(
                               imageUrl:
                                   "${ApiConstants.imageBaseUrl}/${profileController.image}",
@@ -116,16 +119,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
 
 
-              CustomButton(title: "Update Profile", onpress: () {
+              Obx(() =>
+                 CustomButton(
+                     loading: profileController.updateProfileLoading.value,
+                     title: "Update Profile", onpress: () {
 
-                // profileController.profileUpdate(
-                //     name: nameCtrl.text,
-                //     address: locationCtrl.text,
-                //     image: selectedIMage,
-                //     phone: phoneNumberCtrl.text
-                // );
+                  profileController.profileUpdate(
+                      firstName: firstNameCtrl.text,
+                      lastName: lastNameCtrl.text,
+                      address: addressCtrl.text,
+                      image: selectedIMage,
+                      phone: phoneCtrl.text, context: context
+                  );
 
-              }),
+                }),
+              ),
 
 
 

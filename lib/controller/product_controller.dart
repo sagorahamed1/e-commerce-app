@@ -224,6 +224,7 @@ class ProductController extends GetxController {
     await ApiClient.postData(ApiConstants.offerSend, jsonEncode(body));
 
     if (response.statusCode == 200) {
+      Get.back();
       sendOfferLoading(false);
     } else {
       sendOfferLoading(false);

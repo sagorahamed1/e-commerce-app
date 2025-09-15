@@ -1,7 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
-import 'package:petattix/core/app_constants/app_constants.dart';
-import 'package:petattix/helper/prefs_helper.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:socket_io_client/socket_io_client.dart';
 
@@ -28,14 +25,14 @@ class SocketServices {
           IO.OptionBuilder()
               .setTransports(['websocket'])
               .setExtraHeaders({'Authorization': 'Bearer $token'})
+              .enableReconnection()
               .enableForceNew()
               .build());
     }
 
     if (!socket!.connected) {
       socket?.onConnect((_) {
-        print(
-            '==================================> socket connected: ${socket?.connected}');
+        print('==================================> socket connected: ${socket?.connected}');
       });
 
       socket?.onConnectError((err) {

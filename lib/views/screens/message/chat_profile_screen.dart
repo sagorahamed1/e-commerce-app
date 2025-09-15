@@ -1,3 +1,4 @@
+import 'package:chatview/chatview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -5,16 +6,27 @@ import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 
+import '../../../controller/chat_controller.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../widgets/cachanetwork_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 
-class ChatProfileScreen extends StatelessWidget {
+class ChatProfileScreen extends StatefulWidget {
   const ChatProfileScreen({super.key});
 
   @override
+  State<ChatProfileScreen> createState() => _ChatProfileScreenState();
+}
+
+class _ChatProfileScreenState extends State<ChatProfileScreen> {
+
+  final ChatDataController chatController = Get.put(ChatDataController());
+
+
+  @override
   Widget build(BuildContext context) {
+    var data = Get.arguments;
     return Scaffold(
 
       appBar: AppBar(
@@ -96,7 +108,7 @@ class ChatProfileScreen extends StatelessWidget {
               onTap: () {
 
 
-                TextEditingController amonCtrl =
+                TextEditingController reportCtrl =
                 TextEditingController();
                 showDialog(
                   context: context,
@@ -115,7 +127,7 @@ class ChatProfileScreen extends StatelessWidget {
                           Divider(),
                           SizedBox(height: 12.h),
                           CustomTextField(
-                              controller: amonCtrl,
+                              controller: reportCtrl,
                               labelText: "Reason of Report",
                               hintText: "Reason"),
                           SizedBox(height: 12.h),
@@ -126,7 +138,9 @@ class ChatProfileScreen extends StatelessWidget {
                                 child: CustomButton(
                                     height: 50.h,
                                     title: "Cancel",
-                                    onpress: () {},
+                                    onpress: () {
+                                      Get.back();
+                                    },
                                     color: Colors.transparent,
                                     fontSize: 11.h,
                                     loaderIgnore: true,
@@ -144,7 +158,11 @@ class ChatProfileScreen extends StatelessWidget {
                                     height: 50.h,
                                     title: "Report",
                                     onpress: () {
-                                      Get.toNamed(AppRoutes.messageScreen);
+
+                                      // Get.back();
+                                      chatController.reportUser(reportedTo: data["id"], description: reportCtrl.text);
+
+
                                     },
                                     fontSize: 11.h),
                               ),

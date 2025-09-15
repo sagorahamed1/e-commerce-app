@@ -41,7 +41,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               SizedBox(height: 136.h),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(AppRoutes.profileInformationScreen);
+                  Get.toNamed(AppRoutes.profileInformationScreen)?.then((_){
+                    profileController.getLocalData();
+                  });
                 },
                 child: CustomNetworkImage(
                   imageUrl: "${ApiConstants.imageBaseUrl}/${profileController.image}",
@@ -52,11 +54,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(AppRoutes.profileInformationScreen);
+                  Get.toNamed(AppRoutes.profileInformationScreen)?.then((_){
+                    profileController.getLocalData();
+                  });
                 },
                 child: CustomText(
                   top: 10.h,
-                    text: "${profileController.firstName} ${profileController.lastName}",
+                    text: "${profileController.firstName.value} ${profileController.lastName.value}",
                     fontSize: 24.h,
                     color: Color(0xff592B00),
                     bottom: 48.h),
@@ -67,7 +71,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 title: "Profile Information",
                 icon: Assets.icons.personalInfoIcon.svg(),
                 onTap: () {
-                  Get.toNamed(AppRoutes.profileInformationScreen);
+                  Get.toNamed(AppRoutes.profileInformationScreen)?.then((_){
+                    profileController.getLocalData();
+                  });
                 },
               ),
 

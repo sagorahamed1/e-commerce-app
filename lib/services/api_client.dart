@@ -410,7 +410,7 @@ class ApiClient extends GetxService {
 
     debugPrint('====> API Response: [${response0.statusCode}] $uri\n${response0.body}');
 
-    if(response.statusCode == 401 && jsonDecode(response.body)["message"] == "jwt expired"){
+    if(response.statusCode == 401 && (jsonDecode(response.body)["message"] == "jwt expired" || jsonDecode(response.body)["message"] == "invalid signature")){
       Get.offAllNamed(AppRoutes.logInScreen);
     }
 

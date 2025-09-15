@@ -10,6 +10,7 @@ import 'package:petattix/services/api_client.dart';
 import 'package:petattix/services/api_constants.dart';
 
 import '../core/config/app_route.dart';
+import '../services/socket_services.dart';
 
 class AuthController extends GetxController {
   RxBool signUpLoading = false.obs;
@@ -71,10 +72,17 @@ class AuthController extends GetxController {
       PrefsHelper.setString(AppConstants.image, data["data"]["email"]);
 
 
+      SocketServices.init(token: data["token"]);
 
     } else {
-      ToastMessageHelper.showToastMessage(context, response.body["message"]);
       loginLoading(false);
+      PrefsHelper.setString(AppConstants.bearerToken, response.body["token"]);
+      ToastMessageHelper.showToastMessage(context, response.body["message"], title: "info");
+
+      if(response.body["message"] == "Email verification required"){
+        Get.toNamed(AppRoutes.optScreen, arguments: {"screenType": "Sign up"});
+      }
+
     }
   }
 
@@ -103,6 +111,9 @@ class AuthController extends GetxController {
       verifyEmailLoading(false);
     }
   }
+
+
+
 
   RxBool forgotLoading = false.obs;
 
@@ -145,4 +156,34 @@ class AuthController extends GetxController {
       reSetPasswordLoading(false);
     }
   }
+
+
+
+  RxBool changeLoading = false.obs;
+
+  changePassword({required String oldPass, newPass,required BuildContext context}) async {
+    changeLoading(true);
+
+    var body = {
+      "passwordCurrent":"$oldPass",
+      "password":"$newPass",
+      "passwordConfirm":"$newPass"
+    };
+
+    final response =
+    await ApiClient.postData(ApiConstants.updatePassword, jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+      Get.back();
+
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+
+      changeLoading(false);
+    } else {
+      changeLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "warning");
+    }
+  }
+
 }
