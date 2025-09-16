@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/config/app_route.dart';
+import 'package:petattix/model/my_sales_model.dart';
 
 import '../helper/toast_message_helper.dart';
 import '../model/category_model.dart';
@@ -96,7 +97,7 @@ class ProductController extends GetxController {
   getMyProduct() async {
     myProductLoading(true);
     var response = await ApiClient.getData(
-        "${ApiConstants.product}?page=1&limit=10&type=own");
+        "${ApiConstants.product}?page=1&limit=1000&type=own");
 
     print("=============${response.body}");
     if (response.statusCode == 200) {
@@ -108,6 +109,28 @@ class ProductController extends GetxController {
       myProductLoading(false);
     }
   }
+
+
+
+
+  RxList<MySalesModel> mySales = <MySalesModel>[].obs;
+  RxBool mySalesLoading = false.obs;
+
+  getMySales() async {
+    mySalesLoading(true);
+    var response = await ApiClient.getData("${ApiConstants.mySales}?page=1&limit=10000");
+
+    print("=============${response.body}");
+    if (response.statusCode == 200) {
+      mySales.value = List<MySalesModel>.from(response.body["data"].map((x) => MySalesModel.fromJson(x)));
+
+      mySalesLoading(false);
+    } else {
+      mySalesLoading(false);
+    }
+  }
+
+
 
   RxList<ProductModel> allProduct = <ProductModel>[].obs;
   RxBool allProductLoading = false.obs;
@@ -226,9 +249,10 @@ class ProductController extends GetxController {
     if (response.statusCode == 200) {
       Get.back();
       sendOfferLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
     } else {
       sendOfferLoading(false);
-      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "warning");
 
     }
   }
@@ -238,7 +262,7 @@ class ProductController extends GetxController {
 
   RxBool acceptOrCancelLoading = false.obs;
 
-  acceptOrCancel({required String id, buyerId, status}) async {
+  acceptOrCancel({required String id, buyerId, status, required BuildContext context}) async {
     acceptOrCancelLoading(true);
 
     var body = {
@@ -250,8 +274,10 @@ class ProductController extends GetxController {
 
     if (response.statusCode == 200) {
 
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
       acceptOrCancelLoading(false);
     } else {
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "warring");
       acceptOrCancelLoading(false);
     }
   }

@@ -37,6 +37,7 @@ class _PostScreenState extends State<PostScreen> {
     productController.fetchCategory();
     productController.getMyProduct();
     productController.fetchCountries();
+    productController.getMySales();
     super.initState();
   }
 
@@ -71,7 +72,7 @@ class _PostScreenState extends State<PostScreen> {
             tabs: const [
               Text('        Create Post         '),
               Text('         My Post        '),
-              Text('         Purchases       '),
+              Text('         My Sales       '),
             ],
             views: [_createPost(), _myPostList(), _mySalesList(_selected)],
             onChange: (int index) {
@@ -700,148 +701,154 @@ class _PostScreenState extends State<PostScreen> {
   String _selected = 'In Progress';
 
   Widget _mySalesList(String? selectedItem) {
-    return ListView.builder(
-      padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
-      itemCount: 5,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
-          decoration: BoxDecoration(
-            color: const Color(0xfffef4ea), // Card background
-            borderRadius: BorderRadius.circular(12.r),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.4),
-                spreadRadius: 1,
-                blurRadius: 6,
-                offset: Offset(0, 0), // shadow in all directions
-              ),
-            ],
-          ),
-          child: Padding(
-            padding: EdgeInsets.all(10.w),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Image Section
-
-                CustomNetworkImage(
-                    borderRadius: BorderRadius.circular(8.r),
-                    imageUrl:
-                        "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773",
-                    height: 139.h,
-                    width: 109.w),
-
-                SizedBox(width: 7.w),
-
-                // Info Section
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CustomText(
-                              text: "Cat Travel Bag (Used)",
-                              fontWeight: FontWeight.w600,
-                              bottom: 4.h,
-                              color: Colors.black),
-                          Spacer(),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xffD1F5D3), // Card background
-                              borderRadius: BorderRadius.circular(12.r),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.grey.withOpacity(0.4),
-                                  spreadRadius: 1,
-                                  blurRadius: 6,
-                                  offset:
-                                      Offset(0, 0), // shadow in all directions
-                                ),
-                              ],
-                            ),
-                            child: CustomText(
-                              text: "Live",
-                              left: 8.w,
-                              right: 8.w,
-                            ),
-                          ),
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Assets.icons.moneyIconCard.svg(),
-                          SizedBox(width: 4.w),
-                          CustomText(
-                            text: "30\$",
-                            fontWeight: FontWeight.w500,
-                            color: Colors.red,
-                          ),
-                        ],
-                      ),
-                      CustomText(
-                          text: "Pet Type: Cat",
-                          fontSize: 12.h,
-                          bottom: 4.h,
-                          color: Colors.black),
-                      CustomText(
-                        text: "Condition: Used – 60% Usable",
-                        fontSize: 12.h,
-                        bottom: 4.h,
-                        color: Colors.black,
-                      ),
-                      CustomText(
-                        text: "Location: Banani, Dhaka",
-                        fontSize: 12.h,
-                        color: Colors.black,
-                        bottom: 7.h,
-                      ),
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Container(
-                          height: 35.h,
-                          padding: EdgeInsets.symmetric(horizontal: 12.w),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFFFEF4EA),
-                            // light background
-                            border: Border.all(color: const Color(0xFFFF7A01)),
-                            // orange border
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: DropdownButtonHideUnderline(
-                            child: DropdownButton<String>(
-                              value: selectedItem,
-                              icon: const Icon(Icons.arrow_drop_down,
-                                  color: Color(0xFFFF7A01)),
-                              dropdownColor: const Color(0xFFFEF4EA),
-                              borderRadius: BorderRadius.circular(16),
-                              style: const TextStyle(color: Colors.black),
-                              onChanged: (String? newValue) {
-                                if (newValue != null) {
-                                  setState(() {
-                                    _selected = newValue;
-                                  });
-                                }
-                              },
-                              items: _options.map((String item) {
-                                return DropdownMenuItem<String>(
-                                  value: item,
-                                  child: Text(item),
-                                );
-                              }).toList(),
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+    return Obx(() =>
+    productController.mySalesLoading.value ? ShimmerListView() : productController.mySales.isEmpty ? NoDataFoundCard() :
+       ListView.builder(
+        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
+        itemCount: productController.mySales.length,
+        itemBuilder: (context, index) {
+          var sales = productController.mySales[index];
+          return Container(
+            margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
+            decoration: BoxDecoration(
+              color: const Color(0xfffef4ea), // Card background
+              borderRadius: BorderRadius.circular(12.r),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.4),
+                  spreadRadius: 1,
+                  blurRadius: 6,
+                  offset: Offset(0, 0), // shadow in all directions
                 ),
               ],
             ),
-          ),
-        );
-      },
+            child: Padding(
+              padding: EdgeInsets.all(10.w),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Image Section
+
+                  CustomNetworkImage(
+                      borderRadius: BorderRadius.circular(8.r),
+                      imageUrl:
+                          "${ApiConstants.imageBaseUrl}${sales.product?.images}",
+                      height: 139.h,
+                      width: 109.w),
+
+                  SizedBox(width: 7.w),
+
+                  // Info Section
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: CustomText(
+                                  text: "${sales.product?.productName}",
+                                  fontWeight: FontWeight.w600,
+                                  bottom: 4.h,
+                                  color: Colors.black),
+                            ),
+                            // Spacer(),
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xffD1F5D3), // Card background
+                                borderRadius: BorderRadius.circular(12.r),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.4),
+                                    spreadRadius: 1,
+                                    blurRadius: 6,
+                                    offset:
+                                        Offset(0, 0), // shadow in all directions
+                                  ),
+                                ],
+                              ),
+                              child: CustomText(
+                                text: "Live",
+                                left: 8.w,
+                                right: 8.w,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            Assets.icons.moneyIconCard.svg(),
+                            SizedBox(width: 4.w),
+                            CustomText(
+                              text: "30\$",
+                              fontWeight: FontWeight.w500,
+                              color: Colors.red,
+                            ),
+                          ],
+                        ),
+                        CustomText(
+                            text: "Pet Type: ${sales.product?.category}",
+                            fontSize: 12.h,
+                            bottom: 4.h,
+                            color: Colors.black),
+                        CustomText(
+                          text: "Condition: ${sales.product?.condition}",
+                          fontSize: 12.h,
+                          bottom: 4.h,
+                          color: Colors.black,
+                        ),
+                        CustomText(
+                          text: "Brand: ${sales.product?.brand}",
+                          fontSize: 12.h,
+                          color: Colors.black,
+                          bottom: 7.h,
+                        ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Container(
+                            height: 35.h,
+                            padding: EdgeInsets.symmetric(horizontal: 12.w),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFEF4EA),
+                              // light background
+                              border: Border.all(color: const Color(0xFFFF7A01)),
+                              // orange border
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: DropdownButtonHideUnderline(
+                              child: DropdownButton<String>(
+                                value: selectedItem,
+                                icon: const Icon(Icons.arrow_drop_down,
+                                    color: Color(0xFFFF7A01)),
+                                dropdownColor: const Color(0xFFFEF4EA),
+                                borderRadius: BorderRadius.circular(16),
+                                style: const TextStyle(color: Colors.black),
+                                onChanged: (String? newValue) {
+                                  if (newValue != null) {
+                                    setState(() {
+                                      _selected = newValue;
+                                    });
+                                  }
+                                },
+                                items: _options.map((String item) {
+                                  return DropdownMenuItem<String>(
+                                    value: item,
+                                    child: Text(item),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

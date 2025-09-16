@@ -17,12 +17,15 @@ class ApiConstants{
 
 
   static const String product = "/products";
+  static const String mySales = "/orders/sales";
   static const String getCategory = "/categories";
   static const String favourites = "/favourites";
   static const String offerSend = "/offers/send";
   static const String offerAccept = "/offers";
   static const String reports = "/reports";
+  static const String balance = "/wallets/balance";
   static const String walletBalanceAdd = "/wallets/recharge";
+  static const String createDelivery = "/delivery";
   static const String productAnalyze = "/product/analyze";
   static  String favouite(String? page) => "/favourites?page=${page??""}&limit=10";
   static const String getChatUser = "/conversations?term=pet&limit=10";

@@ -3,8 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:petattix/constants/constants.dart';
-import 'package:petattix/helper/prefs_helper.dart';
 import '../global/custom_assets/assets.gen.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
@@ -99,6 +97,28 @@ class WalletController extends GetxController {
     }
   }
 
+
+
+
+
+
+  RxString balance = ''.obs;
+  RxBool balanceLoading = false.obs;
+  getBalance()async{
+    balanceLoading(true);
+
+    final response = await ApiClient.getData(ApiConstants.balance);
+
+    if(response.statusCode == 200 || response.statusCode == 201){
+
+      balance.value = response.body["data"]['balance'].toString();
+      update();
+
+      balanceLoading(false);
+    }else{
+      balanceLoading(false);
+    }
+  }
 
 
 

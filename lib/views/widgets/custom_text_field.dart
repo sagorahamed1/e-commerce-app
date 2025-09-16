@@ -24,6 +24,7 @@ class CustomTextField extends StatefulWidget {
   final double? hintextSize;
   final Widget? suffixIcon;
   final FormFieldValidator? validator;
+  final FocusNode? focusNode;
   final bool isPassword;
   final bool? isEmail;
   final bool? readOnly;
@@ -56,7 +57,7 @@ class CustomTextField extends StatefulWidget {
         this.isPassword = false,
         this.readOnly = false, this.borderRadio, this.onTap, this.onChanged,
         this.maxLength,
-        this.inputFormatters,
+        this.inputFormatters, this.focusNode,
       });
 
   @override
@@ -82,6 +83,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           if(widget.labelText != null)
           CustomText(text: widget.labelText ?? '',bottom: 6.h,left: 2.w,color: Colors.black,),
           TextFormField(
+            focusNode: widget.focusNode,
             onChanged: widget.onChanged,
             onTap:widget. onTap,
             readOnly: widget.readOnly!,

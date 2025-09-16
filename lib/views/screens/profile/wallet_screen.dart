@@ -7,13 +7,28 @@ import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 
+import '../../../controller/wallet_controller.dart';
 import '../../../core/config/app_route.dart';
 import '../../widgets/cachanetwork_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
 
-class WalletScreen extends StatelessWidget {
+class WalletScreen extends StatefulWidget {
   const WalletScreen({super.key});
+
+  @override
+  State<WalletScreen> createState() => _WalletScreenState();
+}
+
+class _WalletScreenState extends State<WalletScreen> {
+
+  WalletController walletController = Get.put(WalletController());
+
+  @override
+  void initState() {
+    walletController.getBalance();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -66,11 +81,13 @@ class WalletScreen extends StatelessWidget {
                             width: 170.w,
                             child: FittedBox(
                               fit: BoxFit.scaleDown, // text will shrink to fit width
-                              child: CustomText(
-                                text: "\$ 1000",
-                                fontSize: 30.sp,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.white,
+                              child: Obx(() =>
+                                 CustomText(
+                                  text: "${walletController.balance.value}",
+                                  fontSize: 30.sp,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),

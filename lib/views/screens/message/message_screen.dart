@@ -142,6 +142,7 @@ class _MessageScreenState extends State<MessageScreen> {
                        Divider(),
                        SizedBox(height: 12.h),
                        CustomTextField(
+                         keyboardType: TextInputType.number,
                            controller: amonCtrl,
                            labelText: "Enter Amount",
                            hintText: "Enter Amount"),
@@ -259,7 +260,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                           isSender: message?.senderId != chatController.chatMessages.value.receiver?.id,
                                           status: '',
                                           imageUrl:
-                                              "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.receiver?.image}",
+                                              "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.conversation?.image}",
                                           buttons: [
 
                                             message?.offer?.status == "accepted" ?
@@ -269,9 +270,18 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 child: CustomButton(
                                                   fontSize: 10.h,
                                                   loaderIgnore: true,
-                                                  title: "Purchase",
+                                                  title:  message?.offer?.buyerId != chatController.chatMessages.value.receiver?.id ? "Purchase" : "Accepted",
                                                   onpress: () {
-                                                    Get.toNamed(AppRoutes.confirmPurchaseScreen);
+
+                                                    if(message?.offer?.buyerId != chatController.chatMessages.value.receiver?.id){
+                                                      Get.toNamed(AppRoutes.confirmPurchaseScreen, arguments: {
+                                                        "productId" : chatController.chatMessages.value.conversation?.id
+                                                      });
+                                                    }else{
+                                                      ToastMessageHelper.showToastMessage(context, "You already accepted", title: "info");
+                                                    }
+
+
                                                     // productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId);
                                                   },
                                                 )) :
@@ -290,7 +300,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                           if(chatController.chatMessages.value.receiver?.id == message?.offer?.buyerId){
 
                                                           }else{
-                                                            productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "reject", buyerId: message?.offer?.buyerId);
+                                                            productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "reject", buyerId: message?.offer?.buyerId, context: context);
                                                           }
                                                         })),
                                                 SizedBox(width: 8.w),
@@ -304,7 +314,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                                         loaderIgnore: true,
                                                         title: "Accept",
                                                         onpress: () {
-                                                          productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId);
+                                                          productController.acceptOrCancel(id: message?.offerId.toString() ?? "", status: "accept", buyerId: message?.offer?.buyerId, context: context);
                                                         },
                                                       ))
                                               ],
