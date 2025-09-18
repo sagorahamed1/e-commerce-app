@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:petattix/core/config/app_route.dart';
+import 'package:petattix/helper/toast_message_helper.dart';
+import '../model/couriar_service_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
 
@@ -36,10 +39,24 @@ class PurchaseController extends GetxController {
     var response = await ApiClient.postData(
         "${ApiConstants.createDelivery}/${productId}", jsonEncode(body));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       createDeliveryLoading(false);
+      ToastMessageHelper.showToastMessage(context, response.body["message"]);
     } else {
       createDeliveryLoading(false);
+      // ToastMessageHelper.showToastMessage(context, response.body["message"].toString(), title: "info");
+
+      ToastMessageHelper.showToastMessage(
+          context,
+          (response.body["message"] is List)
+              ? (response.body["message"] as List).join(", ")
+              : (response.body["message"] ?? "Something went wrong"),
+          title: "info"
+      );
+      if(response.body["message"] ==  "You don't have enough balance to purchase the product."){
+
+        Get.toNamed(AppRoutes.walletScreen);
+      }
     }
   }
 
@@ -58,6 +75,94 @@ class PurchaseController extends GetxController {
       balanceLoading(false);
     } else {
       balanceLoading(false);
+
     }
   }
+
+
+
+
+  RxBool createCollectionLoading = false.obs;
+
+  createCollection(
+      {required var data,required String productId,
+        required BuildContext context}) async {
+    createCollectionLoading(true);
+
+
+    var response = await ApiClient.postData(
+        "${ApiConstants.createCollection(productId)}", jsonEncode(data));
+
+    if (response.statusCode == 200) {
+      createCollectionLoading(false);
+      ToastMessageHelper.showToastMessage(context, response.body["message"]);
+    } else {
+      createCollectionLoading(false);
+      ToastMessageHelper.showToastMessage(context, response.body["message"], title: "info");
+
+    }
+  }
+
+
+
+
+
+
+  RxList<CourierServiceModel> couriar = <CourierServiceModel>[].obs;
+  RxString quoteId = ''.obs;
+  RxBool getCoriarLoading = false.obs;
+
+    geCouriar({required String productId}) async {
+      getCoriarLoading(true);
+    var response = await ApiClient.postData(ApiConstants.couriar(productId), jsonEncode({}));
+
+    print("=============${response.body}");
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      couriar.value = List<CourierServiceModel>.from(response.body["data"]["ServiceResults"].map((x) => CourierServiceModel.fromJson(x)));
+
+      // final Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+      // quoteId.value = jsonResponse["data"]["QuoteID"];
+
+      final jsonResponse = response.body; // no jsonDecode
+      quoteId.value = jsonResponse["data"]["QuoteID"].toString();
+
+
+      update();
+
+      getCoriarLoading(false);
+    } else {
+      getCoriarLoading(false);
+    }
+  }
+
+
+
+
+  RxBool shipmentLoading = false.obs;
+
+  shipment(
+      {required var data,required String productId,
+        required BuildContext context}) async {
+    shipmentLoading(true);
+
+
+    var response = await ApiClient.postData(
+        "${ApiConstants.shipment(productId)}", jsonEncode(data));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      shipmentLoading(false);
+      Get.back();
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+
+    } else {
+      shipmentLoading(false);
+      ToastMessageHelper.showToastMessage(context, response.body["message"], title: "info");
+
+    }
+  }
+
+
+
+
+
 }

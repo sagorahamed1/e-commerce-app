@@ -97,7 +97,7 @@ class _MessageScreenState extends State<MessageScreen> {
                 () => CustomNetworkImage(
                     boxShape: BoxShape.circle,
                     imageUrl:
-                        '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.conversation?.image}',
+                        '${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.receiver?.image}',
                     height: 40.h,
                     width: 40.h),
               ),
@@ -260,7 +260,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                           isSender: message?.senderId != chatController.chatMessages.value.receiver?.id,
                                           status: '',
                                           imageUrl:
-                                              "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.conversation?.image}",
+                                              "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.conversation?.product?.images?[0]["image"]}",
                                           buttons: [
 
                                             message?.offer?.status == "accepted" ?
@@ -275,7 +275,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
                                                     if(message?.offer?.buyerId != chatController.chatMessages.value.receiver?.id){
                                                       Get.toNamed(AppRoutes.confirmPurchaseScreen, arguments: {
-                                                        "productId" : chatController.chatMessages.value.conversation?.id
+                                                        "productId" : message?.offer?.productId.toString()
                                                       });
                                                     }else{
                                                       ToastMessageHelper.showToastMessage(context, "You already accepted", title: "info");

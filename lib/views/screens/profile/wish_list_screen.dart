@@ -69,196 +69,201 @@ class _WishListScreenState extends State<WishListScreen> {
 
   Widget _buildCartList() {
     return Obx(() => productController.myCardLoading.value ? ShimmerListView() : productController.myCard.isEmpty ? NoDataFoundCard() :
-       ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
-        itemCount: productController.myCard.length,
-        itemBuilder: (context, index) {
-          var product = productController.myCard[index];
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
-            decoration: BoxDecoration(
-              color: const Color(0xfffef4ea), // Card background
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.4),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 0), // shadow in all directions
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(10.w),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Image Section
-
-                  CustomNetworkImage(
-                      borderRadius: BorderRadius.circular(8.r),
-                      imageUrl:
-                      "${ApiConstants.imageBaseUrl}/${product.images}",
-                      height: 139.h,
-                      width: 109.w),
-
-                  SizedBox(width: 7.w),
-
-                  // Info Section
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: CustomText(
-                                textAlign: TextAlign.start,
-                                  text: "${product.productName}",
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black),
-                            ),
-
-                            // Spacer(),
-
-                            Icon(Icons.favorite, color: Colors.red)
-                          ],
-                        ),
-
-
-                        Row(
-                          children: [
-                            Assets.icons.moneyIconCard.svg(),
-                            SizedBox(width: 4.w),
-                            CustomText(
-                              text: "${product.sellingPrice}",
-                              fontWeight: FontWeight.w500,
-                              color: Colors.red,
-                            ),
-                          ],
-                        ),
-                        CustomText(
-                            text: "Pet Type: ${product.category}",
-                            fontSize: 12.h,
-                            bottom: 4.h,
-                            color: Colors.black),
-                        CustomText(
-                          text: "Condition: ${product.condition}",
-                          fontSize: 12.h,
-                          bottom: 4.h,
-                          color: Colors.black,
-                        ),
-                        CustomText(
-                          text: "Size: ${product.size}",
-                          fontSize: 12.h,
-                          color: Colors.black,
-                          bottom: 7.h,
-                        ),
-                        Row(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: CustomButton(
-                                  height: 26.h,
-                                  title: "Offer Price",
-                                  onpress: () {
-                                    TextEditingController amonCtrl = TextEditingController();
-                                    amonCtrl.text = product.sellingPrice.toString();
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          content: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              CustomText(
-                                                  text: "Offer Your Price",
-                                                  fontSize: 16.h,
-                                                  fontWeight: FontWeight.w600,
-                                                  top: 29.h,
-                                                  bottom: 20.h,
-                                                  color: Color(0xff592B00)),
-                                              Divider(),
-                                              SizedBox(height: 12.h),
-                                              CustomTextField(
-                                                  controller: amonCtrl,
-                                                  labelText: "Enter Amount",
-                                                  hintText: "Enter Amount"),
-                                              SizedBox(height: 12.h),
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: CustomButton(
-                                                        height: 50.h,
-                                                        title: "Cancel",
-                                                        onpress: () {
-                                                          Get.back();
-                                                        },
-                                                        color: Colors.transparent,
-                                                        fontSize: 11.h,
-                                                        loaderIgnore: true,
-                                                        boderColor: AppColors
-                                                            .primaryColor,
-                                                        titlecolor: AppColors
-                                                            .primaryColor),
-                                                  ),
-                                                  SizedBox(width: 8.w),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: CustomButton(
-                                                        loading: false,
-                                                        loaderIgnore: true,
-                                                        height: 50.h,
-                                                        title: "Offer",
-                                                        onpress: () {
-                                                          // Get.toNamed(AppRoutes
-                                                          //     .messageScreen);
-
-                                                          productController.sendOffer(
-                                                              id: product.id.toString(),
-                                                              price: amonCtrl.text, context:  context);
-                                                        },
-                                                        fontSize: 11.h),
-                                                  ),
-                                                ],
-                                              )
-                                            ],
-                                          ),
-                                        );
-                                      },
-                                    );
-                                  },
-                                  color: Colors.transparent,
-                                  fontSize: 11.h,
-                                  loaderIgnore: true,
-                                  boderColor: AppColors.primaryColor,
-                                  titlecolor: AppColors.primaryColor),
-                            ),
-                            SizedBox(width: 8.w),
-                            Expanded(
-                              flex: 1,
-                              child: CustomButton(
-                                  loading: false,
-                                  loaderIgnore: true,
-                                  height: 26.h,
-                                  title: "Purchase",
-                                  onpress: () {
-                                    Get.toNamed(AppRoutes.confirmPurchaseScreen);
-                                  },
-                                  fontSize: 11.h),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+       Padding(
+         padding:  EdgeInsets.only(bottom: 50.h),
+         child: ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
+          itemCount: productController.myCard.length,
+          itemBuilder: (context, index) {
+            var product = productController.myCard[index];
+            return Container(
+              margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
+              decoration: BoxDecoration(
+                color: const Color(0xfffef4ea), // Card background
+                borderRadius: BorderRadius.circular(12.r),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.4),
+                    spreadRadius: 1,
+                    blurRadius: 6,
+                    offset: Offset(0, 0), // shadow in all directions
                   ),
                 ],
               ),
-            ),
-          );
-        },
-      ),
+              child: Padding(
+                padding: EdgeInsets.all(10.w),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Image Section
+
+                    CustomNetworkImage(
+                        borderRadius: BorderRadius.circular(8.r),
+                        imageUrl: product.images?.isEmpty ?? false ? "" :
+                        "${ApiConstants.imageBaseUrl}/${product.images?.first["image"]}",
+                        height: 139.h,
+                        width: 109.w),
+
+                    SizedBox(width: 7.w),
+
+                    // Info Section
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Expanded(
+                                child: CustomText(
+                                  textAlign: TextAlign.start,
+                                    text: "${product.productName}",
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.black),
+                              ),
+
+                              // Spacer(),
+
+                              Icon(Icons.favorite, color: Colors.red)
+                            ],
+                          ),
+
+
+                          Row(
+                            children: [
+                              Assets.icons.moneyIconCard.svg(),
+                              SizedBox(width: 4.w),
+                              CustomText(
+                                text: "${product.sellingPrice}",
+                                fontWeight: FontWeight.w500,
+                                color: Colors.red,
+                              ),
+                            ],
+                          ),
+                          CustomText(
+                              text: "Pet Type: ${product.category}",
+                              fontSize: 12.h,
+                              bottom: 4.h,
+                              color: Colors.black),
+                          CustomText(
+                            text: "Condition: ${product.condition}",
+                            fontSize: 12.h,
+                            bottom: 4.h,
+                            color: Colors.black,
+                          ),
+                          CustomText(
+                            text: "Size: ${product.size}",
+                            fontSize: 12.h,
+                            color: Colors.black,
+                            bottom: 7.h,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                flex: 1,
+                                child: CustomButton(
+                                    height: 26.h,
+                                    title: "Offer Price",
+                                    onpress: () {
+                                      TextEditingController amonCtrl = TextEditingController();
+                                      amonCtrl.text = product.sellingPrice.toString();
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            content: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                CustomText(
+                                                    text: "Offer Your Price",
+                                                    fontSize: 16.h,
+                                                    fontWeight: FontWeight.w600,
+                                                    top: 29.h,
+                                                    bottom: 20.h,
+                                                    color: Color(0xff592B00)),
+                                                Divider(),
+                                                SizedBox(height: 12.h),
+                                                CustomTextField(
+                                                    controller: amonCtrl,
+                                                    labelText: "Enter Amount",
+                                                    hintText: "Enter Amount"),
+                                                SizedBox(height: 12.h),
+                                                Row(
+                                                  children: [
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: CustomButton(
+                                                          height: 50.h,
+                                                          title: "Cancel",
+                                                          onpress: () {
+                                                            Get.back();
+                                                          },
+                                                          color: Colors.transparent,
+                                                          fontSize: 11.h,
+                                                          loaderIgnore: true,
+                                                          boderColor: AppColors
+                                                              .primaryColor,
+                                                          titlecolor: AppColors
+                                                              .primaryColor),
+                                                    ),
+                                                    SizedBox(width: 8.w),
+                                                    Expanded(
+                                                      flex: 1,
+                                                      child: CustomButton(
+                                                          loading: false,
+                                                          loaderIgnore: true,
+                                                          height: 50.h,
+                                                          title: "Offer",
+                                                          onpress: () {
+                                                            // Get.toNamed(AppRoutes
+                                                            //     .messageScreen);
+
+                                                            productController.sendOffer(
+                                                                id: product.id.toString(),
+                                                                price: amonCtrl.text, context:  context);
+                                                          },
+                                                          fontSize: 11.h),
+                                                    ),
+                                                  ],
+                                                )
+                                              ],
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                    color: Colors.transparent,
+                                    fontSize: 11.h,
+                                    loaderIgnore: true,
+                                    boderColor: AppColors.primaryColor,
+                                    titlecolor: AppColors.primaryColor),
+                              ),
+                              SizedBox(width: 8.w),
+                              Expanded(
+                                flex: 1,
+                                child: CustomButton(
+                                    loading: false,
+                                    loaderIgnore: true,
+                                    height: 26.h,
+                                    title: "Purchase",
+                                    onpress: () {
+                                      Get.toNamed(AppRoutes.confirmPurchaseScreen, arguments: {
+                                        "productId" : product.id
+                                      });
+                                    },
+                                    fontSize: 11.h),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+               ),
+       ),
     );
   }
 

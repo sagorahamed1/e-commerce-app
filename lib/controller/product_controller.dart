@@ -246,7 +246,7 @@ class ProductController extends GetxController {
     var response =
     await ApiClient.postData(ApiConstants.offerSend, jsonEncode(body));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       Get.back();
       sendOfferLoading(false);
       ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");

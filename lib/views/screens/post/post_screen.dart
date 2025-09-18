@@ -74,7 +74,7 @@ class _PostScreenState extends State<PostScreen> {
               Text('         My Post        '),
               Text('         My Sales       '),
             ],
-            views: [_createPost(), _myPostList(), _mySalesList(_selected)],
+            views: [_createPost(), _myPostList(), _mySalesList()],
             onChange: (int index) {
               if (index == 1) {
                 productController.getMyProduct();
@@ -89,10 +89,12 @@ class _PostScreenState extends State<PostScreen> {
   TextEditingController descriptionCtrl = TextEditingController();
   TextEditingController purchasePriceCtrl = TextEditingController();
   TextEditingController sellingPriceCtrl = TextEditingController();
+
   // TextEditingController quantityCtrl = TextEditingController();
   TextEditingController categoryCtrl = TextEditingController();
   TextEditingController selectedCategoryCtrl = TextEditingController();
   TextEditingController brandCtrl = TextEditingController();
+
   // TextEditingController heightCtrl = TextEditingController();
   // TextEditingController widthCtrl = TextEditingController();
   // TextEditingController lengthCtrl = TextEditingController();
@@ -209,13 +211,11 @@ class _PostScreenState extends State<PostScreen> {
                 labelText: "Product Title",
                 hintText: "Product Title"),
 
-
             CustomTextField(
-              keyboardType: TextInputType.number,
+                keyboardType: TextInputType.number,
                 controller: sizeCtrl,
                 labelText: "Size",
                 hintText: "Size"),
-
 
             // CustomTextField(
             //     controller: cityCtrl,
@@ -401,12 +401,8 @@ class _PostScreenState extends State<PostScreen> {
                 labelText: "Description",
                 hintText: "Description"),
 
-
-
-
             Row(
               children: [
-
                 CircularCheckBox(
                   size: 20.r,
                   isChecked: _isBoost,
@@ -427,19 +423,22 @@ class _PostScreenState extends State<PostScreen> {
 
             CustomText(
                 left: 30.w,
-                text: "Boost your ad to appear at the top of your audience’s feed for 3 days with just 1€.", fontSize: 10.h, maxline: 3, textAlign: TextAlign.start),
-
+                text:
+                    "Boost your ad to appear at the top of your audience’s feed for 3 days with just 1€.",
+                fontSize: 10.h,
+                maxline: 3,
+                textAlign: TextAlign.start),
 
             SizedBox(height: 20.h),
 
             CustomButton(
-              loading: productController.productAddLoading.value,
+                loading: productController.productAddLoading.value,
                 title: "Create a Post",
                 onpress: () {
                   if (forKey.currentState!.validate()) {
                     if (_images.length != 0) {
                       productController.addProduct(
-                        context: context,
+                          context: context,
                           productName: titleCtrl.text,
                           phurcasingPrice: purchasePriceCtrl.text,
                           sellingPrice: sellingPriceCtrl.text,
@@ -482,8 +481,6 @@ class _PostScreenState extends State<PostScreen> {
 
   int _currentIndex = 0;
 
-
-
   Future<void> _pickImages() async {
     final List<XFile>? picked = await _picker.pickMultiImage();
     if (picked != null) {
@@ -493,18 +490,18 @@ class _PostScreenState extends State<PostScreen> {
         final remaining = 5 - _images.length;
         _images.addAll(newImages.take(remaining));
         _currentIndex = _images.length - 1;
-
       });
 
-
-      titleCtrl.text = productController. aiImageInfo["product_name"] ?? "";
-      sizeCtrl.text = productController. aiImageInfo["size"] ?? "";
-      brandCtrl.text = productController. aiImageInfo["brand"] ?? "";
-      categoryCtrl.text = productController. aiImageInfo["category"] ?? "";
-      conditionCtrl.text = productController. aiImageInfo["condition"] ?? "";
-      descriptionCtrl.text = productController. aiImageInfo["description"] ?? "";
-      purchasePriceCtrl.text = productController. aiImageInfo["purchasing_price"] ?? "";
-      sellingPriceCtrl.text = productController. aiImageInfo["selling_price"] ?? "";
+      titleCtrl.text = productController.aiImageInfo["product_name"] ?? "";
+      sizeCtrl.text = productController.aiImageInfo["size"] ?? "";
+      brandCtrl.text = productController.aiImageInfo["brand"] ?? "";
+      categoryCtrl.text = productController.aiImageInfo["category"] ?? "";
+      conditionCtrl.text = productController.aiImageInfo["condition"] ?? "";
+      descriptionCtrl.text = productController.aiImageInfo["description"] ?? "";
+      purchasePriceCtrl.text =
+          productController.aiImageInfo["purchasing_price"] ?? "";
+      sellingPriceCtrl.text =
+          productController.aiImageInfo["selling_price"] ?? "";
     }
   }
 
@@ -585,12 +582,13 @@ class _PostScreenState extends State<PostScreen> {
                                 children: [
                                   Row(
                                     children: [
-                                      CustomText(
-                                          text: "${product.productName}",
-                                          fontWeight: FontWeight.w600,
-                                          bottom: 4.h,
-                                          color: Colors.black),
-                                      Spacer(),
+                                      Expanded(
+                                        child: CustomText(
+                                            text: "${product.productName}",
+                                            fontWeight: FontWeight.w600,
+                                            bottom: 4.h,
+                                            color: Colors.black),
+                                      ),
                                       Container(
                                         decoration: BoxDecoration(
                                           color: const Color(
@@ -697,158 +695,162 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-  final List<String> _options = ['In Progress', 'Packed', 'Handover'];
-  String _selected = 'In Progress';
+  final List<String> _options = [
+    "delivered",
+    "pending",
+    "accepted",
+    "rejected",
+    "cancelled",
+    "refunded",
+    "delivery_filled",
+    "shipment_ready",
+    "prepeared"
+  ];
+  String selected = 'delivery_filled';
 
-  Widget _mySalesList(String? selectedItem) {
-    return Obx(() =>
-    productController.mySalesLoading.value ? ShimmerListView() : productController.mySales.isEmpty ? NoDataFoundCard() :
-       ListView.builder(
-        padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
-        itemCount: productController.mySales.length,
-        itemBuilder: (context, index) {
-          var sales = productController.mySales[index];
-          return Container(
-            margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
-            decoration: BoxDecoration(
-              color: const Color(0xfffef4ea), // Card background
-              borderRadius: BorderRadius.circular(12.r),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.4),
-                  spreadRadius: 1,
-                  blurRadius: 6,
-                  offset: Offset(0, 0), // shadow in all directions
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: EdgeInsets.all(10.w),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Image Section
-
-                  CustomNetworkImage(
-                      borderRadius: BorderRadius.circular(8.r),
-                      imageUrl:
-                          "${ApiConstants.imageBaseUrl}${sales.product?.images}",
-                      height: 139.h,
-                      width: 109.w),
-
-                  SizedBox(width: 7.w),
-
-                  // Info Section
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+  Widget _mySalesList() {
+    return Obx(
+      () => productController.mySalesLoading.value
+          ? ShimmerListView()
+          : productController.mySales.isEmpty
+              ? NoDataFoundCard()
+              : ListView.builder(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
+                  itemCount: productController.mySales.length,
+                  itemBuilder: (context, index) {
+                    var sales = productController.mySales[index];
+                    return Container(
+                      margin:
+                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
+                      decoration: BoxDecoration(
+                        color: const Color(0xfffef4ea), // Card background
+                        borderRadius: BorderRadius.circular(12.r),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            spreadRadius: 1,
+                            blurRadius: 6,
+                            offset: Offset(0, 0), // shadow in all directions
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(10.w),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Image Section
+
+                            CustomNetworkImage(
+                                borderRadius: BorderRadius.circular(8.r),
+                                imageUrl:
+                                    "${ApiConstants.imageBaseUrl}${sales.product?.images?[0]["image"]}",
+                                height: 139.h,
+                                width: 109.w),
+
+                            SizedBox(width: 7.w),
+
+                            // Info Section
                             Expanded(
-                              child: CustomText(
-                                  text: "${sales.product?.productName}",
-                                  fontWeight: FontWeight.w600,
-                                  bottom: 4.h,
-                                  color: Colors.black),
-                            ),
-                            // Spacer(),
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xffD1F5D3), // Card background
-                                borderRadius: BorderRadius.circular(12.r),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Colors.grey.withOpacity(0.4),
-                                    spreadRadius: 1,
-                                    blurRadius: 6,
-                                    offset:
-                                        Offset(0, 0), // shadow in all directions
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CustomText(
+                                          textAlign: TextAlign.start,
+                                            text:
+                                                "${sales.product?.productName}",
+                                            fontWeight: FontWeight.w600,
+                                            bottom: 4.h,
+                                            color: Colors.black),
+                                      ),
+                                      // Spacer(),
+                                      Container(
+                                        decoration: BoxDecoration(
+                                          color: const Color(
+                                              0xffD1F5D3), // Card background
+                                          borderRadius:
+                                              BorderRadius.circular(12.r),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.4),
+                                              spreadRadius: 1,
+                                              blurRadius: 6,
+                                              offset: Offset(0,
+                                                  0), // shadow in all directions
+                                            ),
+                                          ],
+                                        ),
+                                        child: CustomText(
+                                          text: "Live",
+                                          left: 8.w,
+                                          right: 8.w,
+                                        ),
+                                      ),
+                                    ],
                                   ),
+                                  Row(
+                                    children: [
+                                      Assets.icons.moneyIconCard.svg(),
+                                      SizedBox(width: 4.w),
+                                      CustomText(
+                                        text: "30\$",
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.red,
+                                      ),
+                                    ],
+                                  ),
+                                  CustomText(
+                                      text:
+                                          "Pet Type: ${sales.product?.category}",
+                                      fontSize: 12.h,
+                                      bottom: 4.h,
+                                      color: Colors.black),
+                                  CustomText(
+                                    text:
+                                        "Condition: ${sales.product?.condition}",
+                                    fontSize: 12.h,
+                                    bottom: 4.h,
+                                    color: Colors.black,
+                                  ),
+                                  CustomText(
+                                    text: "Brand: ${sales.product?.brand}",
+                                    fontSize: 12.h,
+                                    color: Colors.black,
+                                    bottom: 7.h,
+                                  ),
+
+                                  CustomButton(
+                                    height: 30.h,
+                                      loaderIgnore: true,
+                                      fontSize: 12.h,
+                                      title: "${sales.status}", onpress: () {
+
+                                      if(sales.status ==  "delivery_filled"){
+                                        //route
+                                        Get.toNamed(AppRoutes.shipmentScreen, arguments: {
+                                          "productId" : "${sales.product?.id}"
+                                        });
+                                      }else if(sales.status == "shipment_ready"){
+                                        Get.toNamed(AppRoutes.courierScreen, arguments: {
+                                          "productId" : "${sales.product?.id}"
+                                        });
+                                      }
+
+                                  })
                                 ],
                               ),
-                              child: CustomText(
-                                text: "Live",
-                                left: 8.w,
-                                right: 8.w,
-                              ),
                             ),
                           ],
                         ),
-                        Row(
-                          children: [
-                            Assets.icons.moneyIconCard.svg(),
-                            SizedBox(width: 4.w),
-                            CustomText(
-                              text: "30\$",
-                              fontWeight: FontWeight.w500,
-                              color: Colors.red,
-                            ),
-                          ],
-                        ),
-                        CustomText(
-                            text: "Pet Type: ${sales.product?.category}",
-                            fontSize: 12.h,
-                            bottom: 4.h,
-                            color: Colors.black),
-                        CustomText(
-                          text: "Condition: ${sales.product?.condition}",
-                          fontSize: 12.h,
-                          bottom: 4.h,
-                          color: Colors.black,
-                        ),
-                        CustomText(
-                          text: "Brand: ${sales.product?.brand}",
-                          fontSize: 12.h,
-                          color: Colors.black,
-                          bottom: 7.h,
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Container(
-                            height: 35.h,
-                            padding: EdgeInsets.symmetric(horizontal: 12.w),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFEF4EA),
-                              // light background
-                              border: Border.all(color: const Color(0xFFFF7A01)),
-                              // orange border
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: DropdownButtonHideUnderline(
-                              child: DropdownButton<String>(
-                                value: selectedItem,
-                                icon: const Icon(Icons.arrow_drop_down,
-                                    color: Color(0xFFFF7A01)),
-                                dropdownColor: const Color(0xFFFEF4EA),
-                                borderRadius: BorderRadius.circular(16),
-                                style: const TextStyle(color: Colors.black),
-                                onChanged: (String? newValue) {
-                                  if (newValue != null) {
-                                    setState(() {
-                                      _selected = newValue;
-                                    });
-                                  }
-                                },
-                                items: _options.map((String item) {
-                                  return DropdownMenuItem<String>(
-                                    value: item,
-                                    child: Text(item),
-                                  );
-                                }).toList(),
-                              ),
-                            ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+                      ),
+                    );
+                  },
+                ),
     );
   }
 }

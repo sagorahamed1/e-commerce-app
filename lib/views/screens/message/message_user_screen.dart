@@ -96,7 +96,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                                             color: Color(0xff592B00),
                                             width: 0.002),
                                         imageUrl:
-                                            "${ApiConstants.imageBaseUrl}${chatUser.image}",
+                                           chatUser.product?.images?.isEmpty ?? false ? "" :  "${ApiConstants.imageBaseUrl}${chatUser.product?.images?.first.image}",
                                         height: 58.h,
                                         width: 58.w,
                                         boxShape: BoxShape.circle,

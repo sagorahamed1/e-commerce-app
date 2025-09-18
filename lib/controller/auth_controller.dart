@@ -102,8 +102,10 @@ class AuthController extends GetxController {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       if (verifyType == "sign up") {
+
         await PrefsHelper.remove(AppConstants.bearerToken);
           Get.toNamed(AppRoutes.logInScreen);
+
       } else {
         Get.toNamed(AppRoutes.resetPasswordScreen);
       }

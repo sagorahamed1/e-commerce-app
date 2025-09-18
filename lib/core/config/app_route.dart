@@ -24,7 +24,9 @@ import '../../views/screens/profile/wallet_screen.dart';
 import '../../views/screens/profile/wish_list_screen.dart';
 import '../../views/screens/purchas/confirm_purchase_screen.dart';
 import '../../views/screens/purchas/confirmed.dart';
+import '../../views/screens/purchas/courier_screen.dart';
 import '../../views/screens/purchas/make_payment.dart';
+import '../../views/screens/purchas/shipment_screen.dart';
 import '../../views/screens/refund/refund_request_screen.dart';
 import '../../views/screens/setting/change_password_screen.dart';
 import '../../views/screens/setting/privacy_policy_all_screen.dart';
@@ -63,6 +65,8 @@ class AppRoutes {
   static const String refundRequestScreen = "/RefundRequestScreen";
   static const String wishListScreen = "/WishListScreen";
   static const String editMyProductScreent = "/EditMyProductScreent";
+  static const String shipmentScreen = "/ShipmentScreen";
+  static const String courierScreen = "/CourierScreen";
 
 
 
@@ -96,5 +100,7 @@ class AppRoutes {
     GetPage(name: refundRequestScreen, page: () =>  RefundRequestScreen()),
     GetPage(name: wishListScreen, page: () =>  WishListScreen()),
     GetPage(name: editMyProductScreent, page: () =>  EditMyProductScreent()),
+    GetPage(name: shipmentScreen, page: () =>  ShipmentScreen()),
+    GetPage(name: courierScreen, page: () =>  CourierScreen()),
   ];
 }

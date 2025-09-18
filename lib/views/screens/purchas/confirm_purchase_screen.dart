@@ -192,53 +192,6 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                 },
               ),
 
-              // /// Address Autocomplete field
-              // GooglePlaceAutoCompleteTextField(
-              //   focusNode: address1Focus,
-              //   textEditingController: addressLine1Ctrl,
-              //   googleAPIKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0",
-              //
-              //   inputDecoration: InputDecoration(
-              //     hintText: "Start typing address",
-              //     border: OutlineInputBorder(
-              //       borderSide: BorderSide(
-              //           color: Colors.transparent, width: 0.05),
-              //       borderRadius: BorderRadius.circular(12.r),
-              //     ),
-              //   ),
-              //   // debounceTime: 800,
-              //   boxDecoration: BoxDecoration(
-              //       color: const Color(0xFFFFF2E6),
-              //       border: Border.all(color: Colors.transparent),
-              //       borderRadius: BorderRadius.circular(12.r)
-              //   ),
-              //   isLatLngRequired: true,
-              //   getPlaceDetailWithLatLng: (prediction) async {
-              //     final detail = await places.getDetailsByPlaceId(
-              //         prediction.placeId!);
-              //     final comp = detail.result.addressComponents;
-              //
-              //
-              //     for (var c in comp) {
-              //       if (c.types.contains("locality")) {
-              //         cityCtrl.text = c.longName;
-              //       }
-              //       if (c.types.contains("postal_code")) {
-              //         postalCodeCtrl.text = c.longName;
-              //       }
-              //       if (c.types.contains("country")) {
-              //         countryTitleCtrl.text = c.longName;
-              //         countryCodeCtrl.text = c.shortName;
-              //         countryIdCtrl.text = prediction.placeId.toString();
-              //       }
-              //     }
-              //   },
-              //   itemClick: (prediction) {
-              //     addressLine1Ctrl.text = prediction.description ?? "";
-              //     addressLine1Ctrl.selection = TextSelection.fromPosition(
-              //         TextPosition(offset: prediction.description!.length));
-              //   },
-              // ),
 
               SizedBox(height: 10.h),
 
@@ -292,7 +245,9 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                     flex: 1,
                     child: CustomButton(
                         title: "Cancel",
-                        onpress: () {},
+                        onpress: () {
+                          Get.back();
+                        },
                         color: Colors.transparent,
                         fontSize: 11.h,
                         loaderIgnore: true,
@@ -303,10 +258,10 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                   Expanded(
                     flex: 1,
                     child: CustomButton(
-                        loading: false,
                         loaderIgnore: true,
                         title: "Confirm",
                         onpress: () {
+                          print("==================tapped");
                           purchaseController.createDelivery(
                               companyName: companyNameCtrl.text,
                               country: countryTitleCtrl.text,
@@ -317,7 +272,7 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                               addressTow: addressLine2Ctrl.text,
                               phoneNumber: phoneNoCtrl.text,
                               postCode: postalCodeCtrl.text,
-                              productId: data["productId"],
+                              productId: data["productId"] ?? "",
                               context: context);
                           // Get.toNamed(AppRoutes.makePayment);
                         },

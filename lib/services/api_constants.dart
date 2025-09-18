@@ -30,4 +30,7 @@ class ApiConstants{
   static  String favouite(String? page) => "/favourites?page=${page??""}&limit=10";
   static const String getChatUser = "/conversations?term=pet&limit=10";
   static String chatEndPoint(String? id) =>  "/messages/${id??""}?limit=100";
+  static String createCollection(String? id) =>  "/delivery/${id}/collection";
+  static String shipment(String? id) =>  "/delivery/${id}/shipment";
+  static String couriar(String? id) =>  "/delivery/${id}/shipment/late";
 }
