@@ -83,6 +83,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                           SizedBox(
                             width: 170.w,
+                            height: 30.h,
                             child: FittedBox(
                               fit: BoxFit.scaleDown, // text will shrink to fit width
                               child: Obx(() =>
@@ -236,7 +237,8 @@ class _WalletScreenState extends State<WalletScreen> {
               ],
             ),
             Expanded(
-              child: Obx(() => walletController.walletLoading.value ? CircularProgressIndicator() : walletController.walletHistory.isEmpty ? NoDataFoundCard() :
+              child: Obx(() => walletController.walletLoading.value ? Center(
+                  child: CircularProgressIndicator()) : walletController.walletHistory.isEmpty ? NoDataFoundCard() :
                  ListView.builder(
                   padding: EdgeInsets.symmetric(vertical: 10.h),
                   itemCount: walletController.walletHistory.length,

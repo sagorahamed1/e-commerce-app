@@ -498,10 +498,8 @@ class _PostScreenState extends State<PostScreen> {
       categoryCtrl.text = productController.aiImageInfo["category"] ?? "";
       conditionCtrl.text = productController.aiImageInfo["condition"] ?? "";
       descriptionCtrl.text = productController.aiImageInfo["description"] ?? "";
-      purchasePriceCtrl.text =
-          productController.aiImageInfo["purchasing_price"] ?? "";
-      sellingPriceCtrl.text =
-          productController.aiImageInfo["selling_price"] ?? "";
+      purchasePriceCtrl.text = productController.aiImageInfo["purchasing_price"] ?? "";
+      sellingPriceCtrl.text = productController.aiImageInfo["selling_price"] ?? "";
     }
   }
 
@@ -704,143 +702,146 @@ class _PostScreenState extends State<PostScreen> {
           ? ShimmerListView()
           : productController.mySales.isEmpty
               ? NoDataFoundCard()
-              : ListView.builder(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
-                  itemCount: productController.mySales.length,
-                  itemBuilder: (context, index) {
-                    var sales = productController.mySales[index];
-                    return Container(
-                      margin:
-                          EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
-                      decoration: BoxDecoration(
-                        color: const Color(0xfffef4ea), // Card background
-                        borderRadius: BorderRadius.circular(12.r),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.4),
-                            spreadRadius: 1,
-                            blurRadius: 6,
-                            offset: Offset(0, 0), // shadow in all directions
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.all(10.w),
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // Image Section
-
-                            CustomNetworkImage(
-                                borderRadius: BorderRadius.circular(8.r),
-                                imageUrl:
-                                    "${ApiConstants.imageBaseUrl}${sales.product?.images?[0]["image"]}",
-                                height: 139.h,
-                                width: 109.w),
-
-                            SizedBox(width: 7.w),
-
-                            // Info Section
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: CustomText(
-                                          textAlign: TextAlign.start,
-                                            text:
-                                                "${sales.product?.productName}",
-                                            fontWeight: FontWeight.w600,
-                                            bottom: 4.h,
-                                            color: Colors.black),
-                                      ),
-                                      // Spacer(),
-                                      Container(
-                                        decoration: BoxDecoration(
-                                          color: const Color(
-                                              0xffD1F5D3), // Card background
-                                          borderRadius:
-                                              BorderRadius.circular(12.r),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color:
-                                                  Colors.grey.withOpacity(0.4),
-                                              spreadRadius: 1,
-                                              blurRadius: 6,
-                                              offset: Offset(0,
-                                                  0), // shadow in all directions
-                                            ),
-                                          ],
-                                        ),
-                                        child: CustomText(
-                                          text: "Live",
-                                          left: 8.w,
-                                          right: 8.w,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Row(
-                                    children: [
-                                      Assets.icons.moneyIconCard.svg(),
-                                      SizedBox(width: 4.w),
-                                      CustomText(
-                                        text: "30\$",
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.red,
-                                      ),
-                                    ],
-                                  ),
-                                  CustomText(
-                                      text:
-                                          "Pet Type: ${sales.product?.category}",
-                                      fontSize: 12.h,
-                                      bottom: 4.h,
-                                      color: Colors.black),
-                                  CustomText(
-                                    text:
-                                        "Condition: ${sales.product?.condition}",
-                                    fontSize: 12.h,
-                                    bottom: 4.h,
-                                    color: Colors.black,
-                                  ),
-                                  CustomText(
-                                    text: "Brand: ${sales.product?.brand}",
-                                    fontSize: 12.h,
-                                    color: Colors.black,
-                                    bottom: 7.h,
-                                  ),
-
-                                  CustomButton(
-                                    height: 30.h,
-                                      loaderIgnore: true,
-                                      fontSize: 12.h,
-                                      title: "${sales.status}", onpress: () {
-
-                                      if(sales.status ==  "delivery_filled"){
-                                        //route
-                                        Get.toNamed(AppRoutes.shipmentScreen, arguments: {
-                                          "productId" : "${sales.product?.id}"
-                                        });
-                                      }else if(sales.status == "shipment_ready"){
-                                        Get.toNamed(AppRoutes.courierScreen, arguments: {
-                                          "productId" : "${sales.product?.id}"
-                                        });
-                                      }
-
-                                  })
-                                ],
-                              ),
+              : Padding(
+                padding:  EdgeInsets.only(bottom: 110.h),
+                child: ListView.builder(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
+                    itemCount: productController.mySales.length,
+                    itemBuilder: (context, index) {
+                      var sales = productController.mySales[index];
+                      return Container(
+                        margin:
+                            EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
+                        decoration: BoxDecoration(
+                          color: const Color(0xfffef4ea), // Card background
+                          borderRadius: BorderRadius.circular(12.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.4),
+                              spreadRadius: 1,
+                              blurRadius: 6,
+                              offset: Offset(0, 0), // shadow in all directions
                             ),
                           ],
                         ),
-                      ),
-                    );
-                  },
-                ),
+                        child: Padding(
+                          padding: EdgeInsets.all(10.w),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Image Section
+
+                              CustomNetworkImage(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  imageUrl:
+                                      "${ApiConstants.imageBaseUrl}${sales.product?.images?[0]["image"]}",
+                                  height: 139.h,
+                                  width: 109.w),
+
+                              SizedBox(width: 7.w),
+
+                              // Info Section
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: CustomText(
+                                            textAlign: TextAlign.start,
+                                              text:
+                                                  "${sales.product?.productName}",
+                                              fontWeight: FontWeight.w600,
+                                              bottom: 4.h,
+                                              color: Colors.black),
+                                        ),
+                                        // Spacer(),
+                                        // Container(
+                                        //   decoration: BoxDecoration(
+                                        //     color: const Color(
+                                        //         0xffD1F5D3), // Card background
+                                        //     borderRadius:
+                                        //         BorderRadius.circular(12.r),
+                                        //     boxShadow: [
+                                        //       BoxShadow(
+                                        //         color:
+                                        //             Colors.grey.withOpacity(0.4),
+                                        //         spreadRadius: 1,
+                                        //         blurRadius: 6,
+                                        //         offset: Offset(0,
+                                        //             0), // shadow in all directions
+                                        //       ),
+                                        //     ],
+                                        //   ),
+                                        //   child: CustomText(
+                                        //     text: "Live",
+                                        //     left: 8.w,
+                                        //     right: 8.w,
+                                        //   ),
+                                        // ),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Assets.icons.moneyIconCard.svg(),
+                                        SizedBox(width: 4.w),
+                                        CustomText(
+                                          text: "30\$",
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.red,
+                                        ),
+                                      ],
+                                    ),
+                                    CustomText(
+                                        text:
+                                            "Pet Type: ${sales.product?.category}",
+                                        fontSize: 12.h,
+                                        bottom: 4.h,
+                                        color: Colors.black),
+                                    CustomText(
+                                      text:
+                                          "Condition: ${sales.product?.condition}",
+                                      fontSize: 12.h,
+                                      bottom: 4.h,
+                                      color: Colors.black,
+                                    ),
+                                    CustomText(
+                                      text: "Brand: ${sales.product?.brand}",
+                                      fontSize: 12.h,
+                                      color: Colors.black,
+                                      bottom: 7.h,
+                                    ),
+
+                                    CustomButton(
+                                      height: 30.h,
+                                        loaderIgnore: true,
+                                        fontSize: 12.h,
+                                        title: "${sales.status}", onpress: () {
+
+                                        if(sales.status ==  "delivery_filled"){
+                                          //route
+                                          Get.toNamed(AppRoutes.shipmentScreen, arguments: {
+                                            "productId" : "${sales.product?.id}"
+                                          });
+                                        }else if(sales.status == "shipment_ready"){
+                                          Get.toNamed(AppRoutes.courierScreen, arguments: {
+                                            "productId" : "${sales.product?.id}"
+                                          });
+                                        }
+
+                                    })
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+              ),
     );
   }
 }

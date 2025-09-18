@@ -31,7 +31,7 @@ class ChatListController extends GetxController {
 
   getChatUser() async {
     getChatUserLoading(true);
-    var response = await ApiClient.getData("${ApiConstants.getChatUser}&page=1");
+    var response = await ApiClient.getData("${ApiConstants.getChatUser}&page=1&limit100");
 
     if (response.statusCode == 200) {
       totalPage = jsonDecode(response.body['pagination']['totalPages'].toString());

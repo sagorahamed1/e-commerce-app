@@ -72,14 +72,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomText(
-                        text:
-                            "${productController.singleProduct.value.productName}",
-                        top: 16.h,
-                        bottom: 4,
-                        fontSize: 18.h,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.black),
+                    Expanded(
+                      child: CustomText(
+                        textAlign: TextAlign.start,
+                          text:
+                              "${productController.singleProduct.value.productName}",
+                          top: 16.h,
+                          bottom: 4,
+                          fontSize: 18.h,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black),
+                    ),
                     Align(
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
@@ -217,7 +220,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     CustomNetworkImage(
                         imageUrl:
-                            "${ApiConstants.imageBaseUrl}/${productController.singleProduct.value.images?.first.image}",
+                        // productController.singleProduct.value.images?.isEmpty ?? false ? "" :
+                            "${ApiConstants.imageBaseUrl}/${productController.singleProduct.value.user?.image}",
                         height: 34.h,
                         width: 34.w,
                         boxShape: BoxShape.circle),

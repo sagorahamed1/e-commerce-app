@@ -277,6 +277,7 @@ class _WishListScreenState extends State<WishListScreen> {
   }
 
 
+  int ratingX = 5;
 
   Widget _purchaseHistory() {
     return Obx( () => productController.purchesLoading.value ? ShimmerListView() : productController.myPurches.isEmpty ? NoDataFoundCard() :
@@ -325,6 +326,7 @@ class _WishListScreenState extends State<WishListScreen> {
                           children: [
                             Expanded(
                               child: CustomText(
+                                textAlign: TextAlign.start,
                                   text: "${purches.product?.productName}",
                                   fontWeight: FontWeight.w600,
                                   bottom: 4.h,
@@ -495,24 +497,24 @@ class _WishListScreenState extends State<WishListScreen> {
                           ),
                         )
                             :
-                        purches.status.toString().toLowerCase() == "completed"  ?
+                        purches.status.toString().toLowerCase() == "delivered"  ?
 
                         Row(
                           children: [
-                            Expanded(
-                              flex: 1,
-                              child: CustomButton(
-                                  height: 26.h,
-                                  title: "Request Refund",
-                                  onpress: () {
-                                    Get.toNamed(AppRoutes.refundRequestScreen);
-                                  },
-                                  color: Colors.transparent,
-                                  fontSize: 9.h,
-                                  loaderIgnore: true,
-                                  boderColor: AppColors.primaryColor,
-                                  titlecolor: AppColors.primaryColor),
-                            ),
+                            // Expanded(
+                            //   flex: 1,
+                            //   child: CustomButton(
+                            //       height: 26.h,
+                            //       title: "Request Refund",
+                            //       onpress: () {
+                            //         Get.toNamed(AppRoutes.refundRequestScreen);
+                            //       },
+                            //       color: Colors.transparent,
+                            //       fontSize: 9.h,
+                            //       loaderIgnore: true,
+                            //       boderColor: AppColors.primaryColor,
+                            //       titlecolor: AppColors.primaryColor),
+                            // ),
                             SizedBox(width: 8.w),
                             Expanded(
                               flex: 1,
@@ -525,7 +527,7 @@ class _WishListScreenState extends State<WishListScreen> {
 
 
 
-                                    TextEditingController amonCtrl =
+                                    TextEditingController reviewMeg =
                                     TextEditingController();
                                     showDialog(
                                       context: context,
@@ -554,7 +556,7 @@ class _WishListScreenState extends State<WishListScreen> {
                                                   CustomNetworkImage(
                                                       borderRadius: BorderRadius.circular(8.r),
                                                       imageUrl:
-                                                      "https://www.petzlifeworld.in/cdn/shop/files/51e-nUlZ50L.jpg?v=1719579773",
+                                                      "${ApiConstants.imageBaseUrl}/${purches.product?.images?[0].image}",
                                                       height: 71.h,
                                                       width: 61.w),
 
@@ -564,50 +566,21 @@ class _WishListScreenState extends State<WishListScreen> {
                                                     crossAxisAlignment: CrossAxisAlignment.start,
                                                     children: [
 
-                                                      CustomText(text: "Cat Travel Bag", color: Colors.black),
-                                                      CustomText(text: "Banani, Dhaka", color: Colors.black, fontSize: 12.h),
-                                                      CustomText(text: "Original Price: \$30", color: Colors.black, fontSize: 12.h),
+                                                      CustomText(text: "${purches.product?.productName}", color: Colors.black),
+                                                      CustomText(text: "Category: ${purches.product?.category}", color: Colors.black, fontSize: 12.h),
+                                                      CustomText(text: "Brand: ${purches.product?.brand}", color: Colors.black, fontSize: 12.h),
 
                                                     ],
                                                   )
                                                 ],
                                               ),
 
-
-                                              // CustomText(top: 7.h,bottom: 6.h, text: "Seller Info", color: Colors.black),
-                                              //
-                                              // Row(
-                                              //   children: [
-                                              //
-                                              //     CustomNetworkImage(imageUrl: "", height: 34.h, width: 34.w, boxShape: BoxShape.circle),
-                                              //
-                                              //
-                                              //     SizedBox(width: 10.w),
-                                              //     Column(
-                                              //       crossAxisAlignment: CrossAxisAlignment.start,
-                                              //       children: [
-                                              //
-                                              //         CustomText(text: " Sarah Rahman", color: Colors.black87),
-                                              //         Row(
-                                              //           children: [
-                                              //             CustomText(text: "⭐ 4.8 | Verified Seller", color: Colors.black87),
-                                              //           ],
-                                              //         ),
-                                              //
-                                              //
-                                              //       ],
-                                              //     )
-                                              //
-                                              //
-                                              //   ],
-                                              // ),
-
                                               SizedBox(height: 12.h),
 
                                               Align(
                                                 alignment: Alignment.center,
                                                 child: RatingBar.builder(
-                                                  initialRating: 3,
+                                                  initialRating: 5,
                                                   minRating: 1,
                                                   direction: Axis.horizontal,
                                                   allowHalfRating: true,
@@ -619,6 +592,11 @@ class _WishListScreenState extends State<WishListScreen> {
                                                     color: Colors.amber,
                                                   ),
                                                   onRatingUpdate: (rating) {
+
+
+                                                    setState(() {
+                                                      ratingX = rating.toInt();
+                                                    });
                                                     print(rating);
                                                   },
                                                 ),
@@ -626,7 +604,7 @@ class _WishListScreenState extends State<WishListScreen> {
 
                                               SizedBox(height: 12.h),
                                               CustomTextField(
-                                                  controller: amonCtrl,
+                                                  controller: reviewMeg,
                                                   hintText: "Review"),
 
 
@@ -640,7 +618,9 @@ class _WishListScreenState extends State<WishListScreen> {
                                                     child: CustomButton(
                                                         height: 50.h,
                                                         title: "Cancel",
-                                                        onpress: () {},
+                                                        onpress: () {
+                                                          Get.back();
+                                                        },
                                                         color: Colors.transparent,
                                                         fontSize: 11.h,
                                                         loaderIgnore: true,
@@ -658,8 +638,13 @@ class _WishListScreenState extends State<WishListScreen> {
                                                         height: 50.h,
                                                         title: "Submit",
                                                         onpress: () {
-                                                          Get.toNamed(AppRoutes
-                                                              .messageScreen);
+
+                                                          productController.review(
+                                                            reviewMessage: reviewMeg.text,
+                                                            rating: ratingX.toInt(),
+                                                              userId: purches.sellerId.toString(), context: context);
+
+
                                                         },
                                                         fontSize: 11.h),
                                                   ),

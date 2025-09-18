@@ -86,6 +86,9 @@ class ProductController extends GetxController {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       ToastMessageHelper.showToastMessage(context, "Product post successful");
+
+
+
       productAddLoading(false);
     } else {
       productAddLoading(false);
@@ -413,17 +416,14 @@ class ProductController extends GetxController {
   changeStatus({required String oderId, status, required BuildContext context}) async {
     changeStatusLoading(true);
 
-    var body = {"status" : "$status"};
-    var response = await ApiClient.patch("${ApiConstants.changeStatus}/${oderId??""}", jsonEncode(body));
+    var response = await ApiClient.putData("${ApiConstants.changeStatus(oderId)}", {});
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-
 
       final index = myPurches.indexWhere((x) => x.id == oderId);
       if (index != -1) {
         myPurches[index] = myPurches[index].copyWith(status: "delivered");
       }
-
       
       update();
       Get.back();
@@ -438,6 +438,34 @@ class ProductController extends GetxController {
 
 
 
+
+
+
+
+
+  review({required String userId, reviewMessage,required int rating, required BuildContext context}) async {
+    changeStatusLoading(true);
+
+    var body = {
+      "user_id":"${userId}",
+      "rating": rating,
+      "review_msg": "${reviewMessage}"
+    };
+
+    var response = await ApiClient.postData("${ApiConstants.review}", jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.back();
+
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+    } else {
+
+
+      ToastMessageHelper.showToastMessage(context, "Please enter review message and rating", title: "warning");
+
+
+    }
+  }
 
 
 }

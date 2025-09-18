@@ -63,46 +63,46 @@ class _AllProductScreenState extends State<AllProductScreen> {
                 SizedBox(height: 20.h),
 
                 /// Category
+                //
+                // CustomText(
+                //     text: "Category",
+                //     color: Colors.black,
+                //     textAlign: TextAlign.start),
 
-                CustomText(
-                    text: "Category",
-                    color: Colors.black,
-                    textAlign: TextAlign.start),
-
-                SizedBox(height: 10.h),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    categoryButton("Cat", true),
-                    categoryButton("Dog"),
-                    categoryButton("Bird"),
-                    categoryButton("Fish"),
-                    categoryButton("All"),
-                  ],
-                ),
-
-                SizedBox(height: 25.h),
-
-                /// Usability
-                CustomText(
-                    text: "Usability",
-                    color: Colors.black,
-                    textAlign: TextAlign.start),
-                SizedBox(height: 10.h),
-                Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  children: [
-                    categoryButton("100%", true),
-                    categoryButton("80%-99%"),
-                    categoryButton("60%-79%"),
-                    categoryButton("<60%"),
-                    categoryButton("All"),
-                  ],
-                ),
-
-                SizedBox(height: 25.h),
+                // SizedBox(height: 10.h),
+                // Wrap(
+                //   spacing: 10,
+                //   runSpacing: 10,
+                //   children: [
+                //     categoryButton("Cat", true),
+                //     categoryButton("Dog"),
+                //     categoryButton("Bird"),
+                //     categoryButton("Fish"),
+                //     categoryButton("All"),
+                //   ],
+                // ),
+                //
+                // SizedBox(height: 25.h),
+                //
+                // /// Usability
+                // CustomText(
+                //     text: "Usability",
+                //     color: Colors.black,
+                //     textAlign: TextAlign.start),
+                // SizedBox(height: 10.h),
+                // Wrap(
+                //   spacing: 10,
+                //   runSpacing: 10,
+                //   children: [
+                //     categoryButton("100%", true),
+                //     categoryButton("80%-99%"),
+                //     categoryButton("60%-79%"),
+                //     categoryButton("<60%"),
+                //     categoryButton("All"),
+                //   ],
+                // ),
+                //
+                // SizedBox(height: 25.h),
 
                 /// Price Range
                 CustomText(
@@ -126,7 +126,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
                   child: RangeSlider(
                     values: RangeValues(minPrice, maxPrice),
                     min: 0,
-                    max: 100,
+                    max: 500,
                     divisions: 20,
                     onChanged: (values) {
                       setState(() {
@@ -148,6 +148,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                         productController.allProduct.value = [];
                         productController.getAllProduct(
                             price: "${minPrice.ceil()}-${maxPrice.ceil()}");
+
+                        Get.back();
                       }),
                 )
               ],

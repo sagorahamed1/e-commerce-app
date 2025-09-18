@@ -23,9 +23,10 @@ class ApiConstants{
   static const String favourites = "/favourites";
   static const String purches = "/orders/phurcases";
   static const String offerSend = "/offers/send";
-  static const String changeStatus = "/orders";
+  static  String changeStatus(String? id) => "/orders/${id}/completed";
   static const String notifications = "/notifications";
   static const String offerAccept = "/offers";
+  static const String review = "/reviews";
   static const String reports = "/reports";
   static const String balance = "/wallets/balance";
   static const String walletBalanceAdd = "/wallets/recharge";

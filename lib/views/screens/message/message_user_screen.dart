@@ -62,6 +62,10 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                 controller: searchCtrl,
                 hintextColor: Colors.black87,
                 hintText: "Enter name",
+
+                onChanged: (value) {
+                  chatListController.getChatUser();
+                },
                 suffixIcon: Assets.icons.searhIcon.svg()),
             Expanded(
               child: Obx(
