@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:petattix/model/wallet_history_model.dart';
 import '../global/custom_assets/assets.gen.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
@@ -86,16 +87,23 @@ class WalletController extends GetxController {
 
 
 
+  RxList<WalletHistoryModel> walletHistory = <WalletHistoryModel>[].obs;
+
   RxBool walletLoading = false.obs;
   getWallet()async{
     walletLoading(true);
 
-    final response = await ApiClient.getData("uri");
+    final response = await ApiClient.getData(ApiConstants.walletHistory);
 
     if(response.statusCode == 200 || response.statusCode == 201){
 
+      walletHistory.value = List<WalletHistoryModel>.from(response.body["data"].map((x) => WalletHistoryModel.fromJson(x)));
+      walletLoading(false);
+    }else{
+      walletLoading(false);
     }
   }
+
 
 
 

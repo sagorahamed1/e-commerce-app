@@ -17,7 +17,7 @@ class MediaScreen extends StatelessWidget {
           children: [
             Expanded(
               child: GridView.builder(
-                itemCount: 5,
+                itemCount: 1,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                     mainAxisSpacing: 6,

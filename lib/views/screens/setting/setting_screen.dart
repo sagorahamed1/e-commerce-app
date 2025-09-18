@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/config/app_route.dart';
+import 'package:petattix/helper/prefs_helper.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 
+import '../../../core/app_constants/app_constants.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_text.dart';
 
@@ -108,7 +110,9 @@ class SettingScreen extends StatelessWidget {
                               child: CustomButton(
                                   height: 50.h,
                                   title: "Cancel",
-                                  onpress: () {},
+                                  onpress: () {
+                                    Get.back();
+                                  },
                                   color: Colors.transparent,
                                   fontSize: 11.h,
                                   loaderIgnore: true,
@@ -123,8 +127,21 @@ class SettingScreen extends StatelessWidget {
                                   loaderIgnore: true,
                                   height: 50.h,
                                   title: "Yes, Delete",
-                                  onpress: () {
-                                    Get.back();
+                                  onpress: () async{
+
+                                    await PrefsHelper.remove(AppConstants.lastName);
+                                    await PrefsHelper.remove(AppConstants.firstName);
+                                    await PrefsHelper.remove(AppConstants.email);
+                                    await PrefsHelper.remove(AppConstants.image);
+                                    await PrefsHelper.remove(AppConstants.role);
+                                    await PrefsHelper.remove(AppConstants.address);
+                                    await PrefsHelper.remove(AppConstants.userId);
+                                    await PrefsHelper.remove(AppConstants.bearerToken);
+                                    await PrefsHelper.remove(AppConstants.phone);
+                                    await PrefsHelper.remove(AppConstants.isLogged);
+
+
+                                   Get.offAllNamed(AppRoutes.logInScreen);
                                   },
                                   fontSize: 11.h),
                             ),

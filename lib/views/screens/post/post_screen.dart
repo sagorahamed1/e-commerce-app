@@ -695,17 +695,7 @@ class _PostScreenState extends State<PostScreen> {
     );
   }
 
-  final List<String> _options = [
-    "delivered",
-    "pending",
-    "accepted",
-    "rejected",
-    "cancelled",
-    "refunded",
-    "delivery_filled",
-    "shipment_ready",
-    "prepeared"
-  ];
+
   String selected = 'delivery_filled';
 
   Widget _mySalesList() {

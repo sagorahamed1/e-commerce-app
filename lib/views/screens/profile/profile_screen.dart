@@ -9,6 +9,7 @@ import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 
+import '../../../helper/prefs_helper.dart';
 import '../../widgets/custom_button.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -158,8 +159,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                       loaderIgnore: true,
                                       height: 50.h,
                                       title: "Logout",
-                                      onpress: () {
-                                       Get.toNamed(AppRoutes.logInScreen);
+                                      onpress: () async{
+
+                                        await PrefsHelper.remove(AppConstants.lastName);
+                                        await PrefsHelper.remove(AppConstants.firstName);
+                                        await PrefsHelper.remove(AppConstants.email);
+                                        await PrefsHelper.remove(AppConstants.image);
+                                        await PrefsHelper.remove(AppConstants.role);
+                                        await PrefsHelper.remove(AppConstants.address);
+                                        await PrefsHelper.remove(AppConstants.userId);
+                                        await PrefsHelper.remove(AppConstants.bearerToken);
+                                        await PrefsHelper.remove(AppConstants.phone);
+                                        await PrefsHelper.remove(AppConstants.isLogged);
+
+
+                                        Get.offAllNamed(AppRoutes.logInScreen);
+
+
+
                                       },
                                       fontSize: 11.h),
                                 ),

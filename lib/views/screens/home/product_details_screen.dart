@@ -217,7 +217,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   children: [
                     CustomNetworkImage(
                         imageUrl:
-                            "${ApiConstants.imageBaseUrl}/${productController.singleProduct.value.user?.image}",
+                            "${ApiConstants.imageBaseUrl}/${productController.singleProduct.value.images?.first.image}",
                         height: 34.h,
                         width: 34.w,
                         boxShape: BoxShape.circle),
@@ -264,7 +264,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         flex: 1,
                         child: CustomButton(
                             title: "Add to Cart",
-                            onpress: () {},
+                            onpress: () {
+                              productController.toggleFavourite(
+                                type: "back",
+                                  id: productController.singleProduct.value.id
+                                      .toString());
+                            },
                             fontSize: 12.h)),
                   ],
                 ),

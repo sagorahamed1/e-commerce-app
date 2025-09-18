@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import '../../../controller/chat_list_controller.dart';
 import '../../../controller/product_controller.dart';
+import '../../../controller/profile_controller.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../home/home_screen.dart';
@@ -21,6 +23,8 @@ class _MainScreenState extends State<BottomNavBar> {
 
 
   ProductController productController = Get.put(ProductController());
+  ProfileController profileController = Get.put(ProfileController());
+  ChatListController chatListController = Get.put(ChatListController());
 
   final List<Widget> screens = [
      HomeScreen(),
@@ -89,6 +93,16 @@ class _MainScreenState extends State<BottomNavBar> {
         if(index == 0){
           productController.allProduct.clear();
           productController.getAllProduct();
+        }else if(index == 1){
+
+        }else if(index == 2){
+
+          chatListController.chatUsers.value = [];
+          chatListController.getChatUser();
+
+        }else if(index == 3){
+          profileController.getLocalData();
+          print("===============profile Image : ${profileController.image.value}");
         }
         print("====================================================== index : $index");
       },

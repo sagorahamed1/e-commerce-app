@@ -11,6 +11,7 @@ import '../model/category_model.dart';
 import '../model/country_model.dart';
 import '../model/my_card_model.dart';
 import '../model/product_model.dart';
+import '../model/purches_history_model.dart';
 import '../model/single_product_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
@@ -209,9 +210,30 @@ class ProductController extends GetxController {
 
 
 
+
+  RxList<PurchesHistoryModel> myPurches = <PurchesHistoryModel>[].obs;
+  RxBool purchesLoading = false.obs;
+
+  getMyPurches() async {
+    purchesLoading(true);
+    var response = await ApiClient.getData("${ApiConstants.purches}?page=1&limit=10");
+
+    if (response.statusCode == 200) {
+      myPurches.value = List<PurchesHistoryModel>.from(response.body["data"].map((x) => PurchesHistoryModel.fromJson(x)));
+
+      purchesLoading(false);
+    } else {
+      purchesLoading(false);
+    }
+  }
+
+
+
+
+
   RxBool toggleFavouriteLoading = false.obs;
 
-  toggleFavourite({required String id}) async {
+  toggleFavourite({required String id, String? type}) async {
     toggleFavouriteLoading(true);
 
     var body = {"productId": int.parse(id)};
@@ -225,7 +247,12 @@ class ProductController extends GetxController {
       );
 
       update();
+      if(type == "back"){
+        Get.back();
+        Get.snackbar("Success", "Product added to your card");
+      }
       toggleFavouriteLoading(false);
+      
     } else {
       toggleFavouriteLoading(false);
     }
@@ -376,6 +403,39 @@ class ProductController extends GetxController {
           .toList();
     }
   }
+
+
+
+
+
+  RxBool changeStatusLoading = false.obs;
+
+  changeStatus({required String oderId, status, required BuildContext context}) async {
+    changeStatusLoading(true);
+
+    var body = {"status" : "$status"};
+    var response = await ApiClient.patch("${ApiConstants.changeStatus}/${oderId??""}", jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+
+      final index = myPurches.indexWhere((x) => x.id == oderId);
+      if (index != -1) {
+        myPurches[index] = myPurches[index].copyWith(status: "delivered");
+      }
+
+      
+      update();
+      Get.back();
+      changeStatusLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+    } else {
+      changeStatusLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "warning");
+
+    }
+  }
+
 
 
 

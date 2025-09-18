@@ -4,8 +4,11 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:petattix/controller/payment_controlller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/helper/time_format_helper.dart';
+import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
+import 'package:petattix/views/widgets/no_data_found_card.dart';
 
 import '../../../controller/wallet_controller.dart';
 import '../../../core/config/app_route.dart';
@@ -27,6 +30,7 @@ class _WalletScreenState extends State<WalletScreen> {
   @override
   void initState() {
     walletController.getBalance();
+    walletController.getWallet();
     super.initState();
   }
 
@@ -83,7 +87,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               fit: BoxFit.scaleDown, // text will shrink to fit width
                               child: Obx(() =>
                                  CustomText(
-                                  text: "${walletController.balance.value}",
+                                  text: "£ ${double.parse(walletController.balance.value).toStringAsFixed(2)}",
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -220,74 +224,79 @@ class _WalletScreenState extends State<WalletScreen> {
                     fontSize: 17.h,
                     fontWeight: FontWeight.w700,
                     color: Colors.black),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.walletHistoryScreen);
-                  },
-                  child: CustomText(
-                      text: "More...",
-                      fontWeight: FontWeight.w500,
-                      color: Colors.black),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Get.toNamed(AppRoutes.walletHistoryScreen);
+                //   },
+                //   child: CustomText(
+                //       text: "More...",
+                //       fontWeight: FontWeight.w500,
+                //       color: Colors.black),
+                // ),
               ],
             ),
             Expanded(
-              child: ListView.builder(
-                padding: EdgeInsets.symmetric(vertical: 10.h),
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.all(3.r),
-                    padding:
-                        EdgeInsets.symmetric(vertical: 7.h, horizontal: 7.w),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(10.r),
-                      border: Border.all(
-                          color: Colors.grey.withOpacity(0.2), width: 1),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          offset: Offset(0, 2),
-                          blurRadius: 2,
-                        ),
-                      ],
-                    ),
-                    child: Row(
-                      children: [
-                        CustomNetworkImage(
-                          border:
-                              Border.all(color: Color(0xff592B00), width: 3),
-                          imageUrl: "https://i.pravatar.cc/150?img=3",
-                          height: 58.h,
-                          width: 58.w,
-                          boxShape: BoxShape.circle,
-                        ),
-                        SizedBox(width: 10.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CustomText(
-                                text: "Naya",
-                                color: Color(0xff592B00),
-                                fontWeight: FontWeight.w500,
-                                bottom: 6.h),
-                            CustomText(
-                                text: "Transition id: 4524214212",
-                                fontSize: 12.h),
-                            CustomText(text: "21 April 2025", fontSize: 12.h),
-                          ],
-                        ),
-                        Spacer(),
-                        CustomText(
-                            text: "\$ 25",
-                            fontSize: 28.h,
-                            color: AppColors.primaryColor),
-                        SizedBox(width: 8.w)
-                      ],
-                    ),
-                  );
-                },
+              child: Obx(() => walletController.walletLoading.value ? CircularProgressIndicator() : walletController.walletHistory.isEmpty ? NoDataFoundCard() :
+                 ListView.builder(
+                  padding: EdgeInsets.symmetric(vertical: 10.h),
+                  itemCount: walletController.walletHistory.length,
+                  itemBuilder: (context, index) {
+                    var history = walletController.walletHistory[index];
+                    return Container(
+                      margin: EdgeInsets.all(3.r),
+                      padding:
+                          EdgeInsets.symmetric(vertical: 7.h, horizontal: 7.w),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.r),
+                        border: Border.all(
+                            color: Colors.grey.withOpacity(0.2), width: 1),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            offset: Offset(0, 2),
+                            blurRadius: 2,
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          CustomNetworkImage(
+                            border:
+                                Border.all(color: Color(0xff592B00), width: 3),
+                            imageUrl: "${ApiConstants.imageBaseUrl}/${history.user?.image}",
+                            height: 58.h,
+                            width: 58.w,
+                            boxShape: BoxShape.circle,
+                          ),
+                          SizedBox(width: 10.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                CustomText(
+                                    text: "${history.user?.firstName} ${history.user?.lastName}",
+                                    color: Color(0xff592B00),
+                                    fontWeight: FontWeight.w500,
+                                    bottom: 6.h),
+                                CustomText(
+                                    text: "Transition Type: ${history.transectionType}",
+                                    fontSize: 12.h),
+                                CustomText(text: "${TimeFormatHelper.formatDate(history.createdAt ?? DateTime.now())}", fontSize: 12.h),
+                              ],
+                            ),
+                          ),
+
+                          CustomText(
+                              text: "£ ${double.parse(history.amount.toString()).toStringAsFixed(1)}",
+                              fontSize: 18.h,
+                              color: AppColors.primaryColor),
+                          SizedBox(width: 8.w)
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             )
           ],

@@ -13,7 +13,7 @@ class PrivacyPolicyController extends GetxController{
     var response = await ApiClient.getData("$url");
 
     if(response.statusCode == 200 || response.statusCode == 201){
-      valueText.value = response.body["data"]["value"];
+      valueText.value = response.body["content"];
       privacyPolicyLoading(false);
     }else{
       privacyPolicyLoading(false);

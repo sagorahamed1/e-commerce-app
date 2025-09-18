@@ -82,7 +82,7 @@ class ChatDataController extends GetxController {
     }
 
     var response = await ApiClient.getData("${ApiConstants.chatEndPoint(id)}&page=1");
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       totalPage = jsonDecode(response.body['pagination']['totalPages'].toString());
       totalResult = jsonDecode(response.body['pagination']['total'].toString()) ?? 0;
 
@@ -155,7 +155,7 @@ class ChatDataController extends GetxController {
     var response =
     await ApiClient.postData("${ApiConstants.reports}", jsonEncode(body));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
 
       Get.back();
       reportLoading(false);

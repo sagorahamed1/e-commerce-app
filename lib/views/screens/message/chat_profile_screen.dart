@@ -28,7 +28,7 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
   Widget build(BuildContext context) {
     var data = Get.arguments;
     return Scaffold(
-
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -41,7 +41,7 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
                   width: 48.w,
                   boxShape: BoxShape.circle,
                   imageUrl:
-                  "https://randomuser.me/api/portraits/men/10.jpg",
+                  "${data["image"]}",
                 )),
             SizedBox(width: 12.w),
             Column(
@@ -53,12 +53,8 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
                       maxline: 3,
                       textAlign: TextAlign.start,
                       color: Colors.black,
-                      text: "Cat Travel Bag(Preety Zinnat)"),
+                      text: "${data["name"]}"),
                 ),
-
-
-                CustomText(
-                    text: " Last active 23 hr ago", fontSize: 9.h),
               ],
             ),
 
@@ -108,8 +104,7 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
               onTap: () {
 
 
-                TextEditingController reportCtrl =
-                TextEditingController();
+                TextEditingController reportCtrl = TextEditingController();
                 showDialog(
                   context: context,
                   builder: (context) {
@@ -203,89 +198,89 @@ class _ChatProfileScreenState extends State<ChatProfileScreen> {
             SizedBox(height: 18.h),
 
 
-            GestureDetector(
-              onTap: () {
-
-
-
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      content: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          CustomText(
-                              text: "Are you sure to Block this user?",
-                              fontSize: 14.h,
-                              fontWeight: FontWeight.w600,
-                              top: 29.h,
-                              bottom: 20.h,
-                              color: Color(0xff592B00)),
-                          Divider(),
-                          SizedBox(height: 12.h),
-
-                          Row(
-                            children: [
-                              Expanded(
-                                flex: 1,
-                                child: CustomButton(
-                                    height: 50.h,
-                                    title: "Cancel",
-                                    onpress: () {},
-                                    color: Colors.transparent,
-                                    fontSize: 11.h,
-                                    loaderIgnore: true,
-                                    boderColor: AppColors
-                                        .primaryColor,
-                                    titlecolor: AppColors
-                                        .primaryColor),
-                              ),
-                              SizedBox(width: 8.w),
-                              Expanded(
-                                flex: 1,
-                                child: CustomButton(
-                                    loading: false,
-                                    loaderIgnore: true,
-                                    height: 50.h,
-                                    title: "Block",
-                                    onpress: () {
-                                      Get.toNamed(AppRoutes.messageScreen);
-                                    },
-                                    fontSize: 11.h),
-                              ),
-                            ],
-                          )
-                        ],
-                      ),
-                    );
-                  },
-                );
-
-
-
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    color: Color(0xffFEF4EA)
-                ),
-
-                child: Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
-                  child: Row(
-                    children: [
-
-                      Assets.icons.blockUserIcon.svg(),
-
-                      CustomText(text: "Block This User", color: Colors.red, left: 12.w, fontSize: 16.h)
-
-
-                    ],
-                  ),
-                ),
-              ),
-            )
+            // GestureDetector(
+            //   onTap: () {
+            //
+            //
+            //
+            //     showDialog(
+            //       context: context,
+            //       builder: (context) {
+            //         return AlertDialog(
+            //           content: Column(
+            //             mainAxisSize: MainAxisSize.min,
+            //             children: [
+            //               CustomText(
+            //                   text: "Are you sure to Block this user?",
+            //                   fontSize: 14.h,
+            //                   fontWeight: FontWeight.w600,
+            //                   top: 29.h,
+            //                   bottom: 20.h,
+            //                   color: Color(0xff592B00)),
+            //               Divider(),
+            //               SizedBox(height: 12.h),
+            //
+            //               Row(
+            //                 children: [
+            //                   Expanded(
+            //                     flex: 1,
+            //                     child: CustomButton(
+            //                         height: 50.h,
+            //                         title: "Cancel",
+            //                         onpress: () {},
+            //                         color: Colors.transparent,
+            //                         fontSize: 11.h,
+            //                         loaderIgnore: true,
+            //                         boderColor: AppColors
+            //                             .primaryColor,
+            //                         titlecolor: AppColors
+            //                             .primaryColor),
+            //                   ),
+            //                   SizedBox(width: 8.w),
+            //                   Expanded(
+            //                     flex: 1,
+            //                     child: CustomButton(
+            //                         loading: false,
+            //                         loaderIgnore: true,
+            //                         height: 50.h,
+            //                         title: "Block",
+            //                         onpress: () {
+            //                           Get.toNamed(AppRoutes.messageScreen);
+            //                         },
+            //                         fontSize: 11.h),
+            //                   ),
+            //                 ],
+            //               )
+            //             ],
+            //           ),
+            //         );
+            //       },
+            //     );
+            //
+            //
+            //
+            //   },
+            //   child: Container(
+            //     decoration: BoxDecoration(
+            //         borderRadius: BorderRadius.circular(10.r),
+            //         color: Color(0xffFEF4EA)
+            //     ),
+            //
+            //     child: Padding(
+            //       padding:  EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+            //       child: Row(
+            //         children: [
+            //
+            //           Assets.icons.blockUserIcon.svg(),
+            //
+            //           CustomText(text: "Block This User", color: Colors.red, left: 12.w, fontSize: 16.h)
+            //
+            //
+            //         ],
+            //       ),
+            //     ),
+            //   ),
+            // )
 
 
 

@@ -69,7 +69,7 @@ class AuthController extends GetxController {
       Get.offAllNamed(AppRoutes.welcomeScreen);
       loginLoading(false);
 
-      PrefsHelper.setString(AppConstants.image, data["data"]["email"]);
+      PrefsHelper.setString(AppConstants.image, data["data"]["image"]);
 
 
       SocketServices.init(token: data["token"]);

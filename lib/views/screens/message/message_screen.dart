@@ -82,13 +82,16 @@ class _MessageScreenState extends State<MessageScreen> {
   Widget build(BuildContext context) {
     chatController.getChatList(id: argumentsData["chatId"]);
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         elevation: 8,
         centerTitle: false,
         title: GestureDetector(
           onTap: () {
             Get.toNamed(AppRoutes.chatProfileScreen, arguments: {
-              "id" : chatController.chatMessages.value.receiver?.id
+              "id" : chatController.chatMessages.value.receiver?.id,
+              "image" : "${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.receiver?.image}",
+              "name" : '${chatController.chatMessages.value.conversation?.name}'
             });
           },
           child: Row(

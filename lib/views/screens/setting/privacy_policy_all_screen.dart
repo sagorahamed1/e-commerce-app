@@ -22,9 +22,9 @@ class _PrivacyPolicyAllScreenState extends State<PrivacyPolicyAllScreen> {
   @override
   void initState() {
     policyController.getPrivacyPolicyAll(
-        url: Get.arguments["title"] == "Term & Condition"
-            ? "/setting/terms-conditions" :  Get.arguments["title"] == "Privacy Policy"
-            ? "/setting/privacy-policy" : "/setting/about-us");
+        url: Get.arguments["title"] == "Terms of service"
+            ? "/settings/terms_and_condition" :  Get.arguments["title"] == "Privacy Policy"
+            ? "/settings/privacy_policy" : "/settings/about_us");
     super.initState();
   }
 

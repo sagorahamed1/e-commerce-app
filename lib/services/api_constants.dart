@@ -17,10 +17,14 @@ class ApiConstants{
 
 
   static const String product = "/products";
+  static const String walletHistory = "/transections?page=1&limit=1000";
   static const String mySales = "/orders/sales";
   static const String getCategory = "/categories";
   static const String favourites = "/favourites";
+  static const String purches = "/orders/phurcases";
   static const String offerSend = "/offers/send";
+  static const String changeStatus = "/orders";
+  static const String notifications = "/notifications";
   static const String offerAccept = "/offers";
   static const String reports = "/reports";
   static const String balance = "/wallets/balance";
