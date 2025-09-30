@@ -21,7 +21,7 @@ class AuthController extends GetxController {
       email,
       phone,
       address,
-      password}) async {
+      password,required BuildContext context}) async {
     signUpLoading(true);
     var body = {
       "firstName": "$firstName",
@@ -40,8 +40,10 @@ class AuthController extends GetxController {
       Get.toNamed(AppRoutes.optScreen, arguments: {"screenType": "Sign up"});
 
       signUpLoading(false);
+      ToastMessageHelper.showToastMessage(context, response.body["message"]);
     } else {
       signUpLoading(false);
+      ToastMessageHelper.showToastMessage(context, response.body["message"], title: "error");
     }
   }
 

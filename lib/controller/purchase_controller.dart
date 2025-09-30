@@ -43,14 +43,14 @@ class PurchaseController extends GetxController {
       createDeliveryLoading(false);
       ToastMessageHelper.showToastMessage(context, response.body["message"]);
     } else {
+
+
+      print("===========body ${response.body}");
       createDeliveryLoading(false);
       // ToastMessageHelper.showToastMessage(context, response.body["message"].toString(), title: "info");
 
       ToastMessageHelper.showToastMessage(
-          context,
-          (response.body["message"] is List)
-              ? (response.body["message"] as List).join(", ")
-              : (response.body["message"] ?? "Something went wrong"),
+          context, "kkd",
           title: "info"
       );
       if(response.body["message"] ==  "You don't have enough balance to purchase the product."){

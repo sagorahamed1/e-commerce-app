@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:petattix/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
-
 import '../../../core/app_constants/app_colors.dart';
-import '../../../core/config/app_route.dart';
 import '../../../global/custom_assets/assets.gen.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+
 
 class WelcomeScreen extends StatelessWidget {
   const WelcomeScreen({super.key});
@@ -51,8 +50,13 @@ class WelcomeScreen extends StatelessWidget {
                   ),
                   title: "Sell Accessories",
                   onpress: () async{
-                    Navigator.pop(context);
+
                     PermissionStatus status = await Permission.location.request();
+
+                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                      return BottomNavBar();
+                    }));
+
 
                     if (status.isGranted) {
                       // You got permission
@@ -74,7 +78,7 @@ class WelcomeScreen extends StatelessWidget {
                     // Get.toNamed(AppRoutes.bottomNavBar);
                     Navigator.push(context, MaterialPageRoute(builder: (context) {
                       return BottomNavBar();
-                    },));
+                    }));
                   },
                   color: Color(0xFFFFEBD9),
                   boderColor: Colors.transparent,

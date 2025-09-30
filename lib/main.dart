@@ -30,7 +30,7 @@ class MyApp extends StatelessWidget {
       minTextAdapt: true,
       builder: (context, child) {
         return GetMaterialApp(
-          title: 'Droke',
+          title: 'Pet Attix',
           debugShowCheckedModeBanner: false,
           initialRoute: AppRoutes.splashScreen,
           getPages: AppRoutes.routes,
@@ -45,3 +45,7 @@ class MyApp extends StatelessWidget {
 }
 
 
+
+
+
+// nibor60831@mv6a.com

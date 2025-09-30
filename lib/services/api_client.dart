@@ -395,9 +395,7 @@ static  Future<Response> putData(String uri, dynamic body,
       statusCode: response.statusCode,
       statusText: response.reasonPhrase,
     );
-    if (response0.statusCode != 200 &&
-        response0.body != null &&
-        response0.body is! String) {
+    if (response0.statusCode != 200 && response0.body != null && response0.body is! String) {
       ErrorResponse errorResponse = ErrorResponse.fromJson(response0.body);
       response0 = Response(
           statusCode: response0.statusCode,
@@ -417,6 +415,10 @@ static  Future<Response> putData(String uri, dynamic body,
     return response0;
   }
 }
+
+
+
+
 
 class MultipartBody {
   String key;

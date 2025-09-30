@@ -45,27 +45,30 @@ class OptScreen extends StatelessWidget {
                 children: [
                   // TODO: Pin Code TextField
 
-                  PinCodeTextField(
-                    appContext: context,
-                    length: 4,
-                    controller: pinCtrl,
-                    obscureText: false,
-                    keyboardType: TextInputType.number,
-                    animationType: AnimationType.fade,
-                    pinTheme: PinTheme(
-                      shape: PinCodeFieldShape.box,
-                      borderRadius: BorderRadius.circular(8),
-                      fieldHeight: 60,
-                      fieldWidth: 50,
-                      inactiveColor: AppColors.borderColor,
-                      selectedColor: AppColors.borderColor,
-                      activeColor: AppColors.borderColor,
-                      disabledColor: AppColors.borderColor,
+                  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal: 30.w),
+                    child: PinCodeTextField(
+                      appContext: context,
+                      length: 4,
+                      controller: pinCtrl,
+                      obscureText: false,
+                      keyboardType: TextInputType.number,
+                      animationType: AnimationType.fade,
+                      pinTheme: PinTheme(
+                        shape: PinCodeFieldShape.box,
+                        borderRadius: BorderRadius.circular(8),
+                        fieldHeight: 60,
+                        fieldWidth: 60,
+                        inactiveColor: AppColors.borderColor,
+                        selectedColor: AppColors.borderColor,
+                        activeColor: AppColors.borderColor,
+                        disabledColor: AppColors.borderColor,
+                      ),
+                      cursorColor: Colors.black,
+                      animationDuration: Duration(milliseconds: 300),
+                      enableActiveFill: false,
+                      onChanged: (value) {},
                     ),
-                    cursorColor: Colors.black,
-                    animationDuration: Duration(milliseconds: 300),
-                    enableActiveFill: false,
-                    onChanged: (value) {},
                   ),
 
                   Row(

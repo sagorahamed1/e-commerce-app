@@ -54,7 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
               children: [
                 Assets.images.logo.image(height: 32.h),
                 CustomText(
-                    text: "PetAtix",
+                    text: "PetAttix",
                     fontSize: 32.h,
                     fontWeight: FontWeight.w700,
                     color: AppColors.primaryColor,
@@ -135,18 +135,52 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 100.h,
               child: Obx(
                 () => productController.categoryLoading.value
-                    ? Shimmer.fromColors(
-                        baseColor: Colors.grey.shade300,
-                        highlightColor: Colors.grey.shade100,
-                        child: Container(
-                          height: 100.h,
-                          width: 100.w,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.grey.shade300,
+                    ? Row(
+                      children: [
+                        Shimmer.fromColors(
+                            baseColor: Colors.grey.shade300,
+                            highlightColor: Colors.grey.shade100,
+                            child: Container(
+                              height: 100.h,
+                              width: 100.w,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.grey.shade300,
+                              ),
+                            ),
+                          ),
+
+
+                        SizedBox(width: 14.w),
+
+                        Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(
+                            height: 100.h,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade300,
+                            ),
                           ),
                         ),
-                      )
+
+                        SizedBox(width: 14.w),
+                        Shimmer.fromColors(
+                          baseColor: Colors.grey.shade300,
+                          highlightColor: Colors.grey.shade100,
+                          child: Container(
+                            height: 100.h,
+                            width: 100.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.grey.shade300,
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                     : ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: productController.category.length,

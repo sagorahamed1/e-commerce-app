@@ -201,7 +201,9 @@ class SignUpScreen extends StatelessWidget {
                                 phone: completedNumberCtrl.text,
                                 address: addressCtrl.text,
                                 password: passWordCtrl.text.trim(),
-                                email: emailCtrl.text.trim());
+                                email: emailCtrl.text.trim(),
+                               context: context
+                            );
                           } else {
                             print("dkdkdkkfjadsfkajsflaksjdfkldasjfk");
                             ToastMessageHelper.showToastMessage(

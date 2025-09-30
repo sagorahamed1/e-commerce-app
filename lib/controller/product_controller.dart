@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/model/my_sales_model.dart';
@@ -15,6 +16,7 @@ import '../model/purches_history_model.dart';
 import '../model/single_product_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
+import '../views/screens/post/product_post_success_screen.dart';
 
 class ProductController extends GetxController {
   RxBool productAddLoading = false.obs;
@@ -23,24 +25,11 @@ class ProductController extends GetxController {
       {required BuildContext context,
         required String productName,
       category,
-      // quantity,
       brand,
       condition,
-      phurcasingPrice,
       sellingPrice,
       description,
       size,
-      // height,
-      // width,
-      // length,
-      // weight,
-      // city,
-      // postalCode,
-      // countryCode,
-      // countryId,
-      // addressLine1,
-      // addressLine2,
-      // country,
       required bool negotiable,
       required bool isBoosted,
       required List<File> images}) async {
@@ -55,7 +44,6 @@ class ProductController extends GetxController {
     var body = {
       "product_name": "$productName",
       "selling_price": "$sellingPrice",
-      "phurcasing_price": "$phurcasingPrice",
       "category": "$category",
       "quantity": "1",
       "description": "$description",
@@ -64,18 +52,6 @@ class ProductController extends GetxController {
       "is_negotiable": "$negotiable",
       "size": "$size",
       "is_boosted" : "$isBoosted"
-      // "height": "$height",
-      // "width": "$width",
-      // "length": "$length",
-      // "weight": "$weight",
-      // "city": "$city",
-      // "postal_code": "$postalCode",
-      // "country_id": "$countryId",
-      // "country_code": "$countryCode",
-      // "address_line_1": "$addressLine1",
-      // "address_line_2": "$addressLine2",
-      // "is_address_residential": "true",
-      // "country": "$country"
     };
 
     final response = await ApiClient.postMultipartData(
@@ -84,14 +60,31 @@ class ProductController extends GetxController {
 
     print("========================================================================= ${response.body}");
 
+
     if (response.statusCode == 200 || response.statusCode == 201) {
       ToastMessageHelper.showToastMessage(context, "Product post successful");
 
 
+      // Get.toNamed(AppRoutes.bottomNavBar);
+      Navigator.push(context, MaterialPageRoute(builder: (context) {
+        return ProductPostSuccessScreen(productDescription: description, productName: productName, productPrice: sellingPrice);
+      }));
+
+
+      titleCtrl.clear();
+      conditionCtrl.clear();
+      descriptionCtrl.clear();
+      sellingPriceCtrl.clear();
+      sizeCtrl.clear();
+      categoryCtrl.clear();
+      selectedCategoryCtrl.clear();
+      brandCtrl.clear();
 
       productAddLoading(false);
     } else {
       productAddLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "Warning");
+      Get.toNamed(AppRoutes.walletScreen);
     }
   }
 
@@ -314,6 +307,18 @@ class ProductController extends GetxController {
 
 
 
+
+
+
+
+  TextEditingController titleCtrl = TextEditingController();
+  TextEditingController conditionCtrl = TextEditingController();
+  TextEditingController descriptionCtrl = TextEditingController();
+  TextEditingController sellingPriceCtrl = TextEditingController();
+  TextEditingController sizeCtrl = TextEditingController();
+  TextEditingController categoryCtrl = TextEditingController();
+  TextEditingController selectedCategoryCtrl = TextEditingController();
+  TextEditingController brandCtrl = TextEditingController();
   RxBool aiUploadImageLoading = false.obs;
 
   var aiImageInfo = {}.obs;
@@ -330,9 +335,21 @@ class ProductController extends GetxController {
       var data = response.body;
       aiImageInfo.value = data["data"];
 
+
+      // fill controllers here
+      titleCtrl.text = aiImageInfo["product_name"] ?? "";
+      sizeCtrl.text = aiImageInfo["size"] ?? "";
+      brandCtrl.text = aiImageInfo["brand"] ?? "";
+      categoryCtrl.text = aiImageInfo["category"] ?? "";
+      conditionCtrl.text = aiImageInfo["condition"] ?? "";
+      descriptionCtrl.text = aiImageInfo["description"] ?? "";
+      // purchasePriceCtrl.text = aiImageInfo["purchasing_price"]?.toString() ?? "";
+      sellingPriceCtrl.text = aiImageInfo["selling_price"]?.toString() ?? "";
       aiUploadImageLoading(false);
     } else {
+
       aiUploadImageLoading(false);
+      Get.snackbar("Warring", "Type to upload pet related product");
     }
   }
 

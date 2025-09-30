@@ -70,8 +70,8 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
               CustomTextField(
                 focusNode: companyFocus,
                 controller: companyNameCtrl,
-                labelText: "Company Name",
-                hintText: "Company name",
+                labelText: "Your Name",
+                hintText: "Your name",
               ),
 
               CustomText(text: "Address Line 1",
@@ -146,12 +146,7 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
               ),
 
               SizedBox(height: 10.h),
-              CustomTextField(
-                focusNode: address2Focus,
-                controller: addressLine2Ctrl,
-                labelText: "Address line 2",
-                hintText: "Address line 2",
-              ),
+
               CustomTextField(
                 focusNode: cityFocus,
                 controller: cityCtrl,
