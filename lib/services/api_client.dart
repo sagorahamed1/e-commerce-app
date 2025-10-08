@@ -381,8 +381,9 @@ static  Future<Response> putData(String uri, dynamic body,
     dynamic body;
     try {
       body = jsonDecode(response.body);
-    } catch (e) {
+    } catch (e, s) {
       debugPrint(e.toString());
+      debugPrint(s.toString());
     }
     Response response0 = Response(
       body: body ?? response.body,

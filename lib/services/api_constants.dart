@@ -2,8 +2,8 @@ class ApiConstants{
   // static const String baseUrl = "http://192.168.40.142:5000/api/v1";
   // static const String imageBaseUrl = "http://192.168.40.142:5000";
 
-  static const String baseUrl = "https://petattix-xilem.sarv.live/api/v1";
-  static const String imageBaseUrl = "https://petattix-xilem.sarv.live/";
+  static const String baseUrl = "https://api.petattix.com/api/v1";
+  static const String imageBaseUrl = "https://api.petattix.com/";
 
 
   static const String signUpEndPoint = "/auth/signup";

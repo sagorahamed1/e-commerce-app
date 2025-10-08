@@ -158,7 +158,7 @@ class SignUpScreen extends StatelessWidget {
                             const TextSpan(
                                 text: 'By checking the box you agree to our '),
                             TextSpan(
-                              text: 'terms',
+                              text: 'Privacy Policy',
                               style: TextStyle(
                                 color: AppColors.primaryColor,
                                 decoration: TextDecoration.underline,
@@ -166,11 +166,14 @@ class SignUpScreen extends StatelessWidget {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   // Open Terms of Service
+                                  Get.toNamed(AppRoutes.privacyPolicyAllScreen, arguments: {
+                                    "title" : "Privacy Policy",
+                                  });
                                 },
                             ),
                             const TextSpan(text: ' and '),
                             TextSpan(
-                              text: 'Conditions.',
+                              text: 'Terms & Conditions.',
                               style: const TextStyle(
                                 color: AppColors.primaryColor,
                                 decoration: TextDecoration.underline,
@@ -178,6 +181,9 @@ class SignUpScreen extends StatelessWidget {
                               recognizer: TapGestureRecognizer()
                                 ..onTap = () {
                                   // Open Privacy Policy
+                                  Get.toNamed(AppRoutes.privacyPolicyAllScreen, arguments: {
+                                    "title" : "Terms of service",
+                                  });
                                 },
                             ),
                           ],
@@ -207,7 +213,7 @@ class SignUpScreen extends StatelessWidget {
                           } else {
                             print("dkdkdkkfjadsfkajsflaksjdfkldasjfk");
                             ToastMessageHelper.showToastMessage(
-                              context, "Please Accept Terms and Conditions");
+                              context, "Please Accept Privacy Policy and Terms & Conditions", title: "Warning");
                           }
                         }
                         //

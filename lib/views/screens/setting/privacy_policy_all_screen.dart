@@ -15,19 +15,18 @@ class PrivacyPolicyAllScreen extends StatefulWidget {
 }
 
 class _PrivacyPolicyAllScreenState extends State<PrivacyPolicyAllScreen> {
-
-
   PrivacyPolicyController policyController = Get.put(PrivacyPolicyController());
 
   @override
   void initState() {
     policyController.getPrivacyPolicyAll(
         url: Get.arguments["title"] == "Terms of service"
-            ? "/settings/terms_and_condition" :  Get.arguments["title"] == "Privacy Policy"
-            ? "/settings/privacy_policy" : "/settings/about_us");
+            ? "/settings/terms_and_condition"
+            : Get.arguments["title"] == "Privacy Policy"
+                ? "/settings/privacy_policy"
+                : "/settings/about_us");
     super.initState();
   }
-
 
   @override
   void dispose() {
@@ -35,41 +34,37 @@ class _PrivacyPolicyAllScreenState extends State<PrivacyPolicyAllScreen> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: CustomAppBar(title: "${Get.arguments["title"]}"),
-
       body: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 24.w),
+        padding: EdgeInsets.symmetric(horizontal: 24.w),
         child: SingleChildScrollView(
-          child: Obx(() => policyController.valueText.isEmpty ? CircularProgressIndicator() :
-             Column(
-              children: [
+          child: Obx(
+            () => policyController.valueText.isEmpty
+                ? Center(child: Padding(
+                  padding:  EdgeInsets.only(top: 200.h),
+                  child: CircularProgressIndicator(),
+                ))
+                : Column(
+                    children: [
+                      SizedBox(height: 20.h),
 
-                SizedBox(height: 20.h),
+                      // CustomText(
+                      //   color: Colors.black,
+                      //   maxline: 1000,
+                      //   textAlign: TextAlign.start,
+                      //   text: "Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non. \n\n Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non. \n\nLorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non. \n\nLorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non.",)
 
-
-                // CustomText(
-                //   color: Colors.black,
-                //   maxline: 1000,
-                //   textAlign: TextAlign.start,
-                //   text: "Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non. \n\n Lorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non. \n\nLorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non. \n\nLorem ipsum dolor sit amet consectetur. Enim massa aenean ac odio leo habitasse tortor tempor. Ut id urna odio dui leo congue. Ultrices pharetra ornare nam faucibus. Integer id varius consectetur non.",)
-
-                HtmlWidget(
-                    "${policyController.valueText.value}",
-                    textStyle: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      color: Colors.black,
-                      fontSize: 14.h,
-
-                    )
-                ),
-
-
-              ],
-            ),
+                      HtmlWidget("${policyController.valueText.value}",
+                          textStyle: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            color: Colors.black,
+                            fontSize: 14.h,
+                          )),
+                    ],
+                  ),
           ),
         ),
       ),

@@ -218,16 +218,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        height: 50.h,
-                                        width: 50.w,
+                                        height: 55.h,
+                                        width: 55.w,
                                         child: CustomNetworkImage(
+                                          boxShape: BoxShape.circle,
                                             imageUrl: "${ApiConstants.imageBaseUrl}${category.image}"),
                                       ),
                                       SizedBox(
-                                        width: 65.w,
+                                        width: 75.w,
                                         child: CustomText(
                                             text: "${category.name.toString()}",
-                                            fontSize: 12.sp,
+                                            fontSize: 10.sp,
                                             fontWeight: FontWeight.w500,
                                             color: Color(0xff592B00)),
                                       ),

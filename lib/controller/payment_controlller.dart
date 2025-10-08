@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -10,9 +9,6 @@ import 'package:petattix/controller/wallet_controller.dart';
 
 import '../constants/constants.dart';
 import '../core/config/app_route.dart';
-
-
-
 
 class PaymentController {
   Map<String, dynamic>? paymentIntentData;
@@ -36,7 +32,8 @@ class PaymentController {
     }
   }
 
-  Future<void> makePayment({String? subscriptionId, amount , required BuildContext context}) async {
+  Future<void> makePayment(
+      {String? subscriptionId, amount, required BuildContext context}) async {
     try {
       paymentIntentData = await createPaymentIntent("$amount", "USD");
       if (paymentIntentData != null) {
@@ -48,17 +45,18 @@ class PaymentController {
 
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
-            billingDetails: const BillingDetails(
-                name: 'Jo',
-                email: 'jo@gmail.com'),
-            googlePay: const PaymentSheetGooglePay(merchantCountryCode: 'US'),
-            merchantDisplayName: 'Pet Attix',
-            paymentIntentClientSecret: clientSecret,
-            style: ThemeMode.dark
-          ),
+              billingDetails: const BillingDetails(name: 'Jo', email: 'jo@gmail.com'),
+              googlePay: const PaymentSheetGooglePay(merchantCountryCode: 'US'),
+              // applePay: PaymentSheetApplePay(merchantCountryCode: "US"),
+              merchantDisplayName: 'Pet Attix',
+              paymentIntentClientSecret: clientSecret,
+              style: ThemeMode.dark),
         );
 
-        displayPaymentSheet(subscriptionId: "$subscriptionId", context:  context, amount: amount);
+        displayPaymentSheet(
+            subscriptionId: "$subscriptionId",
+            context: context,
+            amount: amount);
       }
     } catch (e, s) {
       if (kDebugMode) {
@@ -67,7 +65,8 @@ class PaymentController {
     }
   }
 
-  Future<Map<String, dynamic>?> createPaymentIntent(String amount, String currency) async {
+  Future<Map<String, dynamic>?> createPaymentIntent(
+      String amount, String currency) async {
     try {
       Map<String, dynamic> body = {
         'amount': calculateAmount(amount),
@@ -78,7 +77,8 @@ class PaymentController {
         Uri.parse('https://api.stripe.com/v1/payment_intents'),
         body: body,
         headers: {
-          'Authorization': 'Bearer ${AppConstants.secretKey}', // Use sk_test_... key here
+          'Authorization': 'Bearer ${AppConstants.secretKey}',
+          // Use sk_test_... key here
           'Content-Type': 'application/x-www-form-urlencoded'
         },
       );
@@ -101,14 +101,24 @@ class PaymentController {
     return a.toString();
   }
 
-  Future<void> displayPaymentSheet({required String subscriptionId,amount,  required BuildContext context}) async {
+  Future<void> displayPaymentSheet(
+      {required String subscriptionId,
+      amount,
+      required BuildContext context}) async {
     try {
       await Stripe.instance.presentPaymentSheet();
-      retrieveTxnId(paymentIntent: paymentIntentData!['id'], subscriptionId: '$subscriptionId', context: context, amount: amount); ///subscription id
+      retrieveTxnId(
+          paymentIntent: paymentIntentData!['id'],
+          subscriptionId: '$subscriptionId',
+          context: context,
+          amount: amount);
+
+      ///subscription id
       if (kDebugMode) {
         debugPrint('Payment intent: $paymentIntentData');
       }
-      ScaffoldMessenger.of(Get.context!).showSnackBar(const SnackBar(content: Text("Paid successfully")));
+      ScaffoldMessenger.of(Get.context!)
+          .showSnackBar(const SnackBar(content: Text("Paid successfully")));
       paymentIntentData = null;
     } catch (e) {
       if (kDebugMode) {
@@ -117,12 +127,18 @@ class PaymentController {
     }
   }
 
-  Future<void> retrieveTxnId({required String paymentIntent, amount, required String subscriptionId, required BuildContext context}) async {
+  Future<void> retrieveTxnId(
+      {required String paymentIntent,
+      amount,
+      required String subscriptionId,
+      required BuildContext context}) async {
     try {
       final response = await http.get(
-        Uri.parse('https://api.stripe.com/v1/charges?payment_intent=$paymentIntent'),
+        Uri.parse(
+            'https://api.stripe.com/v1/charges?payment_intent=$paymentIntent'),
         headers: {
-          "Authorization": "Bearer ${AppConstants.secretKey}", // Use sk_test_... key here
+          "Authorization": "Bearer ${AppConstants.secretKey}",
+          // Use sk_test_... key here
           "Content-Type": "application/x-www-form-urlencoded"
         },
       );
@@ -131,20 +147,25 @@ class PaymentController {
         var data = json.decode(response.body);
         if (kDebugMode) {
           debugPrint("==========================data ${data}");
-          debugPrint("Transaction Id: ${data['data'][0]['balance_transaction']}");
+          debugPrint(
+              "Transaction Id: ${data['data'][0]['balance_transaction']}");
         }
         var transactionId = data['data'][0]['balance_transaction'];
         debugPrint("======================  $subscriptionId");
-        final  WalletController subscriptionController = Get.put(WalletController());
+        final WalletController subscriptionController =
+            Get.put(WalletController());
 
-        subscriptionController.addBalanceToWallet(amount: "$amount", trxId: transactionId, context: context, paymentIntentId: paymentIntent);
+        subscriptionController.addBalanceToWallet(
+            amount: "$amount",
+            trxId: transactionId,
+            context: context,
+            paymentIntentId: paymentIntent);
         // subscriptionController.payment(subscriptionId: subscriptionId, transactionId: "$transactionId");
-
-      }else{
-        print("******************************************************************************************************");
+      } else {
+        print(
+            "******************************************************************************************************");
       }
     } catch (e) {
-
       throw Exception("Error retrieving transaction ID: $e");
     }
   }

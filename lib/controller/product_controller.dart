@@ -19,6 +19,8 @@ import '../services/api_constants.dart';
 import '../views/screens/post/product_post_success_screen.dart';
 
 class ProductController extends GetxController {
+
+
   RxBool productAddLoading = false.obs;
 
   addProduct(
@@ -87,6 +89,70 @@ class ProductController extends GetxController {
       Get.toNamed(AppRoutes.walletScreen);
     }
   }
+
+
+
+
+
+
+  RxBool productEditLoading = false.obs;
+
+  editProduct(
+      {required BuildContext context,
+        required String productName,
+        category,
+        brand,
+        condition,
+        sellingPrice,
+        description,
+        productId,
+        size,
+        required bool negotiable,
+        required bool isBoosted,
+        required List<File> images}) async {
+    productEditLoading(true);
+
+    List<MultipartBody> photoList = [];
+
+    for (var photos in images) {
+      photoList.add(MultipartBody("images", photos));
+    }
+
+    var body = {
+      "product_name": "$productName",
+      "selling_price": "$sellingPrice",
+      "category": "$category",
+      "quantity": "1",
+      "description": "$description",
+      "condition": "$condition",
+      "brand": "$brand",
+      "is_negotiable": "$negotiable",
+      "size": "$size",
+      "is_boosted" : "$isBoosted"
+    };
+
+    final response = await ApiClient.putMultipartData(
+        "${ApiConstants.product}/${productId?? ""}", body,
+        multipartBody: photoList);
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      ToastMessageHelper.showToastMessage(context, "Product post successful");
+
+      productEditLoading(false);
+    } else {
+      productEditLoading(false);
+      ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "Warning");
+
+    }
+  }
+
+
+
+
+
+
+
+
 
   RxList<ProductModel> myProduct = <ProductModel>[].obs;
   RxBool myProductLoading = false.obs;
@@ -349,7 +415,7 @@ class ProductController extends GetxController {
     } else {
 
       aiUploadImageLoading(false);
-      Get.snackbar("Warring", "Type to upload pet related product");
+      Get.snackbar("Warring", "Please try to upload pet related product");
     }
   }
 

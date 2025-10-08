@@ -50,7 +50,7 @@ class PurchaseController extends GetxController {
       // ToastMessageHelper.showToastMessage(context, response.body["message"].toString(), title: "info");
 
       ToastMessageHelper.showToastMessage(
-          context, "kkd",
+          context, response.body["message"][0],
           title: "info"
       );
       if(response.body["message"] ==  "You don't have enough balance to purchase the product."){

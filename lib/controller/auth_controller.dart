@@ -51,9 +51,16 @@ class AuthController extends GetxController {
 
   logIn({required String email, password, required BuildContext context}) async {
     await PrefsHelper.remove(AppConstants.bearerToken);
+
+
     loginLoading(true);
     var body = {"email": "$email", "password": "$password"};
-    final response = await ApiClient.postData(ApiConstants.loginEndPoint, jsonEncode(body));
+
+    var header = {
+      'Content-Type': 'application/json'
+    };
+
+    final response = await ApiClient.postData(ApiConstants.loginEndPoint, jsonEncode(body), headers: header);
 
     if (response.statusCode == 200 || response.statusCode == 201) {
 

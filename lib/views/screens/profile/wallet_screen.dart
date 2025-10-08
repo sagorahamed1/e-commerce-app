@@ -12,6 +12,7 @@ import 'package:petattix/views/widgets/no_data_found_card.dart';
 
 import '../../../controller/wallet_controller.dart';
 import '../../../core/config/app_route.dart';
+import '../../../helper/toast_message_helper.dart';
 import '../../widgets/cachanetwork_image.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text_field.dart';
@@ -35,8 +36,15 @@ class _WalletScreenState extends State<WalletScreen> {
   }
 
   @override
+  void dispose() {
+    walletController.walletHistory.value = [];
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(title: "Wallet"),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -165,9 +173,23 @@ class _WalletScreenState extends State<WalletScreen> {
                                                   title: "Yes",
                                                   onpress: () {
 
-                                                    PaymentController().makePayment(amount: amonCtrl.text, subscriptionId: "subscriptionId", context:  context);
+                                                    if(int.parse(amonCtrl.text) < 30){
+                                                      ToastMessageHelper.showToastMessage(context, "Minimum 30 Pounds required", title: "Warning");
+                                                    }else{
 
-                                                    Get.back();
+                                                      PaymentController().makePayment(amount: amonCtrl.text, subscriptionId: "subscriptionId", context:  context).then((_){
+
+
+                                                        walletController.getBalance();
+                                                        walletController.getWallet();
+
+                                                      });
+
+                                                      Get.back();
+
+                                                    }
+
+
                                                   },
                                                   fontSize: 11.h),
                                             ),

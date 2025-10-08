@@ -4,7 +4,7 @@
 
 
     <application
-        android:label="petattix"
+        android:label="Pet Attix"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

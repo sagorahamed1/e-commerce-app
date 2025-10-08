@@ -1,4 +1,4 @@
-package com.example.petattix
+package com.petattix.petattix
 
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterFragmentActivity

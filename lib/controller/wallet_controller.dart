@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:petattix/helper/toast_message_helper.dart';
 import 'package:petattix/model/wallet_history_model.dart';
 import '../global/custom_assets/assets.gen.dart';
 import '../services/api_client.dart';
@@ -28,7 +29,7 @@ class WalletController extends GetxController {
 
     var response = await ApiClient.postData("${ApiConstants.walletBalanceAdd}", jsonEncode(body));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
 
       showDialog(
           context: context,
@@ -82,6 +83,12 @@ class WalletController extends GetxController {
       addBalanceLoading(false);
     } else {
       addBalanceLoading(false);
+      if(int.parse(amount) < 30){
+        ToastMessageHelper.showToastMessage(context, "Minimum 30 Pounds required", title: "Warning");
+      }else{
+        ToastMessageHelper.showToastMessage(context, "Add Balance Failed! \n Try again", title: "Warning");
+      }
+
     }
   }
 
@@ -110,7 +117,7 @@ class WalletController extends GetxController {
 
 
 
-  RxString balance = ''.obs;
+  RxString balance = '0'.obs;
   RxBool balanceLoading = false.obs;
   getBalance()async{
     balanceLoading(true);

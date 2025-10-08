@@ -41,6 +41,19 @@ class _PostScreenState extends State<PostScreen> {
     super.initState();
   }
 
+
+  @override
+  void dispose() {
+    productController.titleCtrl.clear();
+    productController.sizeCtrl.clear();
+    productController.brandCtrl.clear();
+    productController.categoryCtrl.clear();
+    productController.conditionCtrl.clear();
+    productController.sellingPriceCtrl.clear();
+    productController.descriptionCtrl.clear();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
