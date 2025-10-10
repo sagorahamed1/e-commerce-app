@@ -66,7 +66,8 @@ class WelcomeScreen extends StatelessWidget {
                       print("Location permission denied");
                     } else if (status.isPermanentlyDenied) {
                       // Guide user to app settings
-                      openAppSettings();
+                      await Permission.location.request();
+                      // openAppSettings();
                     }
                   }),
 

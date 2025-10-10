@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
@@ -24,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>MKDirectionsApplicationSupportedModes</key>
+	<array/>
+	<key>NSCameraUsageDescription</key>
+	<string>To scan cards</string>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
@@ -41,14 +49,24 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 
-	<key>NSCameraUsageDescription</key>
-    <string>Scan your card to add it automatically</string>
-    <key>NSCameraUsageDescription</key>
-    <string>To scan cards</string>
+	<key>NSLocalNetworkUsageDescription</key>
+    <string>Pet Attix needs to find devices on your local network for connectivity features.</string>
+
+    <key>NSMicrophoneUsageDescription</key>
+    <string>Pet Attix needs access to the microphone to record audio for chat or media features.</string>
+
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>Pet Attix needs your location to show nearby places and improve your experience.</string>
+
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Pet Attix needs access to your location even in the background to provide accurate location-based features.</string>
+
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Pet Attix uses your location to improve map and nearby feature accuracy.</string>
+
+
+
+
 </dict>
 </plist>

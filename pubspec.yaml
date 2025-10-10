@@ -57,10 +57,9 @@ dependencies:
   google_places_flutter:
   flutter_google_maps_webservices:
   html_unescape:
+  audio_session: ^0.1.25
 
 
-
-  audio_session:
 
 
 dev_dependencies:

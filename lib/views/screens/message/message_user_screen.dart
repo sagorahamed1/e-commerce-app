@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,7 +8,6 @@ import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
 import 'package:petattix/helper/time_format_helper.dart';
 import 'package:petattix/services/api_constants.dart';
-import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
 import 'package:petattix/views/widgets/no_data_found_card.dart';
@@ -14,6 +15,8 @@ import 'package:petattix/views/widgets/no_data_found_card.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../widgets/cachanetwork_image.dart';
 import '../../widgets/custom_text.dart';
+
+
 
 class MessageUserScreen extends StatefulWidget {
   MessageUserScreen({super.key});
@@ -41,6 +44,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Timer? debounce;
     return Scaffold(
       appBar: AppBar(
         leading: SizedBox(),
@@ -64,8 +68,16 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                 hintText: "Enter name",
 
                 onChanged: (value) {
-                  chatListController.getChatUser();
+                  if (debounce?.isActive ?? false) debounce!.cancel();
+                  debounce = Timer(Duration(milliseconds: 500), () {
+                    chatListController.chatUsers.clear();
+
+                    chatListController.getChatUser();
+
+                  });
                 },
+
+
                 suffixIcon: Assets.icons.searhIcon.svg()),
             Expanded(
               child: Obx(
