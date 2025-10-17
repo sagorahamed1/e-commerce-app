@@ -1,16 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
+import '../../../helper/prefs_helper.dart';
 import '../../widgets/custom_button.dart';
 import '../../widgets/custom_text.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 
 
-class WelcomeScreen extends StatelessWidget {
+class WelcomeScreen extends StatefulWidget {
   const WelcomeScreen({super.key});
+
+  @override
+  State<WelcomeScreen> createState() => _WelcomeScreenState();
+}
+
+class _WelcomeScreenState extends State<WelcomeScreen> {
+
+  @override
+  void initState() {
+    getCurrency();
+    super.initState();
+  }
+
+
+  getCurrency()async{
+    await CurrencyHelper.init();
+  }
+
 
   @override
   Widget build(BuildContext context) {

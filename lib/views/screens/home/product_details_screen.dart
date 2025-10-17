@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/time_format_helper.dart';
 import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
@@ -14,6 +15,7 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../../controller/product_controller.dart';
 import '../../../controller/profile_controller.dart';
 import '../../widgets/cachanetwork_image.dart';
+import '../../widgets/custom_text_field.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   const ProductDetailsScreen({super.key});
@@ -25,6 +27,7 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   ProductController productController = Get.put(ProductController());
   ProfileController profileController = Get.put(ProfileController());
+  final GlobalKey<FormState> forKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -53,7 +56,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                 ProductImageSlider(
                   images: productController.singleProduct.value.images
-                      ?.map((e) => "${ApiConstants.imageBaseUrl}${e.image}")
+                      ?.map((e) => "${ApiConstants.imageBaseUrl}/${e.image}")
                       .toList() ?? [],
                 ),
 
@@ -83,6 +86,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           fontWeight: FontWeight.w500,
                           color: Colors.black),
                     ),
+
+
+
                     Align(
                       alignment: Alignment.bottomRight,
                       child: GestureDetector(
@@ -108,40 +114,79 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                   ],
                 ),
+                
+                
+                
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+
+
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Icon(Icons.watch_later_outlined, size: 14.h),
-                        SizedBox(
-                          width: 150.w,
-                          child: CustomText(
-                              textAlign: TextAlign.start,
-                              text:
-                                  " ${TimeFormatHelper.formatDate(productController.singleProduct.value.createdAt ?? DateTime.now())} ${TimeFormatHelper.timeWithAMPMLocalTime(productController.singleProduct.value.createdAt ?? DateTime.now())}",
-                              fontSize: 12.h,
-                              color: Color(0xff6F6F6F)),
+
+
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.watch_later_outlined, size: 14.h),
+                            SizedBox(
+                              width: 150.w,
+                              child: CustomText(
+                                  textAlign: TextAlign.start,
+                                  text:
+                                      " ${TimeFormatHelper.formatDate(productController.singleProduct.value.createdAt ?? DateTime.now())} ${TimeFormatHelper.timeWithAMPMLocalTime(productController.singleProduct.value.createdAt ?? DateTime.now())}",
+                                  fontSize: 10.h,
+                                  color: Color(0xff6F6F6F)),
+                            ),
+                          ],
                         ),
+
+
+                        CustomText(
+                            text:
+                            productController.singleProduct.value.user?.address != null
+                                ? productController.singleProduct.value.user!.address!.isNotEmpty
+                                ? '${productController.singleProduct.value.user!.address![0].toUpperCase()}${productController.singleProduct.value.user!.address!.substring(1).toLowerCase()}'
+                                : 'N/A'
+                                : 'N/A',
+                            fontSize: 10.h,
+                            color: Color(0xff6F6F6F)),
+
+
+
                       ],
                     ),
-                    CustomText(
-                        text:
-                            "${productController.singleProduct.value.sellingPrice}",
-                        fontSize: 17.h,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.red)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        CustomText(
+                            text:
+                                "${CurrencyHelper.getCurrencyPrice(productController.singleProduct.value.sellingPrice.toString())}",
+                            fontSize: 15.h,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.red),
+
+
+
+                        CustomText(
+                            fontSize: 10.h,
+                            text: "Buyer protection ${CurrencyHelper.getCurrencyPrice(productController.singleProduct.value.buyer_protection.toString())}"),
+
+                      ],
+                    )
                   ],
                 ),
+
+
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomText(
-                        text:
-                            "${productController.singleProduct.value.addressLine1 ?? "N/A"}",
-                        fontSize: 12.h,
-                        color: Color(0xff6F6F6F)),
+
+                    SizedBox(),
+
                     CustomText(
                         text: productController
                                     .singleProduct.value.isNegotiable ==
@@ -150,6 +195,11 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                             : "Negotiable",
                         fontSize: 12.h,
                         color: Color(0xff2DA800)),
+
+
+
+
+
                   ],
                 ),
                 Padding(
@@ -174,12 +224,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         "• ${productController.singleProduct.value.condition}"),
                 CustomText(
                     top: 7.h,
-                    text: "Purchase Price",
+                    text: "Selling Price",
                     color: Colors.black,
                     fontWeight: FontWeight.w500),
                 CustomText(
                   text:
-                      "${productController.singleProduct.value.sellingPrice}",
+                      "${CurrencyHelper.getCurrencyPrice(productController.singleProduct.value.sellingPrice.toString())}",
                   fontSize: 17.h,
                   fontWeight: FontWeight.w500,
                   color: Colors.black26,
@@ -257,9 +307,125 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               loading: productController.sendOfferLoading.value,
                               title: "Offer Price",
                               onpress: () {
-                                productController.sendOffer(
-                                    id: productController.singleProduct.value.id.toString(),
-                                    price: productController.singleProduct.value.sellingPrice.toString(), context:  context);
+
+
+
+
+
+                                TextEditingController amonCtrl = TextEditingController();
+
+
+                                amonCtrl.text = productController.singleProduct.value.sellingPrice.toString();
+
+
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    final double sellingPrice = double.tryParse(
+                                      productController.singleProduct.value.sellingPrice.toString(),
+                                    ) ??
+                                        0.0;
+                                    return AlertDialog(
+                                      content: Form(
+                                        key: forKey,
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            CustomText(
+                                                text: "Offer Your Price",
+                                                fontSize: 16.h,
+                                                fontWeight: FontWeight.w600,
+                                                top: 29.h,
+                                                bottom: 20.h,
+                                                color: Color(0xff592B00)),
+                                            Divider(),
+                                            SizedBox(height: 12.h),
+                                            CustomTextField(
+                                                validator: (value) {
+                                                  if (value == null || value.trim().isEmpty) {
+                                                    return "Please enter a price.";
+                                                  }
+
+                                                  final entered = double.tryParse(value) ?? 0.0;
+
+                                                  if (entered <= 0) {
+                                                    return "Please enter a valid amount.";
+                                                  }
+
+                                                  if (entered > sellingPrice) {
+                                                    return "Offer cannot be higher than \n the selling price (${CurrencyHelper.getCurrencyPrice(sellingPrice.toString())})";
+                                                  }
+
+                                                  return null; // ✅ valid
+                                                },
+                                                keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                controller: amonCtrl,
+                                                labelText: "Enter Amount",
+                                                hintText: "Enter Amount"),
+                                            SizedBox(height: 12.h),
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: CustomButton(
+                                                      height: 50.h,
+                                                      title: "Cancel",
+                                                      onpress: () {
+                                                        Get.back();
+                                                      },
+                                                      color: Colors.transparent,
+                                                      fontSize: 11.h,
+                                                      loaderIgnore: true,
+                                                      boderColor: AppColors
+                                                          .primaryColor,
+                                                      titlecolor: AppColors
+                                                          .primaryColor),
+                                                ),
+                                                SizedBox(width: 8.w),
+                                                Expanded(
+                                                  flex: 1,
+                                                  child: CustomButton(
+                                                      loading: productController.sendOfferLoading.value,
+                                                      loaderIgnore: true,
+                                                      height: 50.h,
+                                                      title: "Offer",
+                                                      onpress: () {
+                                                        // Get.toNamed(AppRoutes
+                                                        //     .messageScreen);
+
+
+                                                        if(forKey.currentState!.validate() ){
+                                                          print("===========Called 2");
+                                                          productController.sendOffer(
+                                                              id: productController.singleProduct.value.id.toString(),
+                                                              price: amonCtrl.text, context:  context);
+                                                        }
+
+
+                                                        Get.back();
+
+
+                                                      },
+                                                      fontSize: 11.h),
+                                                ),
+                                              ],
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+
+
+
+
+
+
+
+
+
+
                               },
                               fontSize: 12.h),
                         )),

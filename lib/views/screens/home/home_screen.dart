@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/time_format_helper.dart';
 import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
@@ -223,7 +224,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                         width: 55.w,
                                         child: CustomNetworkImage(
                                           boxShape: BoxShape.circle,
-                                            imageUrl: "${ApiConstants.imageBaseUrl}${category.image}"),
+                                            imageUrl: "${ApiConstants.imageBaseUrl}/${category.image}"),
                                       ),
                                       SizedBox(
                                         width: 75.w,
@@ -286,8 +287,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               index: index,
                               // isFavorite: false,
                               title: "${product.productName}",
-                              address: "${product.addressLine1 ?? "N/A"}",
-                              price: "${product.sellingPrice}",
+                              address: "${product.user?.address?[0].toUpperCase()}${product.user?.address?.substring(1).toLowerCase()}",
+                              price: "${CurrencyHelper.getCurrencyPrice(product.sellingPrice.toString())}",
                               image: "${product.images?[0].image}",
                               time: "${TimeFormatHelper.formatDate(product.createdAt ?? DateTime.now())}, ${TimeFormatHelper.timeWithAMPMLocalTime(product.createdAt ?? DateTime.now())}",
                               onTap: () {

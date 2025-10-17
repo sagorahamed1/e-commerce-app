@@ -7,6 +7,7 @@ import 'package:petattix/controller/product_controller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/time_format_helper.dart';
 import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
@@ -28,6 +29,7 @@ class WishListScreen extends StatefulWidget {
 class _WishListScreenState extends State<WishListScreen> {
 
   ProductController productController = Get.put(ProductController());
+  final GlobalKey<FormState> forKey = GlobalKey<FormState>();
 
 
   @override
@@ -142,7 +144,7 @@ class _WishListScreenState extends State<WishListScreen> {
                               Assets.icons.moneyIconCard.svg(),
                               SizedBox(width: 4.w),
                               CustomText(
-                                text: "${product.sellingPrice}",
+                                text: "${CurrencyHelper.getCurrencyPrice(product.sellingPrice.toString())}",
                                 fontWeight: FontWeight.w500,
                                 color: Colors.red,
                               ),
@@ -175,66 +177,96 @@ class _WishListScreenState extends State<WishListScreen> {
                                     onpress: () {
                                       TextEditingController amonCtrl = TextEditingController();
                                       amonCtrl.text = product.sellingPrice.toString();
+
+                                      final double sellingPrice = double.tryParse(product.sellingPrice.toString(),
+                                      ) ??
+                                          0.0;
+
                                       showDialog(
                                         context: context,
                                         builder: (context) {
                                           return AlertDialog(
-                                            content: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                CustomText(
-                                                    text: "Offer Your Price",
-                                                    fontSize: 16.h,
-                                                    fontWeight: FontWeight.w600,
-                                                    top: 29.h,
-                                                    bottom: 20.h,
-                                                    color: Color(0xff592B00)),
-                                                Divider(),
-                                                SizedBox(height: 12.h),
-                                                CustomTextField(
-                                                    controller: amonCtrl,
-                                                    labelText: "Enter Amount",
-                                                    hintText: "Enter Amount"),
-                                                SizedBox(height: 12.h),
-                                                Row(
-                                                  children: [
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: CustomButton(
-                                                          height: 50.h,
-                                                          title: "Cancel",
-                                                          onpress: () {
-                                                            Get.back();
-                                                          },
-                                                          color: Colors.transparent,
-                                                          fontSize: 11.h,
-                                                          loaderIgnore: true,
-                                                          boderColor: AppColors
-                                                              .primaryColor,
-                                                          titlecolor: AppColors
-                                                              .primaryColor),
-                                                    ),
-                                                    SizedBox(width: 8.w),
-                                                    Expanded(
-                                                      flex: 1,
-                                                      child: CustomButton(
-                                                          loading: false,
-                                                          loaderIgnore: true,
-                                                          height: 50.h,
-                                                          title: "Offer",
-                                                          onpress: () {
-                                                            // Get.toNamed(AppRoutes
-                                                            //     .messageScreen);
+                                            content: Form(
+                                              key: forKey,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  CustomText(
+                                                      text: "Offer Your Price",
+                                                      fontSize: 16.h,
+                                                      fontWeight: FontWeight.w600,
+                                                      top: 29.h,
+                                                      bottom: 20.h,
+                                                      color: Color(0xff592B00)),
+                                                  Divider(),
+                                                  SizedBox(height: 12.h),
+                                                  CustomTextField(
+                                                      validator: (value) {
+                                                        if (value == null || value.trim().isEmpty) {
+                                                          return "Please enter a price.";
+                                                        }
 
-                                                            productController.sendOffer(
-                                                                id: product.id.toString(),
-                                                                price: amonCtrl.text, context:  context);
-                                                          },
-                                                          fontSize: 11.h),
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
+                                                        final entered = double.tryParse(value) ?? 0.0;
+
+                                                        if (entered <= 0) {
+                                                          return "Please enter a valid amount.";
+                                                        }
+
+                                                        if (entered > sellingPrice) {
+                                                          return "Offer cannot be higher than \n the selling price (${CurrencyHelper.getCurrencyPrice(sellingPrice.toString())})";
+                                                        }
+
+                                                        return null; // ✅ valid
+                                                      },
+                                                      keyboardType: TextInputType.numberWithOptions(decimal: true),
+                                                      controller: amonCtrl,
+                                                      labelText: "Enter Amount",
+                                                      hintText: "Enter Amount"),
+                                                  SizedBox(height: 12.h),
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: CustomButton(
+                                                            height: 50.h,
+                                                            title: "Cancel",
+                                                            onpress: () {
+                                                              Get.back();
+                                                            },
+                                                            color: Colors.transparent,
+                                                            fontSize: 11.h,
+                                                            loaderIgnore: true,
+                                                            boderColor: AppColors
+                                                                .primaryColor,
+                                                            titlecolor: AppColors
+                                                                .primaryColor),
+                                                      ),
+                                                      SizedBox(width: 8.w),
+                                                      Expanded(
+                                                        flex: 1,
+                                                        child: CustomButton(
+                                                            loading: false,
+                                                            loaderIgnore: true,
+                                                            height: 50.h,
+                                                            title: "Offer",
+                                                            onpress: () {
+                                                              // Get.toNamed(AppRoutes
+                                                              //     .messageScreen);
+
+                                                              if(forKey.currentState!.validate()){
+                                                                productController.sendOffer(
+                                                                    id: product.id.toString(),
+                                                                    price: amonCtrl.text, context:  context);
+                                                              }
+
+
+                                                            },
+                                                            fontSize: 11.h),
+                                                      ),
+                                                    ],
+                                                  )
+                                                ],
+                                              ),
                                             ),
                                           );
                                         },
@@ -342,7 +374,7 @@ class _WishListScreenState extends State<WishListScreen> {
                             Assets.icons.moneyIconCard.svg(),
                             SizedBox(width: 4.w),
                             CustomText(
-                              text: "£ ${purches.product?.purchasingPrice}",
+                              text: "${CurrencyHelper.getCurrencyPrice(purches.product?.sellingPrice.toString() ?? "0")}",
                               fontWeight: FontWeight.w500,
                               color: Colors.red,
                             ),
@@ -392,7 +424,7 @@ class _WishListScreenState extends State<WishListScreen> {
                               ),
 
                               child: CustomText(
-                                text: "${purches.status}",
+                                text: "${purches.status?.replaceAll("_", " ").toLowerCase().capitalizeFirst}",
                                 left: 8.w,
                                 right: 8.w,),
                             ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/toast_message_helper.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
@@ -157,8 +158,8 @@ class _CourierScreenState extends State<CourierScreen> {
                                   return  Row(
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: [
-                                       Text("${x?.description}"),
-                                      Text("\$${x?.cost}",
+                                       Text("${CurrencyHelper.getCurrencyPrice(x?.description ?? "0")}"),
+                                      Text("${CurrencyHelper.getCurrencyPrice(x?.cost.toString() ?? "0")}",
                                           style: TextStyle(color: Colors.red)),
                                     ],
                                   );
@@ -180,7 +181,7 @@ class _CourierScreenState extends State<CourierScreen> {
                                 const Text("Total Cost",
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold)),
-                                Text("\$${courier.totalCost?.totalCostNetWithCollection}",
+                                Text("${CurrencyHelper.getCurrencyPrice(courier.totalCost?.totalCostNetWithCollection.toString() ?? "0")}",
                                     style: const TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.orange)),

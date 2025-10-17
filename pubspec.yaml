@@ -29,6 +29,7 @@ dependencies:
 
   internet_connection_checker_plus: ^2.5.2
   connectivity_plus:
+  country_picker:
 
   curved_navigation_bar: ^1.0.6
 

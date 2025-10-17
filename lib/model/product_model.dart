@@ -5,7 +5,7 @@ class ProductModel {
   final String? userId;
   final String? productName;
   final String? status;
-  final String? sellingPrice;
+  final dynamic sellingPrice;
   final String? purchasingPrice;
   final String? category;
   final int? quantity;
@@ -162,6 +162,7 @@ class User {
   final String? lastName;
   final String? email;
   final String? image;
+  final String? address;
   final List<String>? roles;
   final bool? isActive;
   final DateTime? createdAt;
@@ -174,6 +175,7 @@ class User {
     this.lastName,
     this.email,
     this.image,
+    this.address,
     this.roles,
     this.isActive,
     this.createdAt,
@@ -187,6 +189,7 @@ class User {
     lastName: json["lastName"],
     email: json["email"],
     image: json["image"],
+    address: json["address"],
     roles: json["roles"] == null ? [] : List<String>.from(json["roles"]!.map((x) => x)),
     isActive: json["isActive"],
     createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
@@ -200,6 +203,7 @@ class User {
     "lastName": lastName,
     "email": email,
     "image": image,
+    "address": address,
     "roles": roles == null ? [] : List<dynamic>.from(roles!.map((x) => x)),
     "isActive": isActive,
     "createdAt": createdAt?.toIso8601String(),

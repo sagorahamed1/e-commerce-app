@@ -6,6 +6,7 @@ import 'package:petattix/helper/toast_message_helper.dart';
 import '../model/couriar_service_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
+import '../views/screens/bottom_nav_bar/bottom_nav_bar.dart';
 
 class PurchaseController extends GetxController {
   RxBool createDeliveryLoading = false.obs;
@@ -41,6 +42,11 @@ class PurchaseController extends GetxController {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       createDeliveryLoading(false);
+
+      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+        return BottomNavBar();
+      }));
+
       ToastMessageHelper.showToastMessage(context, response.body["message"]);
     } else {
 
@@ -50,7 +56,7 @@ class PurchaseController extends GetxController {
       // ToastMessageHelper.showToastMessage(context, response.body["message"].toString(), title: "info");
 
       ToastMessageHelper.showToastMessage(
-          context, response.body["message"][0],
+          context, response.body["message"],
           title: "info"
       );
       if(response.body["message"] ==  "You don't have enough balance to purchase the product."){
@@ -93,8 +99,11 @@ class PurchaseController extends GetxController {
     var response = await ApiClient.postData(
         "${ApiConstants.createCollection(productId)}", jsonEncode(data));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
       createCollectionLoading(false);
+      Get.toNamed(AppRoutes.courierScreen, arguments: {
+        "productId" : "${productId}"
+      });
       ToastMessageHelper.showToastMessage(context, response.body["message"]);
     } else {
       createCollectionLoading(false);

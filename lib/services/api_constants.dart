@@ -6,7 +6,7 @@ class ApiConstants{
   // static const String imageBaseUrl = "https://petattix.merinasib.shop";
 
   static const String baseUrl = "https://api.petattix.com/api/v1";
-  static const String imageBaseUrl = "https://api.petattix.com/";
+  static const String imageBaseUrl = "https://api.petattix.com";
 
 
   static const String signUpEndPoint = "/auth/signup";

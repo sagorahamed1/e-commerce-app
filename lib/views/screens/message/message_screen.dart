@@ -10,6 +10,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:petattix/controller/product_controller.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import '../../../controller/chat_controller.dart';
 import '../../../controller/profile_controller.dart';
@@ -263,7 +264,7 @@ class _MessageScreenState extends State<MessageScreen> {
                                           isSender: message?.senderId != chatController.chatMessages.value.receiver?.id,
                                           status: '',
                                           imageUrl:
-                                              "${ApiConstants.imageBaseUrl}${chatController.chatMessages.value.conversation?.product?.images?[0]["image"]}",
+                                              "${ApiConstants.imageBaseUrl}/${chatController.chatMessages.value.conversation?.product?.images?[0]["image"]}",
                                           buttons: [
 
                                             message?.offer?.status == "accepted" ?
@@ -506,7 +507,8 @@ class _MessageScreenState extends State<MessageScreen> {
                     fontSize: 14.h,
                     bottom: 4.h),
                 CustomText(text: "Buyer offers you a price", bottom: 4.h, color: Colors.black),
-                CustomText(text: "Offer Price: \$$price", bottom: 10.h, color: Color(0xff27A14B)),
+                // CustomText(text: price, bottom: 10.h, color: Color(0xff27A14B)),
+                CustomText(text: "Offer Price: ${price} GBP", bottom: 10.h, color: Color(0xff27A14B)),
                 Row(
                   children: [...buttons],
                 )

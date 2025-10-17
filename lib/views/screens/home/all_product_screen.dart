@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -12,6 +13,7 @@ import 'package:petattix/views/widgets/custom_text.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
 
 import '../../../controller/product_controller.dart';
+import '../../../helper/currency_get_helper.dart';
 import '../../../helper/time_format_helper.dart';
 import '../../widgets/custom_product_card.dart';
 import '../../widgets/no_data_found_card.dart';
@@ -26,6 +28,7 @@ class AllProductScreen extends StatefulWidget {
 
 class _AllProductScreenState extends State<AllProductScreen> {
   final TextEditingController searchCtrl = TextEditingController();
+  final TextEditingController countryNameCtrl = TextEditingController();
   ProductController productController = Get.put(ProductController());
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
@@ -40,7 +43,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
   }
 
   double minPrice = 5;
-  double maxPrice = 20;
+  double maxPrice = 1000;
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +113,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
                     text: "Price Range",
                     color: Colors.black,
                     textAlign: TextAlign.start),
-                SizedBox(height: 10.h),
+                SizedBox(height: 4.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -127,8 +130,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                   child: RangeSlider(
                     values: RangeValues(minPrice, maxPrice),
                     min: 0,
-                    max: 500,
-                    divisions: 20,
+                    max: 10000,
+                    divisions: 100,
                     onChanged: (values) {
                       setState(() {
                         minPrice = values.start;
@@ -137,6 +140,15 @@ class _AllProductScreenState extends State<AllProductScreen> {
                     },
                   ),
                 ),
+
+
+                SizedBox(height: 16.h),
+
+
+                CountrySelectField(controller: countryNameCtrl),
+
+
+
 
                 SizedBox(height: 80.h),
 
@@ -148,7 +160,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
                       onpress: () {
                         productController.allProduct.value = [];
                         productController.getAllProduct(
-                            price: "${minPrice.ceil()}-${maxPrice.ceil()}");
+                            price: "${minPrice.ceil()}-${maxPrice.ceil()}", countryName: countryNameCtrl.text);
 
                         Get.back();
                       }),
@@ -225,8 +237,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                                   index: index,
                                   isFavorite: true,
                                   title: "${product.productName}",
-                                  address: "${product.addressLine1 ?? "N/A"}",
-                                  price: "${product.sellingPrice}",
+                                  address: "${product.user?.address ?? "N/A"}",
+                                  price: "${CurrencyHelper.getCurrencyPrice(product.sellingPrice.toString())}",
                                   time: "${TimeFormatHelper.formatDate(product.createdAt ?? DateTime.now())}, ${TimeFormatHelper.timeWithAMPMLocalTime(product.createdAt ?? DateTime.now())}",
 
                                   // onTap: () {
@@ -270,5 +282,57 @@ class _AllProductScreenState extends State<AllProductScreen> {
             right: 32.w,
             top: 4.h,
             bottom: 4.h));
+  }
+}
+
+
+
+
+
+
+
+class CountrySelectField extends StatefulWidget {
+  final TextEditingController controller;
+  const CountrySelectField({super.key, required this.controller});
+
+  @override
+  State<CountrySelectField> createState() => _CountrySelectFieldState();
+}
+
+class _CountrySelectFieldState extends State<CountrySelectField> {
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        showCountryPicker(
+          context: context,
+          showPhoneCode: false, // optional
+          countryListTheme: CountryListThemeData(
+            borderRadius: BorderRadius.circular(16.r),
+            inputDecoration: InputDecoration(
+              labelText: 'Search Country',
+              hintText: 'Start typing to search...',
+              prefixIcon: const Icon(Icons.search),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12.r),
+              ),
+            ),
+          ),
+          onSelect: (Country country) {
+            setState(() {
+              widget.controller.text = country.name;
+            });
+          },
+        );
+      },
+      child: AbsorbPointer(
+        child: CustomTextField(
+          controller: widget.controller,
+          labelText: "Country",
+          hintText: "Select your country",
+          suffixIcon: const Icon(Icons.arrow_drop_down),
+        ),
+      ),
+    );
   }
 }

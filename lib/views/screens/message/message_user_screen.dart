@@ -31,8 +31,15 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
 
   @override
   void initState() {
-    chatListController.chatUsers.value = [];
-    chatListController.getChatUser();
+
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      chatListController.chatUsers.value = [];
+      chatListController.getChatUser();
+    });
+
+
+
     super.initState();
   }
 
@@ -120,7 +127,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                                             color: Color(0xff592B00),
                                             width: 0.002),
                                         imageUrl:
-                                           chatUser.product?.images?.isEmpty ?? false ? "" :  "${ApiConstants.imageBaseUrl}${chatUser.product?.images?.first.image}",
+                                           chatUser.product?.images?.isEmpty ?? false ? "" :  "${ApiConstants.imageBaseUrl}/${chatUser.product?.images?.first.image}",
                                         height: 58.h,
                                         width: 58.w,
                                         boxShape: BoxShape.circle,

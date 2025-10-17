@@ -34,16 +34,17 @@ class AuthController extends GetxController {
 
     print("====================${country.currencyCode}");
     print("====================${country.currencyName}");
+    print("====================${country.name}");
 
 
     var body = {
       "firstName": "$firstName",
       "lastName": "$lastName",
       "email": "${email}",
-      "address": "$address",
+      "address": "$address, ${country.name}",
       "phone": "$phone",
       "password": "$password",
-      "currency" : country.currencyCode.toString()
+      "currency" : "${country.currencyCode.toString()}"
     };
 
 

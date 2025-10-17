@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:petattix/controller/payment_controlller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/time_format_helper.dart';
 import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
@@ -99,7 +100,7 @@ class _WalletScreenState extends State<WalletScreen> {
                               fit: BoxFit.scaleDown, // text will shrink to fit width
                               child: Obx(() =>
                                  CustomText(
-                                  text: "£ ${double.parse(walletController.balance.value).toStringAsFixed(2)}",
+                                  text: "${CurrencyHelper.getCurrencyPrice(double.parse(walletController.balance.value).toStringAsFixed(2))}",
                                   fontSize: 30.sp,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.white,
@@ -315,10 +316,9 @@ class _WalletScreenState extends State<WalletScreen> {
                           ),
 
                           CustomText(
-                              text: "£ ${double.parse(history.amount.toString()).toStringAsFixed(1)}",
-                              fontSize: 18.h,
+                              text: "${CurrencyHelper.getCurrencyPrice(history.amount.toString())}",
                               color: AppColors.primaryColor),
-                          SizedBox(width: 8.w)
+                          SizedBox(width: 6.w)
                         ],
                       ),
                     );

@@ -6,9 +6,10 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:petattix/controller/wallet_controller.dart';
+import 'package:petattix/helper/prefs_helper.dart';
 
 import '../constants/constants.dart';
-import '../core/config/app_route.dart';
+
 
 class PaymentController {
   Map<String, dynamic>? paymentIntentData;
@@ -34,8 +35,10 @@ class PaymentController {
 
   Future<void> makePayment(
       {String? subscriptionId, amount, required BuildContext context}) async {
+    final currency = await PrefsHelper.getString("currency");
     try {
-      paymentIntentData = await createPaymentIntent("$amount", "USD");
+      paymentIntentData = await createPaymentIntent("$amount", "${currency.toUpperCase()}");
+
       if (paymentIntentData != null) {
         String clientSecret = paymentIntentData!['client_secret'];
 
@@ -46,7 +49,7 @@ class PaymentController {
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
               billingDetails: const BillingDetails(name: 'Jo', email: 'jo@gmail.com'),
-              googlePay: const PaymentSheetGooglePay(merchantCountryCode: 'US'),
+              googlePay:  PaymentSheetGooglePay(merchantCountryCode: '$currency'),
               // applePay: PaymentSheetApplePay(merchantCountryCode: "US"),
               merchantDisplayName: 'Pet Attix',
               paymentIntentClientSecret: clientSecret,
@@ -162,8 +165,7 @@ class PaymentController {
             paymentIntentId: paymentIntent);
         // subscriptionController.payment(subscriptionId: subscriptionId, transactionId: "$transactionId");
       } else {
-        print(
-            "******************************************************************************************************");
+        print("******************************************************************************************************");
       }
     } catch (e) {
       throw Exception("Error retrieving transaction ID: $e");

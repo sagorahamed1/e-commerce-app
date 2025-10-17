@@ -201,7 +201,7 @@ class Product {
   final String? userId;
   final String? productName;
   final String? status;
-  final String? sellingPrice;
+  final dynamic sellingPrice;
   final String? purchasingPrice;
   final String? category;
   final int? quantity;

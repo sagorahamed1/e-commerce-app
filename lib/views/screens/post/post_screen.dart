@@ -9,6 +9,7 @@ import 'package:petattix/controller/product_controller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/toast_message_helper.dart';
 import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
@@ -90,8 +91,13 @@ class _PostScreenState extends State<PostScreen> {
             views: [_createPost(), _myPostList(), _mySalesList()],
             onChange: (int index) {
               if (index == 1) {
+                productController.myProduct.value = [];
                 productController.getMyProduct();
-              } else {}
+              } else if(index == 2){
+                productController.mySales.value = [];
+                productController.getMySales();
+
+              }
             },
           ),
         ));
@@ -458,6 +464,7 @@ class _PostScreenState extends State<PostScreen> {
                                       children: [
                                         Expanded(
                                           child: CustomText(
+                                            textAlign: TextAlign.start,
                                               text: "${product.productName}",
                                               fontWeight: FontWeight.w600,
                                               bottom: 4.h,
@@ -481,7 +488,7 @@ class _PostScreenState extends State<PostScreen> {
                                             ],
                                           ),
                                           child: CustomText(
-                                            text: "${product.status}",
+                                            text: "${product.status?[0].toUpperCase()}${product.status?.substring(1).toLowerCase()}",
                                             left: 8.w,
                                             right: 8.w,
                                           ),
@@ -493,7 +500,7 @@ class _PostScreenState extends State<PostScreen> {
                                         Assets.icons.moneyIconCard.svg(),
                                         SizedBox(width: 4.w),
                                         CustomText(
-                                          text: "${product.sellingPrice}",
+                                          text: "${CurrencyHelper.getCurrencyPrice(product.sellingPrice.toString())}",
                                           fontWeight: FontWeight.w500,
                                           color: Colors.red,
                                         ),
@@ -511,7 +518,7 @@ class _PostScreenState extends State<PostScreen> {
                                       color: Colors.black,
                                     ),
                                     CustomText(
-                                      text: "Location: ${product.addressLine1}",
+                                      text: "",
                                       fontSize: 12.h,
                                       color: Colors.black,
                                       bottom: 7.h,
@@ -612,7 +619,7 @@ class _PostScreenState extends State<PostScreen> {
                               CustomNetworkImage(
                                   borderRadius: BorderRadius.circular(8.r),
                                   imageUrl:
-                                      "${ApiConstants.imageBaseUrl}${sales.product?.images?[0]["image"]}",
+                                      "${ApiConstants.imageBaseUrl}/${sales.product?.images?[0]["image"]}",
                                   height: 139.h,
                                   width: 109.w),
 
@@ -642,7 +649,7 @@ class _PostScreenState extends State<PostScreen> {
                                         Assets.icons.moneyIconCard.svg(),
                                         SizedBox(width: 4.w),
                                         CustomText(
-                                          text: "30\$",
+                                          text: "${CurrencyHelper.getCurrencyPrice(sales.product?.sellingPrice.toString() ?? "0")}",
                                           fontWeight: FontWeight.w500,
                                           color: Colors.red,
                                         ),
@@ -672,7 +679,7 @@ class _PostScreenState extends State<PostScreen> {
                                       height: 30.h,
                                         loaderIgnore: true,
                                         fontSize: 12.h,
-                                        title: "${sales.status}", onpress: () {
+                                        title: "${sales.status?.replaceAll("_", " ").toLowerCase().capitalizeFirst}", onpress: () {
 
                                         if(sales.status ==  "delivery_filled"){
                                           //route

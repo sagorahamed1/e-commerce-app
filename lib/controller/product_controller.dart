@@ -17,6 +17,7 @@ import '../model/single_product_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
 import '../views/screens/post/product_post_success_screen.dart';
+import 'chat_controller.dart';
 
 class ProductController extends GetxController {
 
@@ -198,10 +199,10 @@ class ProductController extends GetxController {
   RxList<ProductModel> allProduct = <ProductModel>[].obs;
   RxBool allProductLoading = false.obs;
 
-  getAllProduct({String? price, search, categoryFilter}) async {
+  getAllProduct({String? price, search, categoryFilter, countryName}) async {
     allProductLoading(true);
     var response = await ApiClient.getData(
-        "${ApiConstants.product}?page=1&limit=10&type=global&price=${price ?? ""}&term=${search??""}&category=${categoryFilter??""}");
+        "${ApiConstants.product}?page=1&limit=1000&type=global&price=${price ?? ""}&term=${search??""}&category=${categoryFilter??""}&country=${countryName??""}");
 
     print("=============${response.body}");
     if (response.statusCode == 200) {
@@ -364,6 +365,12 @@ class ProductController extends GetxController {
     if (response.statusCode == 200) {
 
       ToastMessageHelper.showToastMessage(context, "${response.body["message"]}");
+      final ChatDataController chatController = Get.put(ChatDataController());
+
+      chatController.chatMessages.value;
+
+
+      update();
       acceptOrCancelLoading(false);
     } else {
       ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "warring");
