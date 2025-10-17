@@ -179,7 +179,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
                                    productController.sendOffer(id: chatController.chatMessages.value.conversation?.product?.id.toString() ?? "", price: amonCtrl.text, context:  context);
 
-                                   Get.back();
+
                                  },
                                  fontSize: 11.h),
                            ),

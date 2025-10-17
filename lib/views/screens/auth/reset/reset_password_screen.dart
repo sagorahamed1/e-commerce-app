@@ -54,7 +54,9 @@ class ResetPasswordScreen extends StatelessWidget {
                 SizedBox(height: 130.h),
 
                 Obx(() =>
-                   CustomButton(title: "Confirm", onpress: () {
+                   CustomButton(
+                     loading: authController.reSetPasswordLoading.value,
+                       title: "Confirm", onpress: () {
                     if(forKey.currentState!.validate()){
                       authController.resetPassword(newPassword: newCtrl.text.trim(), confirmPassword: confirmPassCtrl.text.trim());
                     }

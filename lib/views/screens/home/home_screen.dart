@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
 import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/global/custom_assets/assets.gen.dart';
+import 'package:petattix/helper/time_format_helper.dart';
 import 'package:petattix/services/api_constants.dart';
 import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_shimmer_listview.dart';
@@ -252,7 +253,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     color: Color(0xff592B00)),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.allProductScreen, arguments: {"category" : ""});
+                    Get.toNamed(AppRoutes.allProductScreen, arguments: {"category" : ""})?.then((_){
+                      productController.allProduct.value = [];
+                      productController.getAllProduct();
+                    });
                   },
                   child: CustomText(
                       text: "See all...",
@@ -285,6 +289,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               address: "${product.addressLine1 ?? "N/A"}",
                               price: "${product.sellingPrice}",
                               image: "${product.images?[0].image}",
+                              time: "${TimeFormatHelper.formatDate(product.createdAt ?? DateTime.now())}, ${TimeFormatHelper.timeWithAMPMLocalTime(product.createdAt ?? DateTime.now())}",
                               onTap: () {
                                 Get.toNamed(AppRoutes.productDetailsScreen, arguments: {
                                   "index" : product.id

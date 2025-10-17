@@ -14,7 +14,7 @@ class CustomProductCard extends StatelessWidget {
   final String? price;
   final String? address;
   final String? image;
-  final DateTime? time;
+  final String? time;
   final bool? isFavorite;
   final VoidCallback? onTap;
   final VoidCallback? favoriteOnTap;
@@ -96,7 +96,7 @@ class CustomProductCard extends StatelessWidget {
                               children: [
                                 Assets.icons.moneyIconCard.svg(),
                                 CustomText(
-                                    text: ' $price\$',
+                                    text: ' $price',
                                     fontSize: 12.h,
                                     color: Colors.red),
                               ],
@@ -125,7 +125,7 @@ class CustomProductCard extends StatelessWidget {
                                 Icon(Icons.watch_later_outlined,
                                     size: 14.h),
                                 CustomText(
-                                    text: "2h ago",
+                                    text: "${time}",
                                     fontSize: 12.h,
                                     color: Colors.black),
                               ],

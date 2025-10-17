@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:country_currency_pickers/country_pickers.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/get_state_manager.dart';
@@ -17,20 +18,37 @@ class AuthController extends GetxController {
 
   signUp(
       {required String firstName,
+        countryCode,
       lastName,
       email,
       phone,
       address,
       password,required BuildContext context}) async {
     signUpLoading(true);
+
+
+    print("====================${countryCode}");
+
+    final code = countryCode.replaceAll("+", "");
+    final country = CountryPickerUtils.getCountryByPhoneCode(code);
+
+    print("====================${country.currencyCode}");
+    print("====================${country.currencyName}");
+
+
     var body = {
       "firstName": "$firstName",
       "lastName": "$lastName",
       "email": "${email}",
       "address": "$address",
       "phone": "$phone",
-      "password": "$password"
+      "password": "$password",
+      "currency" : country.currencyCode.toString()
     };
+
+
+
+
     final response =
         await ApiClient.postData(ApiConstants.signUpEndPoint, jsonEncode(body));
 
@@ -70,6 +88,7 @@ class AuthController extends GetxController {
       PrefsHelper.setString(AppConstants.lastName, data["data"]["lastName"]);
       PrefsHelper.setString(AppConstants.email, data["data"]["email"]);
       PrefsHelper.setString(AppConstants.address, data["data"]["address"]);
+      PrefsHelper.setString(AppConstants.currency, data["data"]["currency"]);
       PrefsHelper.setString(AppConstants.phone, data["data"]["phone"]);
       PrefsHelper.setString(AppConstants.role, data["data"]["roles"][0]);
       PrefsHelper.setString(AppConstants.bearerToken, data["token"]);

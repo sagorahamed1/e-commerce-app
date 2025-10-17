@@ -63,6 +63,9 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
         child: Column(
           children: [
             CustomTextField(
+              validator: (value) {
+
+              },
                 controller: searchCtrl,
                 hintextColor: Colors.black87,
                 hintText: "Enter name",
@@ -72,7 +75,7 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                   debounce = Timer(Duration(milliseconds: 500), () {
                     chatListController.chatUsers.clear();
 
-                    chatListController.getChatUser();
+                    chatListController.getChatUser(search: searchCtrl.text);
 
                   });
                 },
@@ -95,6 +98,11 @@ class _MessageUserScreenState extends State<MessageUserScreen> {
                                     "chatId" : chatUser.id.toString(),
                                      "name" : "${chatUser.name}",
                                      "image" : "${chatUser.image}"
+                                  })?.then((_){
+
+                                    chatListController.chatUsers.value = [];
+                                    chatListController.getChatUser();
+
                                   });
                                 },
                                 child: Container(

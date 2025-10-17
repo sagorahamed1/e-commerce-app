@@ -69,7 +69,13 @@ class WalletController extends GetxController {
                           ),
                           CustomButton(
                             onpress: () {
+
                               Get.back();
+                              WalletController walletController = Get.put(WalletController());
+                              walletController.walletHistory.value = [];
+                              walletController.getBalance();
+                              walletController.getWallet();
+
                             },
                             title: 'Go To Wallet',
                           ),
@@ -83,8 +89,8 @@ class WalletController extends GetxController {
       addBalanceLoading(false);
     } else {
       addBalanceLoading(false);
-      if(int.parse(amount) < 30){
-        ToastMessageHelper.showToastMessage(context, "Minimum 30 Pounds required", title: "Warning");
+      if(int.parse(amount) < 10){
+        ToastMessageHelper.showToastMessage(context, "Minimum 10 Pounds required", title: "Warning");
       }else{
         ToastMessageHelper.showToastMessage(context, "Add Balance Failed! \n Try again", title: "Warning");
       }

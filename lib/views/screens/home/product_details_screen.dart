@@ -128,7 +128,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ),
                     CustomText(
                         text:
-                            "\$${productController.singleProduct.value.sellingPrice}",
+                            "${productController.singleProduct.value.sellingPrice}",
                         fontSize: 17.h,
                         fontWeight: FontWeight.w500,
                         color: Colors.red)
@@ -179,7 +179,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     fontWeight: FontWeight.w500),
                 CustomText(
                   text:
-                      "\$${productController.singleProduct.value.purchasingPrice}",
+                      "${productController.singleProduct.value.sellingPrice}",
                   fontSize: 17.h,
                   fontWeight: FontWeight.w500,
                   color: Colors.black26,

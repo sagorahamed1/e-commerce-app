@@ -28,8 +28,10 @@ class _WalletScreenState extends State<WalletScreen> {
 
   WalletController walletController = Get.put(WalletController());
 
+
   @override
   void initState() {
+    walletController.walletHistory.value = [];
     walletController.getBalance();
     walletController.getWallet();
     super.initState();
@@ -43,6 +45,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(title: "Wallet"),
@@ -173,7 +176,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                                   title: "Yes",
                                                   onpress: () {
 
-                                                    if(int.parse(amonCtrl.text) < 30){
+                                                    if(int.parse(amonCtrl.text) < 10){
                                                       ToastMessageHelper.showToastMessage(context, "Minimum 30 Pounds required", title: "Warning");
                                                     }else{
 

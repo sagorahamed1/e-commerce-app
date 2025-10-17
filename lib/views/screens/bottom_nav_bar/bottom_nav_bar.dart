@@ -7,6 +7,7 @@ import '../../../controller/product_controller.dart';
 import '../../../controller/profile_controller.dart';
 import '../../../core/app_constants/app_colors.dart';
 import '../../../global/custom_assets/assets.gen.dart';
+import '../../../main.dart';
 import '../home/home_screen.dart';
 import '../message/message_user_screen.dart';
 import '../post/post_screen.dart';
@@ -25,6 +26,7 @@ class _MainScreenState extends State<BottomNavBar> {
   ProductController productController = Get.put(ProductController());
   ProfileController profileController = Get.put(ProfileController());
   ChatListController chatListController = Get.put(ChatListController());
+  final connectivityService = Get.find<ConnectivityService>();
 
   final List<Widget> screens = [
      HomeScreen(),
@@ -48,7 +50,11 @@ class _MainScreenState extends State<BottomNavBar> {
 
     return Scaffold(
       extendBody: true,
-      body: screens[currentIndex],
+      body: Obx(() {
+        final isConnected = connectivityService.isConnected.value;
+        
+       return NoInterNetScreen(child: screens[currentIndex]);
+      } ),
       bottomNavigationBar: SafeArea(
         child: Container(
           height: sizeH * .07,

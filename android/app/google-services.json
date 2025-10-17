@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "608127452127",
+    "project_id": "petattix",
+    "storage_bucket": "petattix.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:608127452127:android:594dea15b67545e6c3ba6a",
+        "android_client_info": {
+          "package_name": "com.petattix.petattix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjw_W3OLe6DL-HyTONPrfmtKCUquQsAIA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

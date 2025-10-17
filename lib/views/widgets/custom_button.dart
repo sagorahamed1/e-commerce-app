@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:petattix/helper/toast_message_helper.dart';
 import '../../core/app_constants/app_colors.dart';
 import '../../global/custom_assets/assets.gen.dart';
+import '../../main.dart';
 import 'custom_text.dart';
 
 class CustomButton extends StatelessWidget {
@@ -17,6 +20,7 @@ class CustomButton extends StatelessWidget {
   final FontWeight? fontWeight;
   final bool loading;
   final bool loaderIgnore;
+  final bool isInternetNeed;
   final Widget? leftIcon;
 
   CustomButton({
@@ -31,13 +35,27 @@ class CustomButton extends StatelessWidget {
     this.titlecolor,
     this.leftIcon,
     this.loading=false,
-    this.loaderIgnore = false, this.fontWeight, this.borderRadius,
+    this.loaderIgnore = false, this.fontWeight, this.borderRadius, this.isInternetNeed = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final connectivityService = Get.find<ConnectivityService>();
+
+      final isConnected = connectivityService.isConnected.value;
+
     return GestureDetector(
-      onTap: loading?(){} : onpress,
+      onTap: loading?(){} : (){
+
+        if(isConnected){
+          onpress();
+        }else if(!isInternetNeed){
+          onpress();
+        }else{
+          ToastMessageHelper.showToastMessage(context, "Please check your internet!", title: "Warning");
+        }
+
+      },
       child: Container(
         width:width?.w ?? double.infinity,
         height: height ?? 50.h,

@@ -21,6 +21,7 @@ class SignUpScreen extends StatelessWidget {
   final TextEditingController emailCtrl = TextEditingController();
   final TextEditingController passWordCtrl = TextEditingController();
   final TextEditingController numberCtrl = TextEditingController();
+  final TextEditingController countryCodeCtrl = TextEditingController();
   final TextEditingController completedNumberCtrl = TextEditingController();
   final TextEditingController confirmPassWordCtrl = TextEditingController();
   final TextEditingController addressCtrl = TextEditingController();
@@ -100,6 +101,7 @@ class SignUpScreen extends StatelessWidget {
                   // Default country
                   onChanged: (phone) {
                     completedNumberCtrl.text = phone.completeNumber;
+                    countryCodeCtrl.text = phone.countryCode;
                     print(phone.completeNumber); // e.g. +14155552671
                   },
                   onCountryChanged: (country) {
@@ -208,9 +210,11 @@ class SignUpScreen extends StatelessWidget {
                                 address: addressCtrl.text,
                                 password: passWordCtrl.text.trim(),
                                 email: emailCtrl.text.trim(),
+                               countryCode:  countryCodeCtrl.text ,
                                context: context
                             );
                           } else {
+                            authController.signUpLoading(false);
                             print("dkdkdkkfjadsfkajsflaksjdfkldasjfk");
                             ToastMessageHelper.showToastMessage(
                               context, "Please Accept Privacy Policy and Terms & Conditions", title: "Warning");

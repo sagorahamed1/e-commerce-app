@@ -1,5 +1,6 @@
 class AppConstants {
 static const String bearerToken = "bearerToken";
+static const String currency = "currency";
 static const String userId = "userId";
 static const String email = "email";
 static const String firstName = "firstName";

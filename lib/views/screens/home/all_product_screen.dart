@@ -12,6 +12,7 @@ import 'package:petattix/views/widgets/custom_text.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
 
 import '../../../controller/product_controller.dart';
+import '../../../helper/time_format_helper.dart';
 import '../../widgets/custom_product_card.dart';
 import '../../widgets/no_data_found_card.dart';
 import '../../widgets/shimmer_grid_view.dart';
@@ -55,7 +56,7 @@ class _AllProductScreenState extends State<AllProductScreen> {
             child: ListView(
               children: [
                 CustomText(
-                    text: "Filler",
+                    text: "Filter",
                     fontSize: 20.h,
                     fontWeight: FontWeight.w600,
                     color: Color(0xff592B00)),
@@ -113,8 +114,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text("${minPrice.toInt()} \$"),
-                    Text("${maxPrice.toInt()} \$"),
+                    Text("${minPrice.toInt()}"),
+                    Text("${maxPrice.toInt()}"),
                   ],
                 ),
                 SliderTheme(
@@ -226,6 +227,8 @@ class _AllProductScreenState extends State<AllProductScreen> {
                                   title: "${product.productName}",
                                   address: "${product.addressLine1 ?? "N/A"}",
                                   price: "${product.sellingPrice}",
+                                  time: "${TimeFormatHelper.formatDate(product.createdAt ?? DateTime.now())}, ${TimeFormatHelper.timeWithAMPMLocalTime(product.createdAt ?? DateTime.now())}",
+
                                   // onTap: () {
                                   //   Get.toNamed(AppRoutes.productDetailsScreen,
                                   //       arguments: {"index": index});
