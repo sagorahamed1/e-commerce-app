@@ -96,51 +96,6 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   isLatLngRequired: true,
-                  // getPlaceDetailWithLatLng: (prediction) async {
-                  //   final detail = await places.getDetailsByPlaceId(prediction.placeId!);
-                  //   final comp = detail.result.addressComponents;
-                  //
-                  //
-                  //   for (var c in comp) {
-                  //     if (c.types.contains("locality")) {
-                  //       cityCtrl.text = c.longName;
-                  //     }
-                  //     if (c.types.contains("postal_code")) {
-                  //       postalCodeCtrl.text = c.longName;
-                  //     }
-                  //     if (c.types.contains("country")) {
-                  //       countryTitleCtrl.text = c.longName;
-                  //       countryCodeCtrl.text = c.shortName;
-                  //
-                  //
-                  //       var body = {
-                  //         "Credentials": {
-                  //           "APIKey": "5XW2Mnqfz6",
-                  //           "Password": "oWMmGi2[8n"
-                  //         }
-                  //       };
-                  //
-                  //
-                  //       var response = await http.post(Uri.parse('https://services3.transglobalexpress.co.uk//Country/V2/GetCountries'), body: jsonEncode(body));
-                  //
-                  //       if (response.statusCode == 200) {
-                  //         final data = json.decode(response.body);
-                  //         final countries = data['Countries'];
-                  //         final matched = countries.firstWhere((e) => e['CountryCode'] == c.shortName, orElse: () => null);
-                  //         print("==========================================res ${matched} == ${response.body}");
-                  //           countryIdCtrl.text = matched;
-                  //       }
-                  //
-                  //
-                  //     }
-                  //   }
-                  //
-                  //
-                  //
-                  //
-                  // },
-
-
                   getPlaceDetailWithLatLng: (prediction) async {
                     final detail = await places.getDetailsByPlaceId(prediction.placeId!);
                     final comp = detail.result.addressComponents;

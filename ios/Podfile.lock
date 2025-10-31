@@ -7,22 +7,39 @@ PODS:
     - Flutter
   - emoji_picker_flutter (0.0.1):
     - Flutter
+  - Firebase/CoreOnly (12.2.0):
+    - FirebaseCore (~> 12.2.0)
+  - firebase_core (4.1.1):
+    - Firebase/CoreOnly (= 12.2.0)
+    - Flutter
+  - FirebaseCore (12.2.0):
+    - FirebaseCoreInternal (~> 12.2.0)
+    - GoogleUtilities/Environment (~> 8.1)
+    - GoogleUtilities/Logger (~> 8.1)
+  - FirebaseCoreInternal (12.2.0):
+    - "GoogleUtilities/NSData+zlib (~> 8.1)"
   - Flutter (1.0.0)
   - flutter_keyboard_visibility (0.0.1):
     - Flutter
   - geocoding_ios (1.0.5):
     - Flutter
-  - Google-Maps-iOS-Utils (5.0.0):
-    - GoogleMaps (~> 8.0)
+  - Google-Maps-iOS-Utils (6.1.0):
+    - GoogleMaps (~> 9.0)
   - google_maps_flutter_ios (0.0.1):
     - Flutter
     - Google-Maps-iOS-Utils (< 7.0, >= 5.0)
     - GoogleMaps (< 10.0, >= 8.4)
-  - GoogleMaps (8.4.0):
-    - GoogleMaps/Maps (= 8.4.0)
-  - GoogleMaps/Base (8.4.0)
-  - GoogleMaps/Maps (8.4.0):
-    - GoogleMaps/Base
+  - GoogleMaps (9.4.0):
+    - GoogleMaps/Maps (= 9.4.0)
+  - GoogleMaps/Maps (9.4.0)
+  - GoogleUtilities/Environment (8.1.0):
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Logger (8.1.0):
+    - GoogleUtilities/Environment
+    - GoogleUtilities/Privacy
+  - "GoogleUtilities/NSData+zlib (8.1.0)":
+    - GoogleUtilities/Privacy
+  - GoogleUtilities/Privacy (8.1.0)
   - image_picker_ios (0.0.1):
     - Flutter
   - just_audio (0.0.1):
@@ -116,6 +133,7 @@ DEPENDENCIES:
   - audio_waveforms (from `.symlinks/plugins/audio_waveforms/ios`)
   - connectivity_plus (from `.symlinks/plugins/connectivity_plus/ios`)
   - emoji_picker_flutter (from `.symlinks/plugins/emoji_picker_flutter/ios`)
+  - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - flutter_keyboard_visibility (from `.symlinks/plugins/flutter_keyboard_visibility/ios`)
   - geocoding_ios (from `.symlinks/plugins/geocoding_ios/ios`)
@@ -137,8 +155,12 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - Firebase
+    - FirebaseCore
+    - FirebaseCoreInternal
     - Google-Maps-iOS-Utils
     - GoogleMaps
+    - GoogleUtilities
     - Stripe
     - StripeApplePay
     - StripeCore
@@ -157,6 +179,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/connectivity_plus/ios"
   emoji_picker_flutter:
     :path: ".symlinks/plugins/emoji_picker_flutter/ios"
+  firebase_core:
+    :path: ".symlinks/plugins/firebase_core/ios"
   Flutter:
     :path: Flutter
   flutter_keyboard_visibility:
@@ -199,12 +223,17 @@ SPEC CHECKSUMS:
   audio_waveforms: a6dde7fe7c0ea05f06ffbdb0f7c1b2b2ba6cedcf
   connectivity_plus: cb623214f4e1f6ef8fe7403d580fdad517d2f7dd
   emoji_picker_flutter: ece213fc274bdddefb77d502d33080dc54e616cc
+  Firebase: 26f6f8d460603af3df970ad505b16b15f5e2e9a1
+  firebase_core: dfc4bd142bee4bc53a5d482397ca322c2dd3165d
+  FirebaseCore: 311c48a147ad4a0ab7febbaed89e8025c67510cd
+  FirebaseCoreInternal: 56ea29f3dad2894f81b060f706f9d53509b6ed3b
   Flutter: e0871f40cf51350855a761d2e70bf5af5b9b5de7
   flutter_keyboard_visibility: 4625131e43015dbbe759d9b20daaf77e0e3f6619
   geocoding_ios: 86f1c479822f07a2f79f7094f2b753d1e9e20215
-  Google-Maps-iOS-Utils: 66d6de12be1ce6d3742a54661e7a79cb317a9321
+  Google-Maps-iOS-Utils: 0a484b05ed21d88c9f9ebbacb007956edd508a96
   google_maps_flutter_ios: 0291eb2aa252298a769b04d075e4a9d747ff7264
-  GoogleMaps: 8939898920281c649150e0af74aa291c60f2e77d
+  GoogleMaps: 0608099d4870cac8754bdba9b6953db543432438
+  GoogleUtilities: 00c88b9a86066ef77f0da2fab05f65d7768ed8e1
   image_picker_ios: 7fe1ff8e34c1790d6fff70a32484959f563a928a
   just_audio: 4e391f57b79cad2b0674030a00453ca5ce817eed
   location: 155caecf9da4f280ab5fe4a55f94ceccfab838f8
@@ -228,6 +257,6 @@ SPEC CHECKSUMS:
   wakelock_plus: e29112ab3ef0b318e58cfa5c32326458be66b556
   webview_flutter_wkwebview: 1821ceac936eba6f7984d89a9f3bcb4dea99ebb2
 
-PODFILE CHECKSUM: 1959d098c91d8a792531a723c4a9d7e9f6a01e38
+PODFILE CHECKSUM: 9c46fd01abff66081b39f5fa5767b3f1d0b11d76
 
 COCOAPODS: 1.16.2

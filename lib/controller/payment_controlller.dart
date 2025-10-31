@@ -46,11 +46,15 @@ class PaymentController {
           debugPrint("Client Secret: $clientSecret");
         }
 
+        debugPrint("=========================currency : $currency");
+
         await Stripe.instance.initPaymentSheet(
           paymentSheetParameters: SetupPaymentSheetParameters(
-              billingDetails: const BillingDetails(name: 'Jo', email: 'jo@gmail.com'),
-              googlePay:  PaymentSheetGooglePay(merchantCountryCode: '$currency'),
-              // applePay: PaymentSheetApplePay(merchantCountryCode: "US"),
+              billingDetails: const BillingDetails(name: 'Jo', email: 'support@petattix.com'),
+              googlePay:  PaymentSheetGooglePay(merchantCountryCode: 'US', currencyCode: "USD", testEnv: false),
+              applePay: PaymentSheetApplePay(
+                merchantCountryCode: 'US',
+              ),
               merchantDisplayName: 'Pet Attix',
               paymentIntentClientSecret: clientSecret,
               style: ThemeMode.dark),
@@ -67,6 +71,9 @@ class PaymentController {
       }
     }
   }
+
+
+
 
   Future<Map<String, dynamic>?> createPaymentIntent(
       String amount, String currency) async {

@@ -22,6 +22,7 @@ void main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = "${AppConstants.publishAbleKey}";
+  Stripe.merchantIdentifier = "merchant.com.petattix.petattix";
   await Stripe.instance.applySettings();
   DependencyInjection dependencyInjection = DependencyInjection();
   dependencyInjection.dependencies();

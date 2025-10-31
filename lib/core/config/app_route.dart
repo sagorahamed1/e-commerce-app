@@ -7,6 +7,7 @@ import '../../views/screens/auth/forgot/forgot_screen.dart';
 import '../../views/screens/auth/login/login_screen.dart';
 import '../../views/screens/auth/otp/opt_screen.dart';
 import '../../views/screens/auth/reset/reset_password_screen.dart';
+import '../../views/screens/auth/set_drop_off_location_screen/set_drop_off_location_screen.dart';
 import '../../views/screens/auth/sing_up/sign_up_screen.dart';
 import '../../views/screens/home/all_product_screen.dart';
 import '../../views/screens/home/cart_screen.dart';
@@ -67,6 +68,7 @@ class AppRoutes {
   static const String editMyProductScreent = "/EditMyProductScreent";
   static const String shipmentScreen = "/ShipmentScreen";
   static const String courierScreen = "/CourierScreen";
+  static const String setDropOffLocationScreen = "/SetDropOffLocationScreen";
 
 
 
@@ -102,5 +104,6 @@ class AppRoutes {
     GetPage(name: editMyProductScreent, page: () =>  EditMyProductScreent()),
     GetPage(name: shipmentScreen, page: () =>  ShipmentScreen()),
     GetPage(name: courierScreen, page: () =>  CourierScreen()),
+    GetPage(name: setDropOffLocationScreen, page: () =>  SetDropOffLocationScreen()),
   ];
 }

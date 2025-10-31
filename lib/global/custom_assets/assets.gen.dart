@@ -199,6 +199,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/logo.png
   AssetGenImage get logo => const AssetGenImage('assets/images/logo.png');
 
+  /// File path: assets/images/noInternetImage.png
+  AssetGenImage get noInternetImage =>
+      const AssetGenImage('assets/images/noInternetImage.png');
+
   /// File path: assets/images/no_data_found.png
   AssetGenImage get noDataFound =>
       const AssetGenImage('assets/images/no_data_found.png');
@@ -214,6 +218,10 @@ class $AssetsImagesGen {
   /// File path: assets/images/onboarding3.png
   AssetGenImage get onboarding3 =>
       const AssetGenImage('assets/images/onboarding3.png');
+
+  /// File path: assets/images/setDropOffLocation.png
+  AssetGenImage get setDropOffLocation =>
+      const AssetGenImage('assets/images/setDropOffLocation.png');
 
   /// File path: assets/images/splashLoading.png
   AssetGenImage get splashLoading =>
@@ -235,10 +243,12 @@ class $AssetsImagesGen {
         confirmImage,
         dog,
         logo,
+        noInternetImage,
         noDataFound,
         onboarding1,
         onboarding2,
         onboarding3,
+        setDropOffLocation,
         splashLoading,
         uploadImage,
         walletBg

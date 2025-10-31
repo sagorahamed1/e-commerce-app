@@ -30,7 +30,8 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
 
 
       if(token != "" && isLogged){
-        Get.offAllNamed(AppRoutes.welcomeScreen);
+        Get.offAllNamed(AppRoutes.setDropOffLocationScreen);
+        // Get.offAllNamed(AppRoutes.welcomeScreen);
         SocketServices.init(token: token);
       }else{
         Get.offAllNamed(AppRoutes.onboardingScreen);
