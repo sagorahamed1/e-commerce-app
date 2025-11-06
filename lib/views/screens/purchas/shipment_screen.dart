@@ -70,6 +70,9 @@ class _ShipmentScreenState extends State<ShipmentScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+
+
+
                 CustomTextField(
                   focusNode: companyFocus,
                   controller: companyNameCtrl,
