@@ -10,6 +10,7 @@ import 'package:petattix/model/my_sales_model.dart';
 import '../helper/toast_message_helper.dart';
 import '../model/category_model.dart';
 import '../model/country_model.dart';
+import '../model/dropOffModel.dart';
 import '../model/my_card_model.dart';
 import '../model/product_model.dart';
 import '../model/purches_history_model.dart';
@@ -33,9 +34,13 @@ class ProductController extends GetxController {
       sellingPrice,
       description,
       size,
+        width, height, weight, length, carrer_type, address, houseNumber, city, country, postalCode, address2, companyName,
       required bool negotiable,
       required bool isBoosted,
-      required List<File> images}) async {
+      required List<File> images,
+
+
+      }) async {
     productAddLoading(true);
 
     List<MultipartBody> photoList = [];
@@ -54,7 +59,20 @@ class ProductController extends GetxController {
       "brand": "$brand",
       "is_negotiable": "$negotiable",
       "size": "$size",
-      "is_boosted" : "$isBoosted"
+      "is_boosted" : "$isBoosted",
+      "width" : "$width",
+      "height" : "$height",
+      "weight" : "$weight",
+      "length" : "$length",
+      "carrer_type" : "$carrer_type",
+      "address" : "$address",
+      "house_number" : "$houseNumber",
+      "city" : "$city",
+      "country" : "$country",
+      "postal_code" : "$postalCode",
+      "address_2" : "",
+      "company_name" : "$houseNumber"
+
     };
 
     final response = await ApiClient.postMultipartData(
@@ -108,6 +126,7 @@ class ProductController extends GetxController {
         description,
         productId,
         size,
+        width, height, weight, length, carrer_type, address, houseNumber, city, country, postalCode, address2, companyName,
         required bool negotiable,
         required bool isBoosted,
         required List<File> images}) async {
@@ -129,7 +148,20 @@ class ProductController extends GetxController {
       "brand": "$brand",
       "is_negotiable": "$negotiable",
       "size": "$size",
-      "is_boosted" : "$isBoosted"
+      "is_boosted" : "$isBoosted",
+      "width" : "$width",
+      "height" : "$height",
+      "weight" : "$weight",
+      "length" : "$length",
+      "carrer_type" : "$carrer_type",
+      "address" : "$address",
+      "house_number" : "$houseNumber",
+      "city" : "$city",
+      "country" : "$country",
+      "postal_code" : "$postalCode",
+      "address_2" : "",
+      "company_name" : "$houseNumber"
+
     };
 
     final response = await ApiClient.putMultipartData(
@@ -555,6 +587,26 @@ class ProductController extends GetxController {
 
 
     }
+  }
+
+
+
+
+
+
+  Rxn<DropOffModel> dropOffData = Rxn<DropOffModel>();
+  RxBool dropOffLoading = false.obs;
+
+  Future<void> fetchDropOffAddress() async {
+
+      dropOffLoading(true);
+      var response = await ApiClient.getData(ApiConstants.getDropOffAddress);
+
+      if (response.statusCode == 200) {
+        dropOffData.value = DropOffModel.fromJson(response.body['data']);
+        update();
+      }
+
   }
 
 

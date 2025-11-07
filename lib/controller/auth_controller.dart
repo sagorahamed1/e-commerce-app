@@ -132,8 +132,9 @@ class AuthController extends GetxController {
     if (response.statusCode == 200 || response.statusCode == 201) {
       if (verifyType == "sign up") {
 
-        await PrefsHelper.remove(AppConstants.bearerToken);
-          Get.toNamed(AppRoutes.logInScreen);
+          Get.toNamed(AppRoutes.setDropOffLocationScreen, arguments: {
+            "screenType" : "signup"
+          });
 
       } else {
         Get.toNamed(AppRoutes.resetPasswordScreen);
@@ -216,5 +217,38 @@ class AuthController extends GetxController {
       ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "warning");
     }
   }
+
+
+
+
+  RxBool setDropOfLocationLoading = false.obs;
+
+  setDropOfLocation({required var data, String? screenType}) async {
+    setDropOfLocationLoading(true);
+
+    final response =
+    await ApiClient.patch(ApiConstants.dropOffLocation, jsonEncode(data));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+
+
+      if(screenType ==  "edit"){
+        Get.back();
+        Get.back();
+      }else{
+
+        await PrefsHelper.remove(AppConstants.bearerToken);
+        Get.offAllNamed(AppRoutes.logInScreen);
+      }
+
+
+
+      setDropOfLocationLoading(false);
+    } else {
+      setDropOfLocationLoading(false);
+    }
+  }
+
 
 }

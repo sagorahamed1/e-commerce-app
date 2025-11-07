@@ -6,6 +6,7 @@ import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
 
 import '../../../controller/profile_controller.dart';
+import '../../../core/app_constants/app_colors.dart';
 import '../../../core/config/app_route.dart';
 import '../../../services/api_constants.dart';
 import '../../widgets/cachanetwork_image.dart';
@@ -117,9 +118,22 @@ class _ProfileInformationScreenState extends State<ProfileInformationScreen> {
                 borderColor: Color(0xff592B00),
                 contentPaddingVertical: 10.h,
               ),
-          
-          
-          
+
+
+
+
+              CustomButton(
+                  color: AppColors.primaryColor,
+                  title: "Change Drop-off Location", onpress: (){
+
+                Get.toNamed(AppRoutes.setDropOffLocationScreen, arguments: {
+                  "screenType" : "edit"
+                });
+
+              }),
+
+
+
 
               SizedBox(height: 50.h),
           

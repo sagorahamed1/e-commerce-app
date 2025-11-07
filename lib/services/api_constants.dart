@@ -2,11 +2,11 @@ class ApiConstants{
   // static const String baseUrl = "http://192.168.40.142:5000/api/v1";
   // static const String imageBaseUrl = "http://192.168.40.142:5000";
 
-  // static const String baseUrl = "https://petattix.merinasib.shop/api/v1";
-  // static const String imageBaseUrl = "https://petattix.merinasib.shop";
+  static const String baseUrl = "https://petattix.merinasib.shop/api/v1";
+  static const String imageBaseUrl = "https://petattix.merinasib.shop";
 
-  static const String baseUrl = "https://api.petattix.com/api/v1";
-  static const String imageBaseUrl = "https://api.petattix.com";
+  // static const String baseUrl = "https://api.petattix.com/api/v1";
+  // static const String imageBaseUrl = "https://api.petattix.com";
 
 
   static const String signUpEndPoint = "/auth/signup";
@@ -17,6 +17,7 @@ class ApiConstants{
   static const String resetPassword = "/auth/reset-password";
   static const String profile = "/users/profile";
   static const String updatePassword = "/auth/update-password";
+  static const String dropOffLocation = "/users/drop-off/address";
 
 
   static const String product = "/products";
@@ -30,6 +31,7 @@ class ApiConstants{
   static const String notifications = "/notifications";
   static const String offerAccept = "/offers";
   static const String review = "/reviews";
+  static const String getDropOffAddress = "/users/drop-off/address";
   static const String reports = "/reports";
   static const String balance = "/wallets/balance";
   static const String walletBalanceAdd = "/wallets/recharge";

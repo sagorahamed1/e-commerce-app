@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_google_maps_webservices/places.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 
@@ -36,8 +38,43 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
   TextEditingController sizeCtrl = TextEditingController();
   TextEditingController productIdCtrl = TextEditingController();
 
+
+
+  TextEditingController weightCtrl = TextEditingController();
+  TextEditingController widthCtrl = TextEditingController();
+  TextEditingController lengthCtrl = TextEditingController();
+  TextEditingController heightCtrl = TextEditingController();
+  TextEditingController postalCodeCtrl = TextEditingController();
+  TextEditingController houseNumberCtrl = TextEditingController();
+  TextEditingController countryTitleCtrl = TextEditingController();
+  TextEditingController addressLine1Ctrl = TextEditingController();
+  TextEditingController cityCtrl = TextEditingController();
+  TextEditingController stateCtrl = TextEditingController();
+
+
+
+  FocusNode companyFocus = FocusNode();
+  FocusNode address1Focus = FocusNode();
+  FocusNode address2Focus = FocusNode();
+  FocusNode cityFocus = FocusNode();
+  FocusNode postalFocus = FocusNode();
+  FocusNode countryFocus = FocusNode();
+  FocusNode houseNumberFocus = FocusNode();
+  FocusNode countryIdFocus = FocusNode();
+  FocusNode countryTitleFocus = FocusNode();
+  FocusNode weightFocus = FocusNode();
+  FocusNode widthFocus = FocusNode();
+  FocusNode lengthFocus = FocusNode();
+  FocusNode heightFocus = FocusNode();
+  FocusNode stateFocus = FocusNode();
+
+
   bool _isChecked = false;
+  bool pickMyLocation = true;
+  bool _isBoost = false;
   final GlobalKey<FormState> forKey = GlobalKey<FormState>();
+  final places = GoogleMapsPlaces(
+      apiKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0");
 
 
   @override
@@ -54,6 +91,21 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
     selectedCategoryCtrl.text = product.category.toString();
     sizeCtrl.text = product.size.toString();
     productIdCtrl.text = product.id.toString();
+
+        addressLine1Ctrl.text = product.collectionAddress?.address ?? '';
+        houseNumberCtrl.text = product.collectionAddress?.houseNumber ?? '';
+        cityCtrl.text = product.collectionAddress?.city ?? '';
+        stateCtrl.text = product.collectionAddress?.city ?? '';
+        postalCodeCtrl.text = product.collectionAddress?.postalCode ?? '';
+        countryTitleCtrl.text = product.collectionAddress?.country ?? '';
+
+
+        heightCtrl.text = product.height ?? "";
+        weightCtrl.text = product.weight ?? "";
+        lengthCtrl.text = product.length ?? "";
+        widthCtrl.text = product.width ?? "";
+
+
 
 
     super.initState();
@@ -252,6 +304,279 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
                     hintText: "Description"),
 
 
+
+
+
+
+
+
+
+                /// Extra Shipment Fields
+                CustomTextField(
+                  focusNode: weightFocus,
+                  controller: weightCtrl,
+                  labelText: "Weight (kg)",
+                  hintText: "Enter weight",
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Weight is required";
+                    }
+                    final num? weight = num.tryParse(value);
+                    if (weight == null) return "Please enter a valid number";
+                    if (weight < 1) return "Weight must be at least 1 KG";
+                    if (weight > 100) return "Weight must be at most 100 KG";
+                    return null;
+                  },
+                ),
+                CustomTextField(
+                  focusNode: widthFocus,
+                  controller: widthCtrl,
+                  labelText: "Width (cm)",
+                  hintText: "Enter width",
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Width is required";
+                    }
+                    final num? width = num.tryParse(value);
+                    if (width == null) return "Please enter a valid number";
+                    if (width < 10) return "Width must be at least 10 CM";
+                    if (width > 100) return "Width must be at most 100 CM";
+                    return null;
+                  },
+                ),
+                CustomTextField(
+                  focusNode: lengthFocus,
+                  controller: lengthCtrl,
+                  labelText: "Length (cm)",
+                  hintText: "Enter length",
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Length is required";
+                    }
+                    final num? length = num.tryParse(value);
+                    if (length == null) return "Please enter a valid number";
+                    if (length < 1) return "Length must be at least 1 CM";
+                    if (length > 100) return "Length must be at most 100 CM";
+                    return null;
+                  },
+                ),
+                CustomTextField(
+                  focusNode: heightFocus,
+                  controller: heightCtrl,
+                  labelText: "Height (cm)",
+                  hintText: "Enter height",
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return "Height is required";
+                    }
+                    final num? height = num.tryParse(value);
+                    if (height == null) return "Please enter a valid number";
+                    if (height < 1) return "Height must be at least 1 CM";
+                    if (height > 100) return "Height must be at most 100 CM";
+                    return null;
+                  },
+                ),
+
+                SizedBox(height: 20.h),
+
+
+
+                Row(
+                  children: [
+                    CircularCheckBox(
+                      size: 20.r,
+                      isChecked: _isBoost,
+                      onChanged: (value) {
+                        setState(() {
+                          _isBoost = value;
+                        });
+                      },
+                    ),
+                    CustomText(
+                        text: "Boost This Add",
+                        fontSize: 16.h,
+                        color: Colors.black,
+                        left: 10.w,
+                        right: 5.w),
+                  ],
+                ),
+
+
+
+                CustomText(
+                    left: 30.w,
+                    text: "Boost your ad to appear at the top of your audience’s feed for 3 days with just 1€.",
+                    fontSize: 10.h,
+                    maxline: 3,
+                    textAlign: TextAlign.start),
+
+
+                SizedBox(height: 28.h),
+
+
+                Align(
+                    alignment: Alignment.centerLeft,
+                    child: CustomText(text: "Delivery Method", fontSize: 16.h, fontWeight: FontWeight.w600, color: Colors.black)),
+
+
+                SizedBox(height: 10.h),
+                Row(
+                  children: [
+                    CircularCheckBox(
+                      size: 20.r,
+                      isChecked: pickMyLocation,
+                      onChanged: (value) {
+                        setState(() {
+                          pickMyLocation = value;
+                        });
+                      },
+                    ),
+                    CustomText(
+                        text: "Pick up from my location",
+                        fontSize: 16.h,
+                        color: Colors.black,
+                        left: 10.w,
+                        right: 5.w),
+                  ],
+                ),
+
+
+
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+
+                    SizedBox(height: 10.h),
+
+
+                    CustomText(text: "Address",
+                        fontWeight: FontWeight.w500,
+                        bottom: 10.h),
+
+                    GooglePlaceAutoCompleteTextField(
+                      focusNode: address1Focus,
+                      textEditingController: addressLine1Ctrl,
+                      googleAPIKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0",
+                      inputDecoration: InputDecoration(
+                        hintText: "Select address",
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent, width: 0.05),
+                          borderRadius: BorderRadius.circular(12.r),
+                        ),
+                      ),
+                      boxDecoration: BoxDecoration(
+                        color: const Color(0xFFFFF2E6),
+                        border: Border.all(color: Colors.transparent),
+                        borderRadius: BorderRadius.circular(12.r),
+                      ),
+                      isLatLngRequired: true,
+                      getPlaceDetailWithLatLng: (prediction) async {
+                        final detail = await places.getDetailsByPlaceId(prediction.placeId!);
+                        final comp = detail.result.addressComponents;
+
+                        for (var c in comp) {
+                          if (c.types.contains("locality")) {
+                            cityCtrl.text = c.longName;
+                          }
+                          if (c.types.contains("postal_code")) {
+                            postalCodeCtrl.text = c.longName;
+                          }
+                          if (c.types.contains("country")) {
+                            countryTitleCtrl.text = c.longName;
+                            houseNumberCtrl.text = c.shortName;
+
+                          }
+                        }
+                      },
+                      itemClick: (prediction) {
+                        addressLine1Ctrl.text = prediction.description ?? "";
+                        addressLine1Ctrl.selection = TextSelection.fromPosition(
+                          TextPosition(offset: prediction.description!.length),
+                        );
+                      },
+                    ),
+
+                    SizedBox(height: 10.h),
+
+
+                    CustomTextField(
+                      focusNode: countryTitleFocus,
+                      controller: countryTitleCtrl,
+                      labelText: "Country",
+                      hintText: "Country",
+                    ),
+
+
+                    CustomTextField(
+                      focusNode: postalFocus,
+                      controller: postalCodeCtrl,
+                      labelText: "Postal Code",
+                      hintText: "Postal Code",
+                    ),
+
+
+
+
+                    Row(
+                      children: [
+
+
+                        Expanded(
+                          flex: 1,
+                          child: CustomTextField(
+                            focusNode: stateFocus,
+                            controller: stateCtrl,
+                            labelText: "State",
+                            hintText: "State",
+                          ),
+                        ),
+
+
+                        SizedBox(width: 12.w),
+
+
+                        Expanded(
+                          flex: 1,
+                          child: CustomTextField(
+                            focusNode: cityFocus,
+                            controller: cityCtrl,
+                            labelText: "City",
+                            hintText: "City",
+                          ),
+                        ),
+
+
+                      ],
+                    ),
+
+
+                    CustomTextField(
+                      focusNode: houseNumberFocus,
+                      controller: houseNumberCtrl,
+                      labelText: "House Number",
+                      hintText: "House Number",
+                    ),
+
+
+                  ],
+                ),
+
+
+
+                SizedBox(height: 16.h),
+
+
+
+
+
+
+
+
+
                 Obx(()=>
                    CustomButton(
                      loading: productController.productEditLoading.value,
@@ -271,10 +596,25 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
                                 brand: brandCtrl.text,
                                 size: sizeCtrl.text,
                                 images: _images,
-                                isBoosted: false);
+                                isBoosted: false,
+                                width: widthCtrl.text,
+                                height: heightCtrl.text,
+                                length: lengthCtrl.text,
+                                weight: weightCtrl.text,
+                                address: addressLine1Ctrl.text,
+                                address2: "",
+                                city: cityCtrl.text,
+                                companyName: houseNumberCtrl.text,
+                                country: countryTitleCtrl.text,
+                                houseNumber: houseNumberCtrl.text,
+                                postalCode: postalCodeCtrl.text,
+                                carrer_type: "collection_address"
+
+
+                            );
                           } else {
                             ToastMessageHelper.showToastMessage(
-                                context, "Please select your product images");
+                                context, "Please select your product images", title: "Warning");
                           }
                         }
                       }),

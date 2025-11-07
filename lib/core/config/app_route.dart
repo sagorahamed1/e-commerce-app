@@ -68,7 +68,7 @@ class AppRoutes {
   static const String editMyProductScreent = "/EditMyProductScreent";
   static const String shipmentScreen = "/ShipmentScreen";
   static const String courierScreen = "/CourierScreen";
-  // static const String setDropOffLocationScreen = "/SetDropOffLocationScreen";
+  static const String setDropOffLocationScreen = "/SetDropOffLocationScreen";
 
 
 
@@ -104,6 +104,6 @@ class AppRoutes {
     GetPage(name: editMyProductScreent, page: () =>  EditMyProductScreent()),
     GetPage(name: shipmentScreen, page: () =>  ShipmentScreen()),
     GetPage(name: courierScreen, page: () =>  CourierScreen()),
-    // GetPage(name: setDropOffLocationScreen, page: () =>  SetDropOffLocationScreen()),
+    GetPage(name: setDropOffLocationScreen, page: () =>  SetDropOffLocationScreen()),
   ];
 }

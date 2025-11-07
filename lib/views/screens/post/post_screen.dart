@@ -43,6 +43,19 @@ class _PostScreenState extends State<PostScreen> {
     productController.getMyProduct();
     productController.fetchCountries();
     productController.getMySales();
+
+
+    productController.fetchDropOffAddress().then((_) {
+      final data = productController.dropOffData.value;
+      if (data != null) {
+        addressLine1Ctrl.text = data.address ?? '';
+        houseNumberCtrl.text = data.houseNumber ?? '';
+        cityCtrl.text = data.city ?? '';
+        stateCtrl.text = data.countryState ?? '';
+        postalCodeCtrl.text = data.postalCode ?? '';
+        countryTitleCtrl.text = data.country ?? '';
+      }
+    });
     super.initState();
   }
 
@@ -118,10 +131,11 @@ class _PostScreenState extends State<PostScreen> {
   TextEditingController lengthCtrl = TextEditingController();
   TextEditingController heightCtrl = TextEditingController();
   TextEditingController postalCodeCtrl = TextEditingController();
-  TextEditingController countryCodeCtrl = TextEditingController();
+  TextEditingController houseNumberCtrl = TextEditingController();
   TextEditingController countryTitleCtrl = TextEditingController();
   TextEditingController addressLine1Ctrl = TextEditingController();
   TextEditingController cityCtrl = TextEditingController();
+  TextEditingController stateCtrl = TextEditingController();
 
 
 
@@ -131,20 +145,21 @@ class _PostScreenState extends State<PostScreen> {
   FocusNode cityFocus = FocusNode();
   FocusNode postalFocus = FocusNode();
   FocusNode countryFocus = FocusNode();
-  FocusNode countryCodeFocus = FocusNode();
+  FocusNode houseNumberFocus = FocusNode();
   FocusNode countryIdFocus = FocusNode();
   FocusNode countryTitleFocus = FocusNode();
   FocusNode weightFocus = FocusNode();
   FocusNode widthFocus = FocusNode();
   FocusNode lengthFocus = FocusNode();
   FocusNode heightFocus = FocusNode();
+  FocusNode stateFocus = FocusNode();
 
 
 
 
   bool _isChecked = false;
   bool _isBoost = false;
-  bool pickMyLocation = false;
+  bool pickMyLocation = true;
   final GlobalKey<FormState> forKey = GlobalKey<FormState>();
 
   Widget _createPost() {
@@ -429,21 +444,13 @@ class _PostScreenState extends State<PostScreen> {
 
             CustomText(
                 left: 30.w,
-                text:
-                    "Boost your ad to appear at the top of your audience’s feed for 3 days with just 1€.",
+                text: "Boost your ad to appear at the top of your audience’s feed for 3 days with just 1€.",
                 fontSize: 10.h,
                 maxline: 3,
                 textAlign: TextAlign.start),
 
 
-
-
-
-
-
-
-
-            SizedBox(height: 20.h),
+            SizedBox(height: 28.h),
 
 
             Align(
@@ -474,13 +481,14 @@ class _PostScreenState extends State<PostScreen> {
 
 
 
-            pickMyLocation ?
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
 
+                SizedBox(height: 10.h),
 
-                CustomText(text: "Address Line 1",
+
+                CustomText(text: "Address",
                     fontWeight: FontWeight.w500,
                     bottom: 10.h),
 
@@ -489,7 +497,7 @@ class _PostScreenState extends State<PostScreen> {
                   textEditingController: addressLine1Ctrl,
                   googleAPIKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0",
                   inputDecoration: InputDecoration(
-                    hintText: "Start typing address",
+                    hintText: "Select address",
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Colors.transparent, width: 0.05),
                       borderRadius: BorderRadius.circular(12.r),
@@ -514,32 +522,8 @@ class _PostScreenState extends State<PostScreen> {
                       }
                       if (c.types.contains("country")) {
                         countryTitleCtrl.text = c.longName;
-                        countryCodeCtrl.text = c.shortName;
+                        houseNumberCtrl.text = c.shortName;
 
-                        var body = {
-                          "Credentials": {
-                            "APIKey": "5XW2Mnqfz6",
-                            "Password": "oWMmGi2[8n"
-                          }
-                        };
-
-                        var response = await http.post(
-                          Uri.parse('https://services3.transglobalexpress.co.uk/Country/V2/GetCountries'),
-                          headers: {"Content-Type": "application/json"},
-                          body: jsonEncode(body),
-                        );
-
-                        if (response.statusCode == 200) {
-                          final data = json.decode(response.body);
-                          final countries = data['Countries'];
-                          final matched = countries.firstWhere(
-                                  (e) => e['CountryCode'] == c.shortName,
-                              orElse: () => null);
-
-                          if (matched != null) {
-                            // countryIdCtrl.text = matched['CountryID'].toString();
-                          }
-                        }
                       }
                     }
                   },
@@ -553,18 +537,6 @@ class _PostScreenState extends State<PostScreen> {
 
                 SizedBox(height: 10.h),
 
-                CustomTextField(
-                  focusNode: cityFocus,
-                  controller: cityCtrl,
-                  labelText: "City",
-                  hintText: "City",
-                ),
-                CustomTextField(
-                  focusNode: postalFocus,
-                  controller: postalCodeCtrl,
-                  labelText: "Postal Code",
-                  hintText: "Postal Code",
-                ),
 
                 CustomTextField(
                   focusNode: countryTitleFocus,
@@ -572,46 +544,208 @@ class _PostScreenState extends State<PostScreen> {
                   labelText: "Country",
                   hintText: "Country",
                 ),
+
+
                 CustomTextField(
-                  focusNode: countryCodeFocus,
-                  controller: countryCodeCtrl,
-                  labelText: "Country Code",
-                  hintText: "Country Code",
+                  focusNode: postalFocus,
+                  controller: postalCodeCtrl,
+                  labelText: "Postal Code",
+                  hintText: "Postal Code",
                 ),
 
 
-              ],
-            ) :
 
 
+                Row(
+                  children: [
 
-            Row(
-              children: [
-                CircularCheckBox(
-                  size: 20.r,
-                  isChecked: !pickMyLocation,
-                  onChanged: (value) {
-                    setState(() {
-                      pickMyLocation = !value;
-                    });
-                  },
+
+                    Expanded(
+                      flex: 1,
+                      child: CustomTextField(
+                        focusNode: stateFocus,
+                        controller: stateCtrl,
+                        labelText: "State",
+                        hintText: "State",
+                      ),
+                    ),
+
+
+                    SizedBox(width: 12.w),
+
+
+                    Expanded(
+                      flex: 1,
+                      child: CustomTextField(
+                        focusNode: cityFocus,
+                        controller: cityCtrl,
+                        labelText: "City",
+                        hintText: "City",
+                      ),
+                    ),
+
+
+                  ],
                 ),
-                CustomText(
-                    text: "Drop off at a Sendcloud pickup point",
-                    fontSize: 16.h,
-                    color: Colors.black,
-                    left: 10.w,
-                    right: 5.w),
+
+
+                CustomTextField(
+                  focusNode: houseNumberFocus,
+                  controller: houseNumberCtrl,
+                  labelText: "House Number",
+                  hintText: "House Number",
+                ),
+
+
               ],
             ),
 
 
 
+                 SizedBox(height: 16.h),
 
 
-
-
-
+            //
+            //
+            // Row(
+            //   children: [
+            //     CircularCheckBox(
+            //       size: 20.r,
+            //       isChecked: !pickMyLocation,
+            //       onChanged: (value) async {
+            //         setState(() {
+            //           pickMyLocation = !value;
+            //         });
+            //
+            //         List<dynamic> servicePoints = [];
+            //         bool isLoading = false;
+            //
+            //         String basicAuth = 'Basic ${base64Encode(utf8.encode('fb447bde-14d9-4adf-9b23-cab2af16c26c:0b66e82cf1d74f7585b3068bcc961079'))}';
+            //
+            //         Future<void> fetchServicePoints() async {
+            //           setState(() {
+            //             isLoading = true;
+            //           });
+            //
+            //           try {
+            //             final response = await http.get(Uri.parse(
+            //                 'https://stoplight.io/mocks/sendcloud/sendcloud-public-api:v2/299107080/service-points?country=GB'
+            //             ), headers: {
+            //               'Content-Type' : 'application/json',
+            //               'Authorization': basicAuth,
+            //               'Accept': 'application/json',
+            //             });
+            //
+            //             if (response.statusCode == 200) {
+            //               print("================resopnse ${response.body}");
+            //               setState(() {
+            //                 var data = json.decode(response.body);
+            //                 servicePoints = data; // ✅ Correct assignment
+            //                 isLoading = false;
+            //               });
+            //             } else {
+            //               setState(() {
+            //                 isLoading = false;
+            //               });
+            //               print('API Error: ${response.statusCode}');
+            //             }
+            //           } catch (e) {
+            //             setState(() {
+            //               isLoading = false;
+            //             });
+            //             print('Error fetching service points: $e');
+            //           }
+            //         }
+            //
+            //
+            //         // Fetch data before showing dialog
+            //         await fetchServicePoints();
+            //
+            //         showDialog(
+            //           context: context,
+            //           builder: (BuildContext context) {
+            //             return AlertDialog(
+            //               title: Row(
+            //                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //                 children: [
+            //                   CustomText(text: "Select a Drop-off Point", fontSize: 16.h, fontWeight: FontWeight.w600, color: Colors.black),
+            //                   IconButton(
+            //                     icon: Icon(Icons.close),
+            //                     onPressed: () => Navigator.of(context).pop(),
+            //                   ),
+            //                 ],
+            //               ),
+            //               content: SingleChildScrollView(
+            //                 child: Column(
+            //                   mainAxisSize: MainAxisSize.min,
+            //                   crossAxisAlignment: CrossAxisAlignment.start,
+            //                   children: [
+            //                     Text(
+            //                       'Select a Drop-off Point Near You',
+            //                       style: TextStyle(
+            //                         fontSize: 16,
+            //                         fontWeight: FontWeight.bold,
+            //                       ),
+            //                     ),
+            //                     SizedBox(height: 16),
+            //                     TextField(
+            //                       decoration: InputDecoration(
+            //                         hintText: 'Enter postal code or city',
+            //                         border: OutlineInputBorder(),
+            //                         contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            //                       ),
+            //                     ),
+            //                     SizedBox(height: 16),
+            //                     Text(
+            //                       'Available Drop-off Point',
+            //                       style: TextStyle(
+            //                         fontSize: 14,
+            //                         fontWeight: FontWeight.bold,
+            //                       ),
+            //                     ),
+            //                     SizedBox(height: 12),
+            //
+            //                     isLoading
+            //                         ? Center(child: CircularProgressIndicator())
+            //                         : servicePoints.isEmpty
+            //                         ? Padding(
+            //                       padding: EdgeInsets.all(16),
+            //                       child: Center(child: Text('No service points available')),
+            //                     )
+            //                         : Container(
+            //                       constraints: BoxConstraints(
+            //                         maxHeight: 340.h,
+            //                       ),
+            //                       child: ListView.builder(
+            //                         shrinkWrap: true,
+            //                         physics: AlwaysScrollableScrollPhysics(),
+            //                         itemCount: servicePoints.length,
+            //                         itemBuilder: (context, index) {
+            //                           return Column(
+            //                             children: [
+            //                               DropOffPointCard(servicePoint: servicePoints[index]),
+            //                               SizedBox(height: 8),
+            //                             ],
+            //                           );
+            //                         },
+            //                       ),
+            //                     )
+            //                   ],
+            //                 ),
+            //               ),
+            //             );
+            //           },
+            //         );
+            //       },
+            //     ),
+            //     CustomText(
+            //         text: "Drop off at a Sendcloud pickup point",
+            //         fontSize: 16.h,
+            //         color: Colors.black,
+            //         left: 10.w,
+            //         right: 5.w),
+            //   ],
+            // ),
 
 
 
@@ -624,6 +758,7 @@ class _PostScreenState extends State<PostScreen> {
                   onpress: () {
                     if (forKey.currentState!.validate()) {
                       if (_images.length != 0) {
+
                         productController.addProduct(
                             context: context,
                             productName: productController.titleCtrl.text,
@@ -635,7 +770,21 @@ class _PostScreenState extends State<PostScreen> {
                             brand: productController.brandCtrl.text,
                             size:productController.sizeCtrl.text,
                             isBoosted: _isBoost,
-                            images: _images);
+                            images: _images,
+                          width: widthCtrl.text,
+                          height: heightCtrl.text,
+                          length: lengthCtrl.text,
+                          weight: weightCtrl.text,
+                          address: addressLine1Ctrl.text,
+                          address2: "",
+                          city: cityCtrl.text,
+                          companyName: houseNumberCtrl.text,
+                          country: countryTitleCtrl.text,
+                          houseNumber: houseNumberCtrl.text,
+                          postalCode: postalCodeCtrl.text,
+                          carrer_type: "collection_address"
+
+                        );
                       } else {
                         ToastMessageHelper.showToastMessage(
                             context, "Please select your product images");
@@ -991,5 +1140,77 @@ class _PostScreenState extends State<PostScreen> {
                   ),
               ),
     );
+  }
+}
+
+
+
+
+class DropOffPointCard extends StatelessWidget {
+  final Map<String, dynamic> servicePoint;
+
+  const DropOffPointCard({Key? key, required this.servicePoint}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey.shade300),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildInfoRow('Name', servicePoint['name'] ?? 'N/A'),
+          SizedBox(height: 8),
+          _buildInfoRow('Street', servicePoint['street'] ?? 'N/A'),
+          SizedBox(height: 8),
+          _buildInfoRow('House Number', servicePoint['house_number']?.toString() ?? 'N/A'),
+          SizedBox(height: 8),
+          _buildInfoRow('Postal Code', servicePoint['postal_code'] ?? 'N/A'),
+          SizedBox(height: 8),
+          _buildInfoRow('City', servicePoint['city'] ?? 'N/A'),
+          SizedBox(height: 8),
+          _buildInfoRow('Opening Hours', _formatOpeningHours(servicePoint['formatted_opening_times'] ?? {})),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildInfoRow(String label, String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          width: 120,
+          child: Text(
+            '$label :',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+        Expanded(
+          child: Text(value),
+        ),
+      ],
+    );
+  }
+
+  String _formatOpeningHours(Map<String, dynamic> openingTimes) {
+    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+    List<String> hours = [];
+
+    for (int i = 0; i < days.length; i++) {
+      if (openingTimes[i.toString()] != null &&
+          openingTimes[i.toString()] is List &&
+          (openingTimes[i.toString()] as List).isNotEmpty) {
+        hours.add('${days[i]}: ${openingTimes[i.toString()].first}');
+      }
+    }
+
+    return hours.isNotEmpty ? hours.join(', ') : 'Not available';
   }
 }

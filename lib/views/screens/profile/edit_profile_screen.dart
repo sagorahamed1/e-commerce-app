@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
 import 'package:petattix/views/widgets/custom_text_field.dart';
@@ -115,6 +117,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 hintextColor: Colors.black,
                 contentPaddingVertical: 10.h,
               ),
+              
+              
+
+              
               SizedBox(height: 50.h),
 
 
