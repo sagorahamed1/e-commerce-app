@@ -7,6 +7,9 @@ import 'package:get/get.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:petattix/controller/purchase_controller.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/core/config/app_route.dart';
+import 'package:petattix/helper/toast_message_helper.dart';
+import 'package:petattix/views/widgets/cusotom_check_box.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:petattix/views/widgets/custom_text.dart';
 import '../../../controller/product_controller.dart';
@@ -100,8 +103,11 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
     super.initState();
   }
 
+  bool isSendCloudPoint = false;
+
   @override
   Widget build(BuildContext context) {
+    final apiData = productController.dropOffData.value;
     var data = Get.arguments;
     return Scaffold(
       appBar: CustomAppBar(title: "Confirm Purchase"),
@@ -121,6 +127,27 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                   children: [
 
                     SizedBox(height: 10.h),
+
+
+                    Row(
+                      children: [
+                        CircularCheckBox(
+                          size: 20.r,
+                          isChecked: true,
+                          onChanged: (value) {},
+                        ),
+                        CustomText(
+                            text: "Deliver to my location",
+                            fontSize: 16.h,
+                            color: Colors.black,
+                            left: 10.w,
+                            right: 5.w),
+                      ],
+                    ),
+
+
+                    SizedBox(height: 16.h),
+
 
 
                     CustomText(text: "Address",
@@ -236,6 +263,46 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                 ),
 
 
+
+
+
+
+                Row(
+                  children: [
+                    CircularCheckBox(
+                      size: 20.r,
+                      isChecked: isSendCloudPoint,
+                      onChanged: (value) {
+                        setState(() {
+                          isSendCloudPoint = value;
+
+                          if(isSendCloudPoint){
+                            Get.toNamed(AppRoutes.dropOffPointScreen, arguments: {
+                              "lat" : apiData?.latitude,
+                              "long" : apiData?.longitude,
+                              "country" : apiData?.country
+                             });
+                          }else{
+                            purchaseController.servicePointId = "";
+                            setState(() {});
+
+                            ToastMessageHelper.showToastMessage(context, "Your drop-off point removed!");
+                          }
+
+                        });
+                      },
+                    ),
+                    CustomText(
+                        text: "Pick up from Sendcloud point",
+                        fontSize: 16.h,
+                        color: Colors.black,
+                        left: 10.w,
+                        right: 5.w),
+                  ],
+                ),
+
+
+                SizedBox(height: 20.h),
 
 
 
@@ -410,21 +477,19 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                           onpress: () {
                             print("==================tapped");
                             if (forKey.currentState!.validate()){
-                              // purchaseController.createDelivery(
-                                  // companyName: companyNameCtrl.text,
-                                  // country: countryTitleCtrl.text,
-                                  // countryId: countryIdCtrl.text,
-                                  // countryCode: countryCodeCtrl.text,
-                                  // city: cityCtrl.text,
-                                  // addressOne: addressLine1Ctrl.text,
-                                  // addressTow: addressLine2Ctrl.text,
-                                  // phoneNumber: phoneNoCtrl.text,
-                                  // postCode: postalCodeCtrl.text,
-                                  // productId: data["productId"] ?? "",
-                                  // context: context);
+                              purchaseController.createDelivery(
+                                addressOne: addressLine1Ctrl.text,
+                                  city: cityCtrl.text,
+                                  country: countryTitleCtrl.text,
+                                  countryState: stateCtrl.text,
+                                  houseNumber: houseNumberCtrl.text,
+                                  postalCode: postalCodeCtrl.text,
+                                  companyName: houseNumberCtrl.text,
+                                  productId: data["productId"] ?? "",
+                                  context: context);
                             }
 
-                            // Get.toNamed(AppRoutes.makePayment);
+
                           },
                           fontSize: 11.h),
                     ),

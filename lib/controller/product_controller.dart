@@ -14,6 +14,7 @@ import '../model/dropOffModel.dart';
 import '../model/my_card_model.dart';
 import '../model/product_model.dart';
 import '../model/purches_history_model.dart';
+import '../model/shipping_price_data.dart';
 import '../model/single_product_model.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
@@ -608,6 +609,64 @@ class ProductController extends GetxController {
       }
 
   }
+
+
+
+
+  Rx<ShippingPricingData?> shippingData = Rx<ShippingPricingData?>(null);
+  RxBool shippingLoading = false.obs;
+  RxString errorMessage = ''.obs;
+
+  fetchShippingPricing({
+    required String productId,
+    required String shippingId,
+  }) async {
+    try {
+      shippingLoading(true);
+      errorMessage('');
+
+      final response = await ApiClient.getData(
+        "/delivery/$productId/shipping/$shippingId/pricing",
+      );
+
+      print("🌐 Raw Response: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final dynamic responseData = response.body;
+
+
+        shippingData.value = ShippingPricingData.fromJson(responseData["data"]);
+        update();
+        shippingLoading(false);
+      } else {
+        errorMessage('Invalid response code ${response.statusCode}');
+      }
+    } catch (e) {
+      errorMessage('Failed to load shipping pricing: $e');
+    } finally {
+      shippingLoading(false);
+    }
+  }
+
+
+
+
+
+   confirmPayment({String? productId, shippingId,required BuildContext context}) async {
+
+    var response = await ApiClient.postData("/delivery/$productId/payment/$shippingId", jsonEncode({}));
+
+    if (response.statusCode == 200) {
+      Get.back();
+      Get.back();
+      Get.back();
+
+      ToastMessageHelper.showToastMessage(context, "Shipment Completed!");
+
+    }
+
+  }
+
 
 
 }

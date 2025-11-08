@@ -27,6 +27,8 @@ import '../../views/screens/purchas/confirm_purchase_screen.dart';
 import '../../views/screens/purchas/confirmed.dart';
 import '../../views/screens/purchas/courier_screen.dart';
 import '../../views/screens/purchas/make_payment.dart';
+import '../../views/screens/purchas/order_summary_screen.dart';
+import '../../views/screens/purchas/select_drop_off_point.dart';
 import '../../views/screens/purchas/shipment_screen.dart';
 import '../../views/screens/refund/refund_request_screen.dart';
 import '../../views/screens/setting/change_password_screen.dart';
@@ -69,6 +71,8 @@ class AppRoutes {
   static const String shipmentScreen = "/ShipmentScreen";
   static const String courierScreen = "/CourierScreen";
   static const String setDropOffLocationScreen = "/SetDropOffLocationScreen";
+  static const String dropOffPointScreen = "/DropOffPointScreen";
+  static const String orderSummaryScreen = "/OrderSummaryScreen";
 
 
 
@@ -105,5 +109,7 @@ class AppRoutes {
     GetPage(name: shipmentScreen, page: () =>  ShipmentScreen()),
     GetPage(name: courierScreen, page: () =>  CourierScreen()),
     GetPage(name: setDropOffLocationScreen, page: () =>  SetDropOffLocationScreen()),
+    GetPage(name: dropOffPointScreen, page: () =>  DropOffPointScreen()),
+    GetPage(name: orderSummaryScreen, page: () =>  OrderSummaryScreen()),
   ];
 }

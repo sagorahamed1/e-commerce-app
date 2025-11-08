@@ -42,5 +42,6 @@ class ApiConstants{
   static String chatEndPoint(String? id) =>  "/messages/${id??""}?limit=100";
   static String createCollection(String? id) =>  "/delivery/${id}/collection";
   static String shipment(String? id) =>  "/delivery/${id}/shipment";
-  static String couriar(String? id) =>  "/delivery/${id}/shipment/late";
+  // static String couriar(String? id) =>  "/delivery/${id}/shipment/late";
+  static String couriar(String? id) =>  "/delivery/${id}/shipping/methods";
 }

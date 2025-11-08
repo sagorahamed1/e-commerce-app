@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:petattix/core/app_constants/app_colors.dart';
+import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/helper/currency_get_helper.dart';
 import 'package:petattix/helper/toast_message_helper.dart';
 import 'package:petattix/views/widgets/custom_button.dart';
@@ -50,7 +51,7 @@ class _CourierScreenState extends State<CourierScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Select a courier service",
+              "Select Your Shipping Option",
               style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w600),
             ),
             SizedBox(height: 16.h),
@@ -95,9 +96,12 @@ class _CourierScreenState extends State<CourierScreen> {
                             /// Top Row (Logo + Radio)
                             Row(
                               children: [
-                                CustomText(text: "${courier.serviceName}", fontSize: 16.h, fontWeight: FontWeight.w700, color: Colors.green),
+                                Expanded(child: CustomText(
+                                    textAlign: TextAlign.start,
+                                    text: "${courier.name}", fontSize: 16.h, fontWeight: FontWeight.w700, color: Colors.green)),
 
-                                const Spacer(),
+                                SizedBox(width: 12.w),
+
                                 Radio<int>(
                                   value: index,
                                   groupValue: selectedIndex,
@@ -112,81 +116,15 @@ class _CourierScreenState extends State<CourierScreen> {
                             ),
                             SizedBox(height: 8.h),
 
-                            /// Service Type
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text("Service Type",
-                                    style: TextStyle(
-                                        fontSize: 12.sp,
-                                        color: Colors.grey.shade600)),
-                                DropdownButton<String>(
-                                  value: "Air",
-                                  underline: const SizedBox(),
-                                  items: ["Air", "Sea", "Land"]
-                                      .map((e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e),
-                                  ))
-                                      .toList(),
-                                  onChanged: (_) {},
-                                ),
-                              ],
-                            ),
-
                             // SizedBox(height: 6.h),
 
-                            Obx(() => CustomText(text: "Quote ID: ${purchaseController.quoteId.value}", color: Colors.black)),
 
-                            Text("Chargeable Weight: ${courier.chargeableWeight} Kg"),
-                            Text(
-                                "Transit time estimation (days): ${courier.transitTimeEstimate}"),
+                            CustomText(text: "Quote ID: ${courier.id}", color: Colors.black, fontWeight: FontWeight.w700),
+                            CustomText(text: "Carrier: ${courier.carrier}", color: Colors.black),
+                            CustomText(text: "Country: ${courier.countries?[0].name}", color: Colors.black),
+                            CustomText(text: "Weight Limit: ${courier.minWeight}-${courier.maxWeight}KG", color: Colors.black),
+                            CustomText(text: "Price: ${courier.countries?[0].price}", color: Colors.black),
 
-                            SizedBox(height: 12.h),
-                            Text("Service Cost Breaks down:",
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 13.sp)),
-
-                            SizedBox(height: 6.h),
-
-                            ListView.builder(
-                                itemCount: courier.servicePriceBreakdown?.length,
-                                shrinkWrap: true,
-                                physics:  NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  var x = courier.servicePriceBreakdown?[index];
-                                  return  Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                       Text("${CurrencyHelper.getCurrencyPrice(x?.description ?? "0")}"),
-                                      Text("${CurrencyHelper.getCurrencyPrice(x?.cost.toString() ?? "0")}",
-                                          style: TextStyle(color: Colors.red)),
-                                    ],
-                                  );
-                                }),
-
-
-                            // Row(
-                            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            //   children: [
-                            //     const Text("Collection"),
-                            //     Text("\$${courier.collection}",
-                            //         style: TextStyle(color: Colors.red)),
-                            //   ],
-                            // ),
-                             Divider(),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                const Text("Total Cost",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold)),
-                                Text("${CurrencyHelper.getCurrencyPrice(courier.totalCost?.totalCostNetWithCollection.toString() ?? "0")}",
-                                    style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.orange)),
-                              ],
-                            ),
                           ],
                         ),
                       ),
@@ -210,27 +148,33 @@ class _CourierScreenState extends State<CourierScreen> {
                 }
                     : () {
 
-                  var selectedCourier = purchaseController.couriar[selectedIndex];
 
-                  var couriarInfo = {
-                    "QuoteID": int.parse(purchaseController.quoteId.value),
-                    "ServiceID": int.parse(selectedCourier.serviceId.toString()),
-                    "order_id": int.parse(selectedCourier.serviceId.toString()),
-                    "orderReference":"xcvxcv",
-                    "serviceName": "${selectedCourier.serviceName}",
-                    "carrierName": "${selectedCourier.carrierName}",
-                    "chargeableWeight": int.parse(selectedCourier.chargeableWeight.toString()),
-                    "transitTimeEstimate": "${selectedCourier.transitTimeEstimate}",
-                    "sameDayCollectionCutOffTime": "${selectedCourier.sameDayCollectionCutOffTime}",
-                    "isWarehouseService": selectedCourier.isWarehouseService,
-                    "totalCostNetWithCollection": double.parse(selectedCourier.totalCost?.totalCostNetWithCollection.toString() ?? "") ,
-                    "totalCostNetWithoutCollection": double.parse(selectedCourier.totalCost?.totalCostNetWithoutCollection.toString() ?? "") ,
-                    "totalCostGrossWithCollection": double.parse(selectedCourier.totalCost?.totalCostGrossWithCollection.toString() ?? "") ,
-                    "totalCostGrossWithoutCollection":double.parse(selectedCourier.totalCost?.totalCostGrossWithoutCollection.toString() ?? "") ,
-                  };
+                  Get.toNamed(AppRoutes.orderSummaryScreen, arguments: {
+                    "productId" : "$productId",
+                    "shippingId" : "${purchaseController.couriar[selectedIndex].id}"
+                  });
 
-                  
-                  purchaseController.shipment(data: couriarInfo, context: context, productId: productId);
+                  // var selectedCourier = purchaseController.couriar[selectedIndex];
+
+                  // var couriarInfo = {
+                  //   "QuoteID": int.parse(purchaseController.quoteId.value),
+                  //   "ServiceID": int.parse(selectedCourier.serviceId.toString()),
+                  //   "order_id": int.parse(selectedCourier.serviceId.toString()),
+                  //   "orderReference":"xcvxcv",
+                  //   "serviceName": "${selectedCourier.serviceName}",
+                  //   "carrierName": "${selectedCourier.carrierName}",
+                  //   "chargeableWeight": int.parse(selectedCourier.chargeableWeight.toString()),
+                  //   "transitTimeEstimate": "${selectedCourier.transitTimeEstimate}",
+                  //   "sameDayCollectionCutOffTime": "${selectedCourier.sameDayCollectionCutOffTime}",
+                  //   "isWarehouseService": selectedCourier.isWarehouseService,
+                  //   "totalCostNetWithCollection": double.parse(selectedCourier.totalCost?.totalCostNetWithCollection.toString() ?? "") ,
+                  //   "totalCostNetWithoutCollection": double.parse(selectedCourier.totalCost?.totalCostNetWithoutCollection.toString() ?? "") ,
+                  //   "totalCostGrossWithCollection": double.parse(selectedCourier.totalCost?.totalCostGrossWithCollection.toString() ?? "") ,
+                  //   "totalCostGrossWithoutCollection":double.parse(selectedCourier.totalCost?.totalCostGrossWithoutCollection.toString() ?? "") ,
+                  // };
+
+                  //
+                  // purchaseController.shipment(data: {}, context: context, productId: productId);
 
 
                 },

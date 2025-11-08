@@ -1,219 +1,87 @@
 
 
+
+
 class CourierServiceModel {
-  final int? serviceId;
-  final String? serviceName;
-  final String? carrierName;
-  final int? chargeableWeight;
-  final String? transitTimeEstimate;
-  final String? sameDayCollectionCutOffTime;
-  final bool? isWarehouseService;
-  final TotalCost? totalCost;
-  final List<OptionalExtra>? servicePriceBreakdown;
-  final List<OptionalExtra>? optionalExtras;
-  final bool? signatureRequiredAvailable;
-  final List<ExpectedLabel>? expectedLabels;
-  final List<CollectionOption>? collectionOptions;
-  final String? serviceType;
+  final int? id;
+  final String? name;
+  final String? carrier;
+  final String? minWeight;
+  final String? maxWeight;
+  final String? servicePointInput;
+  final int? price;
+  final List<Country>? countries;
 
   CourierServiceModel({
-    this.serviceId,
-    this.serviceName,
-    this.carrierName,
-    this.chargeableWeight,
-    this.transitTimeEstimate,
-    this.sameDayCollectionCutOffTime,
-    this.isWarehouseService,
-    this.totalCost,
-    this.servicePriceBreakdown,
-    this.optionalExtras,
-    this.signatureRequiredAvailable,
-    this.expectedLabels,
-    this.collectionOptions,
-    this.serviceType,
+    this.id,
+    this.name,
+    this.carrier,
+    this.minWeight,
+    this.maxWeight,
+    this.servicePointInput,
+    this.price,
+    this.countries,
   });
 
   factory CourierServiceModel.fromJson(Map<String, dynamic> json) => CourierServiceModel(
-    serviceId: json["ServiceID"],
-    serviceName: json["ServiceName"],
-    carrierName: json["CarrierName"],
-    chargeableWeight: json["ChargeableWeight"],
-    transitTimeEstimate: json["TransitTimeEstimate"],
-    sameDayCollectionCutOffTime: json["SameDayCollectionCutOffTime"],
-    isWarehouseService: json["IsWarehouseService"],
-    totalCost: json["TotalCost"] == null ? null : TotalCost.fromJson(json["TotalCost"]),
-    servicePriceBreakdown: json["ServicePriceBreakdown"] == null ? [] : List<OptionalExtra>.from(json["ServicePriceBreakdown"]!.map((x) => OptionalExtra.fromJson(x))),
-    optionalExtras: json["OptionalExtras"] == null ? [] : List<OptionalExtra>.from(json["OptionalExtras"]!.map((x) => OptionalExtra.fromJson(x))),
-    signatureRequiredAvailable: json["SignatureRequiredAvailable"],
-    expectedLabels: json["ExpectedLabels"] == null ? [] : List<ExpectedLabel>.from(json["ExpectedLabels"]!.map((x) => ExpectedLabel.fromJson(x))),
-    collectionOptions: json["CollectionOptions"] == null ? [] : List<CollectionOption>.from(json["CollectionOptions"]!.map((x) => CollectionOption.fromJson(x))),
-    serviceType: json["ServiceType"],
+    id: json["id"],
+    name: json["name"],
+    carrier: json["carrier"],
+    minWeight: json["min_weight"],
+    maxWeight: json["max_weight"],
+    servicePointInput: json["service_point_input"],
+    price: json["price"],
+    countries: json["countries"] == null ? [] : List<Country>.from(json["countries"]!.map((x) => Country.fromJson(x))),
   );
 
   Map<String, dynamic> toJson() => {
-    "ServiceID": serviceId,
-    "ServiceName": serviceName,
-    "CarrierName": carrierName,
-    "ChargeableWeight": chargeableWeight,
-    "TransitTimeEstimate": transitTimeEstimate,
-    "SameDayCollectionCutOffTime": sameDayCollectionCutOffTime,
-    "IsWarehouseService": isWarehouseService,
-    "TotalCost": totalCost?.toJson(),
-    "ServicePriceBreakdown": servicePriceBreakdown == null ? [] : List<dynamic>.from(servicePriceBreakdown!.map((x) => x.toJson())),
-    "OptionalExtras": optionalExtras == null ? [] : List<dynamic>.from(optionalExtras!.map((x) => x.toJson())),
-    "SignatureRequiredAvailable": signatureRequiredAvailable,
-    "ExpectedLabels": expectedLabels == null ? [] : List<dynamic>.from(expectedLabels!.map((x) => x.toJson())),
-    "CollectionOptions": collectionOptions == null ? [] : List<dynamic>.from(collectionOptions!.map((x) => x.toJson())),
-    "ServiceType": serviceType,
+    "id": id,
+    "name": name,
+    "carrier": carrier,
+    "min_weight": minWeight,
+    "max_weight": maxWeight,
+    "service_point_input": servicePointInput,
+    "price": price,
+    "countries": countries == null ? [] : List<dynamic>.from(countries!.map((x) => x.toJson())),
   };
 }
 
-class CollectionOption {
-  final int? collectionOptionId;
-  final String? collectionOptionTitle;
-  final double? collectionCharge;
-  final String? sameDayCollectionCutOffTime;
-  final ExpectedLabel? expectedLabel;
+class Country {
+  final int? id;
+  final String? name;
+  final dynamic price;
+  final String? iso2;
+  final String? iso3;
+  final int? leadTimeHours;
+  final List<dynamic>? priceBreakdown;
 
-  CollectionOption({
-    this.collectionOptionId,
-    this.collectionOptionTitle,
-    this.collectionCharge,
-    this.sameDayCollectionCutOffTime,
-    this.expectedLabel,
+  Country({
+    this.id,
+    this.name,
+    this.price,
+    this.iso2,
+    this.iso3,
+    this.leadTimeHours,
+    this.priceBreakdown,
   });
 
-  factory CollectionOption.fromJson(Map<String, dynamic> json) => CollectionOption(
-    collectionOptionId: json["CollectionOptionID"],
-    collectionOptionTitle: json["CollectionOptionTitle"],
-    collectionCharge: json["CollectionCharge"]?.toDouble(),
-    sameDayCollectionCutOffTime: json["SameDayCollectionCutOffTime"],
-    expectedLabel: json["ExpectedLabel"] == null ? null : ExpectedLabel.fromJson(json["ExpectedLabel"]),
+  factory Country.fromJson(Map<String, dynamic> json) => Country(
+    id: json["id"],
+    name: json["name"],
+    price: json["price"],
+    iso2: json["iso_2"],
+    iso3: json["iso_3"],
+    leadTimeHours: json["lead_time_hours"],
+    priceBreakdown: json["price_breakdown"] == null ? [] : List<dynamic>.from(json["price_breakdown"]!.map((x) => x)),
   );
 
   Map<String, dynamic> toJson() => {
-    "CollectionOptionID": collectionOptionId,
-    "CollectionOptionTitle": collectionOptionTitle,
-    "CollectionCharge": collectionCharge,
-    "SameDayCollectionCutOffTime": sameDayCollectionCutOffTime,
-    "ExpectedLabel": expectedLabel?.toJson(),
+    "id": id,
+    "name": name,
+    "price": price,
+    "iso_2": iso2,
+    "iso_3": iso3,
+    "lead_time_hours": leadTimeHours,
+    "price_breakdown": priceBreakdown == null ? [] : List<dynamic>.from(priceBreakdown!.map((x) => x)),
   };
-}
-
-class ExpectedLabel {
-  final String? labelRole;
-  final String? labelFormat;
-  final String? labelGenerateStatus;
-  final List<AvailableSize>? availableSizes;
-
-  ExpectedLabel({
-    this.labelRole,
-    this.labelFormat,
-    this.labelGenerateStatus,
-    this.availableSizes,
-  });
-
-  factory ExpectedLabel.fromJson(Map<String, dynamic> json) => ExpectedLabel(
-    labelRole: json["LabelRole"],
-    labelFormat: json["LabelFormat"],
-    labelGenerateStatus: json["LabelGenerateStatus"],
-    availableSizes: json["AvailableSizes"] == null ? [] : List<AvailableSize>.from(json["AvailableSizes"]!.map((x) => AvailableSize.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "LabelRole": labelRole,
-    "LabelFormat": labelFormat,
-    "LabelGenerateStatus": labelGenerateStatus,
-    "AvailableSizes": availableSizes == null ? [] : List<dynamic>.from(availableSizes!.map((x) => x.toJson())),
-  };
-}
-
-class AvailableSize {
-  final Size? size;
-
-  AvailableSize({
-    this.size,
-  });
-
-  factory AvailableSize.fromJson(Map<String, dynamic> json) => AvailableSize(
-    size: sizeValues.map[json["Size"]]!,
-  );
-
-  Map<String, dynamic> toJson() => {
-    "Size": sizeValues.reverse[size],
-  };
-}
-
-enum Size {
-  A4,
-  THERMAL
-}
-
-final sizeValues = EnumValues({
-  "A4": Size.A4,
-  "Thermal": Size.THERMAL
-});
-
-class OptionalExtra {
-  final String? code;
-  final String? description;
-  final double? cost;
-
-  OptionalExtra({
-    this.code,
-    this.description,
-    this.cost,
-  });
-
-  factory OptionalExtra.fromJson(Map<String, dynamic> json) => OptionalExtra(
-    code: json["Code"],
-    description: json["Description"],
-    cost: json["Cost"]?.toDouble(),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "Code": code,
-    "Description": description,
-    "Cost": cost,
-  };
-}
-
-class TotalCost {
-  final double? totalCostNetWithCollection;
-  final double? totalCostNetWithoutCollection;
-  final double? totalCostGrossWithCollection;
-  final double? totalCostGrossWithoutCollection;
-
-  TotalCost({
-    this.totalCostNetWithCollection,
-    this.totalCostNetWithoutCollection,
-    this.totalCostGrossWithCollection,
-    this.totalCostGrossWithoutCollection,
-  });
-
-  factory TotalCost.fromJson(Map<String, dynamic> json) => TotalCost(
-    totalCostNetWithCollection: json["TotalCostNetWithCollection"]?.toDouble(),
-    totalCostNetWithoutCollection: json["TotalCostNetWithoutCollection"]?.toDouble(),
-    totalCostGrossWithCollection: json["TotalCostGrossWithCollection"]?.toDouble(),
-    totalCostGrossWithoutCollection: json["TotalCostGrossWithoutCollection"]?.toDouble(),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "TotalCostNetWithCollection": totalCostNetWithCollection,
-    "TotalCostNetWithoutCollection": totalCostNetWithoutCollection,
-    "TotalCostGrossWithCollection": totalCostGrossWithCollection,
-    "TotalCostGrossWithoutCollection": totalCostGrossWithoutCollection,
-  };
-}
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
-  }
 }

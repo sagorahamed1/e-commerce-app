@@ -9,6 +9,7 @@ import 'package:petattix/views/widgets/custom_app_bar.dart';
 import 'package:http/http.dart' as http;
 
 import '../../../../controller/auth_controller.dart';
+import '../../../../controller/product_controller.dart';
 import '../../../../core/app_constants/app_colors.dart';
 import '../../../widgets/custom_button.dart';
 import '../../../widgets/custom_text.dart';
@@ -46,6 +47,24 @@ class _SetDropOffLocationScreenState extends State<SetDropOffLocationScreen> {
   final places = GoogleMapsPlaces(apiKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0");
 
   Map<String, dynamic>? addressBody;
+  ProductController productController = Get.put(ProductController());
+
+
+  @override
+  void initState() {
+    productController.fetchDropOffAddress().then((_) {
+      final data = productController.dropOffData.value;
+      if (data != null) {
+        addressLine1Ctrl.text = data.address ?? '';
+        houseNumberCtrl.text = data.houseNumber ?? '';
+        cityCtrl.text = data.city ?? '';
+        stateCtrl.text = data.countryState ?? '';
+        postalCodeCtrl.text = data.postalCode ?? '';
+        countryTitleCtrl.text = data.country ?? '';
+      }
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
