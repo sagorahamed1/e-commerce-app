@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_places_flutter/google_places_flutter.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:petattix/views/widgets/cachanetwork_image.dart';
 import 'package:petattix/views/widgets/custom_app_bar.dart';
 
 import '../../../controller/product_controller.dart';
@@ -76,6 +77,8 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
   final places = GoogleMapsPlaces(
       apiKey: "AIzaSyA-Iri6x5mzNv45XO3a-Ew3z4nvF4CdYo0");
 
+  String productImage = "";
+
 
   @override
   void initState() {
@@ -104,6 +107,11 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
         weightCtrl.text = product.weight ?? "";
         lengthCtrl.text = product.length ?? "";
         widthCtrl.text = product.width ?? "";
+
+
+        setState(() {
+          productImage = product.images?.first.image  ?? "";
+        });
 
 
 
@@ -136,8 +144,8 @@ class _EditMyProductScreentState extends State<EditMyProductScreent> {
                     ),
                     borderRadius: BorderRadius.circular(12.r),
                   ),
-                  child: _images.isEmpty
-                      ? Center( // majhe rakhbo
+                  child:  _images.isEmpty
+                      ?  Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       // content ke chhoto kore maje rakhbe

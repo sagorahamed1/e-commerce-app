@@ -9,6 +9,7 @@ import 'package:petattix/views/widgets/no_data_found_card.dart';
 
 import '../../../controller/notifications_controller.dart';
 import '../../../core/app_constants/app_colors.dart';
+import '../../../core/config/app_route.dart';
 import '../../widgets/cachanetwork_image.dart';
 import '../../widgets/custom_text.dart';
 
@@ -74,44 +75,49 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
                                 return Padding(
                                   padding: EdgeInsets.only(bottom: 12.h),
-                                  child: Padding(
-                                    padding: EdgeInsets.all(12.h),
-                                    child: Row(
-                                      crossAxisAlignment: CrossAxisAlignment.center,
-                                      children: [
-                                        ClipRRect(
-                                            borderRadius: BorderRadius.circular(12.r),
-                                            child: CustomNetworkImage(
-                                              height: 56.h,
-                                              width: 56.w,
-                                              boxShape: BoxShape.circle,
-                                              imageUrl:
-                                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBEWcexrgcYJTSBSh5z0rREtTvoACOcFLoow&s",
-                                              border: Border.all(
-                                                  color: Colors.blueAccent, width: 2),
-                                            )),
-                                        SizedBox(width: 12.w),
-                                        Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children: [
-                                            SizedBox(
-                                              width: 250.w,
-                                              child: CustomText(
-                                                  maxline: 3,
-                                                  textAlign: TextAlign.start,
-                                                  color: Colors.black,
-                                                  text: "${notification.msg}",
-                                                  fontSize: 12.h),
-                                            ),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.toNamed(AppRoutes.wishListScreen, arguments: {"title" : "Wish List", "type" : "${notification.id}"});
+                                    },
+                                    child: Padding(
+                                      padding: EdgeInsets.all(12.h),
+                                      child: Row(
+                                        crossAxisAlignment: CrossAxisAlignment.center,
+                                        children: [
+                                          ClipRRect(
+                                              borderRadius: BorderRadius.circular(12.r),
+                                              child: CustomNetworkImage(
+                                                height: 56.h,
+                                                width: 56.w,
+                                                boxShape: BoxShape.circle,
+                                                imageUrl:
+                                                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBEWcexrgcYJTSBSh5z0rREtTvoACOcFLoow&s",
+                                                border: Border.all(
+                                                    color: Colors.blueAccent, width: 2),
+                                              )),
+                                          SizedBox(width: 12.w),
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              SizedBox(
+                                                width: 250.w,
+                                                child: CustomText(
+                                                    maxline: 3,
+                                                    textAlign: TextAlign.start,
+                                                    color: Colors.black,
+                                                    text: "${notification.msg}",
+                                                    fontSize: 12.h),
+                                              ),
 
 
-                                            CustomText(
-                                                text: "${TimeFormatHelper.formatDate(notification.createdAt ?? DateTime.now())}", fontSize: 9.h),
-                                          ],
-                                        ),
+                                              CustomText(
+                                                  text: "${TimeFormatHelper.formatDate(notification.createdAt ?? DateTime.now())}", fontSize: 9.h),
+                                            ],
+                                          ),
 
 
-                                      ],
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 );

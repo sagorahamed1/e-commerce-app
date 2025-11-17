@@ -3,11 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:petattix/core/config/app_route.dart';
 import 'package:petattix/helper/toast_message_helper.dart';
 import 'package:petattix/model/wallet_history_model.dart';
 import '../global/custom_assets/assets.gen.dart';
 import '../services/api_client.dart';
 import '../services/api_constants.dart';
+import '../views/screens/profile/withdraw_success_screen.dart';
 import '../views/widgets/custom_button.dart';
 import '../views/widgets/custom_text.dart';
 
@@ -146,4 +148,42 @@ class WalletController extends GetxController {
 
 
 
+
+
+  RxBool withdrawBalanceLoading = false.obs;
+
+  withdrawBalance({required String amount, required BuildContext context}) async {
+    withdrawBalanceLoading(true);
+
+    var body = {
+      "amount": int.parse(amount)
+    };
+
+    var response = await ApiClient.postData("${ApiConstants.withDraw}", jsonEncode(body));
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+
+     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
+     //  return  WithdrawSuccessScreen(amount: amount);
+     // },));
+
+      Get.toNamed(AppRoutes.withdrawSuccessScreen, arguments: {
+        "amount" : amount
+      });
+
+      withdrawBalanceLoading(false);
+    } else {
+      withdrawBalanceLoading(false);
+
+
+    }
+  }
+
+
+
+
 }
+
+
+
+

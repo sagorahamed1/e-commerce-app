@@ -144,7 +144,7 @@ class _CourierScreenState extends State<CourierScreen> {
                 onPressed: selectedIndex == -1
                     ? (){
 
-                  ToastMessageHelper.showToastMessage(context, "Please select couriar!", title: "info");
+                  ToastMessageHelper.showToastMessage(context, "Please select courier!", title: "info");
                 }
                     : () {
 
@@ -184,7 +184,7 @@ class _CourierScreenState extends State<CourierScreen> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r)),
                 ),
-                child: Text("Make Payment",
+                child: Text("Select Courier",
                     style:
                     TextStyle(fontSize: 16.sp, color: Colors.white)),
               ),

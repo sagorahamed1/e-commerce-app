@@ -73,7 +73,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
 
                     PermissionStatus status = await Permission.location.request();
 
-                    Navigator.push(context, MaterialPageRoute(builder: (context) {
+                    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) {
                       return BottomNavBar();
                     }));
 

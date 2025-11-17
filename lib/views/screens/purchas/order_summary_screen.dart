@@ -19,7 +19,7 @@ class OrderSummaryScreen extends StatefulWidget {
 
 class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
   ProductController controller = Get.put(ProductController());
-  final data = Get.arguments;
+  // final data = Get.arguments;
 
 
   @override
@@ -28,6 +28,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
     controller.fetchShippingPricing(
       productId: "${data["productId"]}",
       shippingId: "${data["shippingId"]}",
+      context: context
     );
 
     super.initState();
@@ -62,10 +63,11 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
         }
 
         if (controller.errorMessage.value.isNotEmpty) {
+
           return Center(
             child: Text(
-              "Error: ${controller.errorMessage.value}",
-              style: TextStyle(color: Colors.red, fontSize: 16.sp),
+              "Shipping method is not valid \n Please go back and try another!",
+              style: TextStyle(color: Colors.black, fontSize: 20.sp),
               textAlign: TextAlign.center,
             ),
           );
@@ -96,12 +98,12 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                 SizedBox(height: 24.h),
                 _buildSectionTitle("Shipping Details"),
                 SizedBox(height: 8.h),
-                _buildShippingDetails("${data.shippingMethodInfo?.name}", "${data.shippingMethodInfo?.carrier}", "${data.pricingInfo?.total}"),
+                _buildShippingDetails("${data.shippingMethodInfo?.name}", "${data.shippingMethodInfo?.carrier}", "${data.pricingInfo?.total.toString()}"),
                 SizedBox(height: 24.h),
                 _buildSectionTitle("Buyer Protection"),
-                _buildBuyerProtection(data.pricingInfo?.productProtectionFee?.toDouble() ?? 0.0, ),
+                 _buildBuyerProtection(data.pricingInfo?.productProtectionFee?.toDouble() ?? 0.0, ),
                 SizedBox(height: 8.h),
-                // _buildBuyerProtection(data.pricing),
+                 // _buildBuyerProtection(data.pricing),
                 SizedBox(height: 24.h),
                 _buildSectionTitle("Total Summary"),
                 SizedBox(height: 8.h),
@@ -115,7 +117,7 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
                   ),
                   child: Column(
                     children: [
-                      _summaryRow("Delivery Charge", "${double.parse(data.pricingInfo?.deliveryCharge.toString() ?? "").toStringAsFixed(2)}"),
+                     _summaryRow("Delivery Charge", "${double.parse(data.pricingInfo?.deliveryCharge.toString() ?? "").toStringAsFixed(2)}"),
                       _summaryRow("Delivery Protection Fee", "${double.parse(data.pricingInfo?.deliveryProtectionFee.toString() ?? "").toStringAsFixed(2)}"),
                       _summaryRow("Product Price", "${double.parse(data.pricingInfo?.productPrice.toString() ?? "").toStringAsFixed(2)}"),
                       _summaryRow("Production Fee", "${double.parse(data.pricingInfo?.productProtectionFee.toString() ?? "").toStringAsFixed(2)}"),
@@ -130,12 +132,15 @@ class _OrderSummaryScreenState extends State<OrderSummaryScreen> {
               ],
             ),
           ),
-          CustomButton(
-            title: "Make Payment",
-            onpress: () {
-              controller.confirmPayment(context: context, productId: routeData["productId"], shippingId: routeData["shippingId"]);
-              print("💰 Make Payment Clicked");
-            },
+          Obx(() =>
+             CustomButton(
+              loading: controller.confirmPaymentLoading.value,
+              title: "Make Payment",
+              onpress: () {
+                controller.confirmPayment(context: context, productId: routeData["productId"], shippingId: routeData["shippingId"]);
+                print("💰 Make Payment Clicked");
+              },
+            ),
           ),
           SizedBox(height: 16.h),
         ],

@@ -134,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 top: 10.h,
                 color: Color(0xff592B00)),
             SizedBox(
-              height: 100.h,
+              height: 120.h,
               child: Obx(
                 () => productController.categoryLoading.value
                     ? Row(
@@ -215,23 +215,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: EdgeInsets.all(12.r),
+                                  padding: EdgeInsets.all(15.r),
                                   child: Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       SizedBox(
-                                        height: 55.h,
-                                        width: 55.w,
+                                        height: 65.h,
+                                        width: 65.w,
                                         child: CustomNetworkImage(
                                           boxShape: BoxShape.circle,
                                             imageUrl: "${ApiConstants.imageBaseUrl}/${category.image}"),
                                       ),
                                       SizedBox(
-                                        width: 75.w,
+                                        width: 79.w,
                                         child: CustomText(
                                             text: "${category.name.toString()}",
                                             fontSize: 10.sp,
-                                            fontWeight: FontWeight.w500,
+                                            fontWeight: FontWeight.w600,
                                             color: Color(0xff592B00)),
                                       ),
                                     ],

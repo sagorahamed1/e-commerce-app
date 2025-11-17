@@ -42,12 +42,14 @@ class _WishListScreenState extends State<WishListScreen> {
   var title = Get.arguments["title"];
   @override
   Widget build(BuildContext context) {
+    var data = Get.arguments;
     return Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: CustomAppBar(title: "$title"),
         body: Padding(
           padding: EdgeInsets.symmetric(horizontal: 18.w),
           child: ContainedTabBarView(
+            initialIndex: data["type"] == "n/a" ? 0 : 1,
             tabBarProperties: TabBarProperties(
               height: 45.h,
               indicatorColor: Colors.orange,
@@ -64,7 +66,7 @@ class _WishListScreenState extends State<WishListScreen> {
             ],
             views: [
               _buildCartList(),
-              _purchaseHistory(),
+              _purchaseHistory(id: data["type"]),
             ],
             onChange: (index) {
               if(index == 0){
@@ -285,9 +287,13 @@ class _WishListScreenState extends State<WishListScreen> {
                                     loading: false,
                                     loaderIgnore: true,
                                     height: 26.h,
-                                    title: "Purchase",
+                                    title:  product.status == "in_progress"?"Courier":"Purchase",
                                     onpress: () {
-                                      Get.toNamed(AppRoutes.confirmPurchaseScreen, arguments: {
+                                   product.status == "in_progress"?
+                                   Get.toNamed(AppRoutes.courierScreen, arguments: {
+                                     "productId" : "${product.id}"
+                                   })
+                                       :   Get.toNamed(AppRoutes.confirmPurchaseScreen, arguments: {
                                         "productId" : product.id
                                       });
                                     },
@@ -311,7 +317,7 @@ class _WishListScreenState extends State<WishListScreen> {
 
   int ratingX = 5;
 
-  Widget _purchaseHistory() {
+  Widget _purchaseHistory({String? id}) {
     return Obx( () => productController.purchesLoading.value ? ShimmerListView() : productController.myPurches.isEmpty ? NoDataFoundCard() :
        ListView.builder(
         padding: EdgeInsets.symmetric(horizontal: 2.w, vertical: 20.h),
@@ -321,6 +327,7 @@ class _WishListScreenState extends State<WishListScreen> {
           return Container(
             margin: EdgeInsets.symmetric(vertical: 6.h, horizontal: 3.w),
             decoration: BoxDecoration(
+              border: Border.all(color: id == purches.id.toString() ?  AppColors.primaryColor : Colors.transparent),
               color: const Color(0xfffef4ea), // Card background
               borderRadius: BorderRadius.circular(12.r),
               boxShadow: [

@@ -23,16 +23,18 @@ class _DropOffPointScreenState extends State<DropOffPointScreen> {
   bool _isLoading = true;
   String _errorMessage = '';
   final TextEditingController _searchController = TextEditingController();
+  var data = Get.arguments;
 
   @override
   void initState() {
     super.initState();
-    _fetchServicePoints();
+    _searchController.text = data["postalCode"];
+    _fetchServicePoints(postalCode: data["postalCode"]);
   }
 
-  Future<void> _fetchServicePoints() async {
 
 
+  Future<void> _fetchServicePoints({String? postalCode}) async {
 
     try {
       setState(() {
@@ -40,12 +42,16 @@ class _DropOffPointScreenState extends State<DropOffPointScreen> {
         _errorMessage = '';
       });
 
-      var data = Get.arguments;
+
+
       final points = await ApiService.getServicePoints(
         latitude: data["lat"],
         longitude: data["long"],
         country: '${data["country"]}',
+        postalCode: postalCode
       );
+
+      print("=====================Called Api");
 
       setState(() {
         _servicePoints = points;
@@ -65,6 +71,7 @@ class _DropOffPointScreenState extends State<DropOffPointScreen> {
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -77,7 +84,7 @@ class _DropOffPointScreenState extends State<DropOffPointScreen> {
           },
         ),
         title: CustomText(
-          text: "Delete",
+          text: "Select Drop-off Point",
           fontSize: 18.sp,
           fontWeight: FontWeight.w600,
           color: Colors.black,
@@ -154,7 +161,7 @@ class _DropOffPointScreenState extends State<DropOffPointScreen> {
                           color: Colors.black,
                         ),
                         onChanged: (value) {
-                          // You can implement search/filter functionality here
+                          _fetchServicePoints(postalCode: _searchController.text);
                         },
                       ),
                     ),
@@ -189,14 +196,14 @@ class _DropOffPointScreenState extends State<DropOffPointScreen> {
                         SizedBox(height: 16.h),
                         ElevatedButton(
                           onPressed: _fetchServicePoints,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                          ),
                           child: CustomText(
                             text: "Retry",
                             fontSize: 14.sp,
                             fontWeight: FontWeight.w500,
                             color: Colors.white,
-                          ),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blue,
                           ),
                         ),
                       ],
@@ -397,11 +404,12 @@ class ApiService {
     required String latitude,
     required String longitude,
     required String country,
+     String? postalCode
   }) async {
     try {
       final response = await http.get(
         Uri.parse(
-            '$_baseUrl/service-points?latitude=$latitude&longitude=$longitude&country=$country'
+            '$_baseUrl/service-points?latitude=$latitude&longitude=$longitude&country=$country&postal_code=${postalCode??""}'
         ),
         headers: {
           'Authorization': _getAuthHeader(),
@@ -409,7 +417,9 @@ class ApiService {
         },
       );
 
-      if (response.statusCode == 200) {
+      print("============response: ${response.body} \n End point: /service-points?latitude=$latitude&longitude=$longitude&country=$country&postal_code=${postalCode??""}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final List<dynamic> data = json.decode(response.body);
         return data.map((json) => ServicePoint.fromJson(json)).toList();
       } else {

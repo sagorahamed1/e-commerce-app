@@ -140,7 +140,7 @@ class _WalletScreenState extends State<WalletScreen> {
                                           top: 10.h,
                                           color: Colors.black,
                                           text:
-                                              "Do you want to sure add this amount of balance?",
+                                              "Do you want to add this amount of balance?",
                                         ),
                                         SizedBox(height: 12.h),
                                         CustomTextField(
@@ -221,18 +221,109 @@ class _WalletScreenState extends State<WalletScreen> {
                             ),
                           ),
                           SizedBox(height: 10.h),
-                          Container(
-                            decoration: BoxDecoration(
-                              color: Color(0xffFFD6B0),
-                              borderRadius: BorderRadius.circular(16.r),
-                            ),
-                            child: Padding(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 8.h, horizontal: 22.w),
-                              child: CustomText(
-                                  text: "Withdraw Now",
-                                  fontSize: 12.h,
-                                  color: Colors.black),
+                          GestureDetector(
+                            onTap: () {
+
+
+
+
+
+                              TextEditingController withdrawAmonCtrl =
+                              TextEditingController();
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        CustomText(
+                                            text: "Withdraw Balance",
+                                            fontSize: 16.h,
+                                            fontWeight: FontWeight.w600,
+                                            top: 29.h,
+                                            bottom: 20.h,
+                                            color: Color(0xff592B00)),
+                                        Divider(),
+                                        CustomText(
+                                          maxline: 2,
+                                          bottom: 10.h,
+                                          top: 10.h,
+                                          color: Colors.black,
+                                          text:
+                                          "Do you want to withdraw this amount of balance?",
+                                        ),
+                                        SizedBox(height: 12.h),
+                                        CustomTextField(
+                                            keyboardType: TextInputType.number,
+                                            controller: withdrawAmonCtrl,
+                                            labelText: "Enter Amount",
+                                            hintText: "Enter Amount"),
+                                        SizedBox(height: 12.h),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              flex: 1,
+                                              child: CustomButton(
+                                                  height: 50.h,
+                                                  title: "Cancel",
+                                                  onpress: () {
+                                                    Get.back();
+                                                  },
+                                                  color: Colors.transparent,
+                                                  fontSize: 11.h,
+                                                  loaderIgnore: true,
+                                                  boderColor:
+                                                  AppColors.primaryColor,
+                                                  titlecolor:
+                                                  AppColors.primaryColor),
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Obx(() =>
+                                                 CustomButton(
+                                                    loading: walletController.withdrawBalanceLoading.value,
+                                                    loaderIgnore: true,
+                                                    height: 50.h,
+                                                    title: "Yes",
+                                                    onpress: () {
+
+
+                                                      walletController.withdrawBalance(amount: withdrawAmonCtrl.text, context: context);
+
+
+                                                    },
+                                                    fontSize: 11.h),
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+
+
+
+
+
+
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: Color(0xffFFD6B0),
+                                borderRadius: BorderRadius.circular(16.r),
+                              ),
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 8.h, horizontal: 22.w),
+                                child: CustomText(
+                                    text: "Withdraw Now",
+                                    fontSize: 12.h,
+                                    color: Colors.black),
+                              ),
                             ),
                           ),
                         ],

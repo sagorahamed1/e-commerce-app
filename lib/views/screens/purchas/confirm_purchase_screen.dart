@@ -104,11 +104,12 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
   }
 
   bool isSendCloudPoint = false;
+  var data = Get.arguments;
 
   @override
   Widget build(BuildContext context) {
     final apiData = productController.dropOffData.value;
-    var data = Get.arguments;
+
     return Scaffold(
       appBar: CustomAppBar(title: "Confirm Purchase"),
       body: Padding(
@@ -186,6 +187,10 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
                             countryTitleCtrl.text = c.longName;
                             houseNumberCtrl.text = c.shortName;
 
+                          }
+                          if (c.types.contains("administrative_area_level_1")) {
+                            // This usually represents the state / province / region
+                            stateCtrl.text = c.longName;
                           }
                         }
                       },
@@ -278,9 +283,11 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
 
                           if(isSendCloudPoint){
                             Get.toNamed(AppRoutes.dropOffPointScreen, arguments: {
-                              "lat" : apiData?.latitude,
-                              "long" : apiData?.longitude,
-                              "country" : apiData?.country
+                              "lat" : apiData?.latitude ?? "0",
+                              "long" : apiData?.longitude ?? "0",
+                              "country" : apiData?.country ?? "bangladesh",
+                              "id" : "${data["productId"]}",
+                              "postalCode" : apiData?.postalCode.toString() ?? ""
                              });
                           }else{
                             purchaseController.servicePointId = "";
@@ -471,27 +478,30 @@ class _ConfirmPurchaseScreenState extends State<ConfirmPurchaseScreen> {
 
                     Expanded(
                       flex: 1,
-                      child: CustomButton(
-                          loaderIgnore: true,
-                          title: "Confirm",
-                          onpress: () {
-                            print("==================tapped");
-                            if (forKey.currentState!.validate()){
-                              purchaseController.createDelivery(
-                                addressOne: addressLine1Ctrl.text,
-                                  city: cityCtrl.text,
-                                  country: countryTitleCtrl.text,
-                                  countryState: stateCtrl.text,
-                                  houseNumber: houseNumberCtrl.text,
-                                  postalCode: postalCodeCtrl.text,
-                                  companyName: houseNumberCtrl.text,
-                                  productId: data["productId"] ?? "",
-                                  context: context);
-                            }
+                      child: Obx(() =>
+                         CustomButton(
+                           loading: purchaseController.createDeliveryLoading.value,
+                            // loaderIgnore: true,
+                            title: "Confirm",
+                            onpress: () {
+                              print("==================tapped");
+                              if (forKey.currentState!.validate()){
+                                purchaseController.createDelivery(
+                                  addressOne: addressLine1Ctrl.text,
+                                    city: cityCtrl.text,
+                                    country: countryTitleCtrl.text,
+                                    countryState: stateCtrl.text,
+                                    houseNumber: houseNumberCtrl.text,
+                                    postalCode: postalCodeCtrl.text,
+                                    companyName: houseNumberCtrl.text,
+                                    productId: data["productId"] ?? "",
+                                    context: context);
+                              }
 
 
-                          },
-                          fontSize: 11.h),
+                            },
+                            fontSize: 11.h),
+                      ),
                     ),
                   ],
                 ),

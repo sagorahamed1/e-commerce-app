@@ -525,6 +525,10 @@ class _PostScreenState extends State<PostScreen> {
                         houseNumberCtrl.text = c.shortName;
 
                       }
+                      if (c.types.contains("administrative_area_level_1")) {
+                        // This usually represents the state / province / region
+                        stateCtrl.text = c.longName;
+                      }
                     }
                   },
                   itemClick: (prediction) {
@@ -882,12 +886,12 @@ class _PostScreenState extends State<PostScreen> {
                             children: [
                               // Image Section
 
-                              CustomNetworkImage(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  imageUrl:
-                                      "${ApiConstants.imageBaseUrl}/${product.images?[0].image}",
-                                  height: 139.h,
-                                  width: 109.w),
+                              // CustomNetworkImage(
+                              //     borderRadius: BorderRadius.circular(8.r),
+                              //     imageUrl:
+                              //         "${ApiConstants.imageBaseUrl}${product.images?[0].image ?? ""}",
+                              //     height: 139.h,
+                              //     width: 109.w),
 
                               SizedBox(width: 7.w),
 
@@ -1054,7 +1058,7 @@ class _PostScreenState extends State<PostScreen> {
 
                               CustomNetworkImage(
                                   borderRadius: BorderRadius.circular(8.r),
-                                  imageUrl:
+                                  imageUrl: sales.product?.images?.length == 0 ? "" :
                                       "${ApiConstants.imageBaseUrl}/${sales.product?.images?[0]["image"]}",
                                   height: 139.h,
                                   width: 109.w),

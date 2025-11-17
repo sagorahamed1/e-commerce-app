@@ -82,11 +82,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                               "${productController.singleProduct.value.productName}",
                           top: 16.h,
                           bottom: 4,
-                          fontSize: 18.h,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 19.h,
+                          maxline: 2,
+                          fontWeight: FontWeight.w600,
                           color: Colors.black),
                     ),
 
+                    SizedBox(width: 30.w),
 
 
                     Align(
@@ -128,7 +130,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
 
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Icon(Icons.watch_later_outlined, size: 14.h),
                             SizedBox(
@@ -144,15 +146,20 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         ),
 
 
-                        CustomText(
-                            text:
-                            productController.singleProduct.value.user?.address != null
-                                ? productController.singleProduct.value.user!.address!.isNotEmpty
-                                ? '${productController.singleProduct.value.user!.address![0].toUpperCase()}${productController.singleProduct.value.user!.address!.substring(1).toLowerCase()}'
-                                : 'N/A'
-                                : 'N/A',
-                            fontSize: 10.h,
-                            color: Color(0xff6F6F6F)),
+                        SizedBox(
+                          width: 200.w,
+                          child: CustomText(
+                              text:
+                              productController.singleProduct.value.user?.address != null
+                                  ? productController.singleProduct.value.user!.address!.isNotEmpty
+                                  ? '${productController.singleProduct.value.user!.address![0].toUpperCase()}${productController.singleProduct.value.user!.address!.substring(1).toLowerCase()}'
+                                  : 'N/A'
+                                  : 'N/A',
+                              fontSize: 10.h,
+                              textAlign: TextAlign.start,
+                              maxline: 3,
+                              color: Color(0xff6F6F6F)),
+                        ),
 
 
 

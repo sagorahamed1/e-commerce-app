@@ -23,6 +23,7 @@ import '../../views/screens/profile/profile_information_screen.dart';
 import '../../views/screens/profile/wallet_history_screen.dart';
 import '../../views/screens/profile/wallet_screen.dart';
 import '../../views/screens/profile/wish_list_screen.dart';
+import '../../views/screens/profile/withdraw_success_screen.dart';
 import '../../views/screens/purchas/confirm_purchase_screen.dart';
 import '../../views/screens/purchas/confirmed.dart';
 import '../../views/screens/purchas/courier_screen.dart';
@@ -73,6 +74,7 @@ class AppRoutes {
   static const String setDropOffLocationScreen = "/SetDropOffLocationScreen";
   static const String dropOffPointScreen = "/DropOffPointScreen";
   static const String orderSummaryScreen = "/OrderSummaryScreen";
+  static const String withdrawSuccessScreen = "/WithdrawSuccessScreen";
 
 
 
@@ -111,5 +113,6 @@ class AppRoutes {
     GetPage(name: setDropOffLocationScreen, page: () =>  SetDropOffLocationScreen()),
     GetPage(name: dropOffPointScreen, page: () =>  DropOffPointScreen()),
     GetPage(name: orderSummaryScreen, page: () =>  OrderSummaryScreen()),
+    GetPage(name: withdrawSuccessScreen, page: () =>  WithdrawSuccessScreen()),
   ];
 }

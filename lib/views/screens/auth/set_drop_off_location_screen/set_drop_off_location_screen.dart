@@ -116,62 +116,62 @@ class _SetDropOffLocationScreenState extends State<SetDropOffLocationScreen> {
                     borderRadius: BorderRadius.circular(12.r),
                   ),
                   isLatLngRequired: true,
-                  getPlaceDetailWithLatLng: (prediction) async {
-                    final detail = await places.getDetailsByPlaceId(prediction.placeId!);
-                    final comp = detail.result.addressComponents;
-                    final geometry = detail.result.geometry;
+                    getPlaceDetailWithLatLng: (prediction) async {
+                      final detail = await places.getDetailsByPlaceId(prediction.placeId!);
+                      final comp = detail.result.addressComponents;
+                      final geometry = detail.result.geometry;
 
-                    String street = '';
-                    String city = '';
-                    String state = '';
-                    String postalCode = '';
-                    String country = '';
-                    String countryCode = '';
-                    String houseNumber = '';
+                      String street = '';
+                      String city = '';
+                      String state = '';
+                      String postalCode = '';
+                      String country = '';
+                      String countryCode = '';
+                      String houseNumber = '';
 
-                    for (var c in comp) {
-                      if (c.types.contains('route')) {
-                        street = c.longName;
-                      } else if (c.types.contains('street_number')) {
-                        houseNumber = c.longName;
-                      } else if (c.types.contains('locality')) {
-                        city = c.longName;
-                      } else if (c.types.contains('administrative_area_level_1')) {
-                        state = c.longName;
-                      } else if (c.types.contains('postal_code')) {
-                        postalCode = c.longName;
-                      } else if (c.types.contains('country')) {
-                        country = c.longName;
-                        countryCode = c.shortName;
+                      // ✅ Correct address component extraction
+                      for (var c in comp) {
+                        if (c.types.contains('street_number')) {
+                          houseNumber = c.longName;
+                        } else if (c.types.contains('route')) {
+                          street = c.longName;
+                        } else if (c.types.contains('locality')) {
+                          city = c.longName;
+                        } else if (c.types.contains('administrative_area_level_1')) {
+                          state = c.longName;
+                        } else if (c.types.contains('postal_code')) {
+                          postalCode = c.longName;
+                        } else if (c.types.contains('country')) {
+                          country = c.longName;
+                          countryCode = c.shortName;
+                        }
                       }
-                    }
 
-                    // Fill all fields automatically
-                    setState(() {
-                      // addressLine1Ctrl.text =
-                      // '${houseNumber.isNotEmpty ? '$houseNumber ' : ''}$street';
-                      houseNumberCtrl.text = houseNumber;
-                      cityCtrl.text = city;
-                      stateCtrl.text = state;
-                      postalCodeCtrl.text = postalCode;
-                      countryTitleCtrl.text = country;
+                      // ✅ Update controllers with extracted data
+                      setState(() {
+                        // addressLine1Ctrl.text =
+                        // '${houseNumber.isNotEmpty ? '$houseNumber ' : ''}$street';
+                        houseNumberCtrl.text = houseNumber;
+                        cityCtrl.text = city;
+                        stateCtrl.text = state;
+                        postalCodeCtrl.text = postalCode;
+                        countryTitleCtrl.text = countryCode;
 
-                      // Build API-ready address body
-                      addressBody = {
-                        "address": addressLine1Ctrl.text.trim(),
-                        "house_number": houseNumber,
-                        "address_2": "",
-                        "city": city,
-                        "country": countryCode,
-                        "postal_code": postalCode,
-                        "country_state": state,
-                        "latitude": geometry?.location.lat,
-                        "longitude": geometry?.location.lng,
-                      };
-                    });
+                        addressBody = {
+                          "address": addressLine1Ctrl.text.trim(),
+                          "house_number": houseNumber,
+                          "address_2": "",
+                          "city": city,
+                          "country": countryCode,
+                          "postal_code": postalCode,
+                          "country_state": state,
+                          "latitude": geometry?.location.lat,
+                          "longitude": geometry?.location.lng,
+                        };
+                      });
 
-                    print("📦 Address Body Ready: ${jsonEncode(addressBody)}");
-                  },
+                      print("📦 Address Body Ready: ${jsonEncode(addressBody)}");
+                    },
                   itemClick: (prediction) {
                     addressLine1Ctrl.text = prediction.description ?? "";
                     addressLine1Ctrl.selection = TextSelection.fromPosition(
@@ -233,19 +233,46 @@ class _SetDropOffLocationScreenState extends State<SetDropOffLocationScreen> {
                       () => CustomButton(
                     loading: authController.setDropOfLocationLoading.value,
                     title: data["screenType"] == "edit" ? "Change Drop-off Location" : "Continue",
-                    onpress: () async {
-                      if (forKey.currentState!.validate()) {
-                        if (addressBody == null) {
-                          Get.snackbar("Error", "Please select a valid address first.");
-                          return;
-                        }
+                    // onpress: () async {
+                    //   if (forKey.currentState!.validate()) {
+                    //     if (addressBody == null) {
+                    //       Get.snackbar("Error", "Please select a valid address first.");
+                    //       return;
+                    //     }
+                    //
+                    //     authController.setDropOfLocation(data: addressBody, screenType: "${data["screenType"]}");
+                    //
+                    //
+                    //   }
+                    // },
 
-                        authController.setDropOfLocation(data: addressBody, screenType: "${data["screenType"]}");
+                        onpress: () async {
+                          if (forKey.currentState!.validate()) {
+                            // ✅ Always rebuild addressBody from current field values
+                            addressBody = {
+                              "address": addressLine1Ctrl.text.trim(),
+                              "house_number": houseNumberCtrl.text.trim(),
+                              "address_2": "",
+                              "city": cityCtrl.text.trim(),
+                              "country": countryTitleCtrl.text.trim(),
+                              "postal_code": postalCodeCtrl.text.trim(),
+                              "country_state": stateCtrl.text.trim(),
+                              "latitude": addressBody?["latitude"], // keep previous lat/lng if available
+                              "longitude": addressBody?["longitude"],
+                            };
 
+                            // If still no lat/lng (manual entry only), just send null
+                            addressBody!["latitude"] ??= null;
+                            addressBody!["longitude"] ??= null;
 
-                      }
-                    },
-                  ),
+                            authController.setDropOfLocation(
+                              data: addressBody,
+                              screenType: "${data["screenType"]}",
+                            );
+                          }
+                        },
+
+                      ),
                 ),
 
                 SizedBox(height: 160.h),

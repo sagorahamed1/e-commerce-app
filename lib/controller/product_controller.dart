@@ -106,7 +106,12 @@ class ProductController extends GetxController {
     } else {
       productAddLoading(false);
       ToastMessageHelper.showToastMessage(context, "${response.body["message"]}", title: "Warning");
-      Get.toNamed(AppRoutes.walletScreen);
+
+
+      if(response.body["message"] == ""){
+        Get.toNamed(AppRoutes.walletScreen);
+      }
+
     }
   }
 
@@ -165,6 +170,7 @@ class ProductController extends GetxController {
 
     };
 
+    print("body---------last test${body}");
     final response = await ApiClient.putMultipartData(
         "${ApiConstants.product}/${productId?? ""}", body,
         multipartBody: photoList);
@@ -619,7 +625,8 @@ class ProductController extends GetxController {
 
   fetchShippingPricing({
     required String productId,
-    required String shippingId,
+    required dynamic shippingId,
+     required BuildContext context
   }) async {
     try {
       shippingLoading(true);
@@ -631,18 +638,21 @@ class ProductController extends GetxController {
 
       print("🌐 Raw Response: ${response.body}");
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         final dynamic responseData = response.body;
-
-
         shippingData.value = ShippingPricingData.fromJson(responseData["data"]);
         update();
         shippingLoading(false);
       } else {
-        errorMessage('Invalid response code ${response.statusCode}');
+        Map<String, dynamic> error = {
+          "": response.body["message"]
+        };
+        ToastMessageHelper.showToastMessage(context, error.toString(),title: "error");
+        errorMessage(' ${error}');
       }
-    } catch (e) {
-      errorMessage('Failed to load shipping pricing: $e');
+    } catch (e, s) {
+      print("=================error : $s");
+      errorMessage('Failed to load shipping pricing: ${e}');
     } finally {
       shippingLoading(false);
     }
@@ -652,17 +662,23 @@ class ProductController extends GetxController {
 
 
 
+  RxBool confirmPaymentLoading = false.obs;
    confirmPayment({String? productId, shippingId,required BuildContext context}) async {
+     confirmPaymentLoading(true);
 
     var response = await ApiClient.postData("/delivery/$productId/payment/$shippingId", jsonEncode({}));
 
-    if (response.statusCode == 200) {
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      Get.back();
       Get.back();
       Get.back();
       Get.back();
 
       ToastMessageHelper.showToastMessage(context, "Shipment Completed!");
 
+      confirmPaymentLoading(false);
+    }else{
+      confirmPaymentLoading(false);
     }
 
   }

@@ -1,12 +1,16 @@
 class ApiConstants{
+
   // static const String baseUrl = "http://192.168.40.142:5000/api/v1";
   // static const String imageBaseUrl = "http://192.168.40.142:5000";
 
-  static const String baseUrl = "https://petattix.merinasib.shop/api/v1";
-  static const String imageBaseUrl = "https://petattix.merinasib.shop";
+  // static const String baseUrl = "https://petattix.merinasib.shop/api/v1";
+  // static const String imageBaseUrl = "https://petattix.merinasib.shop";
 
-  // static const String baseUrl = "https://api.petattix.com/api/v1";
-  // static const String imageBaseUrl = "https://api.petattix.com";
+  static const String baseUrl = "https://api.petattix.com/api/v1";
+  static const String imageBaseUrl = "https://api.petattix.com";
+
+  // static const String baseUrl = "https://home5000.merinasib.shop/api/v1";
+
 
 
   static const String signUpEndPoint = "/auth/signup";
@@ -35,6 +39,7 @@ class ApiConstants{
   static const String reports = "/reports";
   static const String balance = "/wallets/balance";
   static const String walletBalanceAdd = "/wallets/recharge";
+  static const String withDraw = "/wallets/withdraw";
   static const String createDelivery = "/delivery";
   static const String productAnalyze = "/product/analyze";
   static  String favouite(String? page) => "/favourites?page=${page??""}&limit=10";
